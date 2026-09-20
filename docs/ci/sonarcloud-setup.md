@@ -28,6 +28,16 @@ O workflow está em `.github/workflows/ci.yml` e a config do scanner em `sonar-p
    - **variable** `SONAR_HOST_URL` = a URL do seu SonarQube (ex.: `http://SEU_IP:9000`).
 4. O mesmo workflow funciona — a `sonarqube-scan-action` usa `SONAR_HOST_URL`.
 
+## Deploy Vercel — pendência conhecida
+O job `deploy` roda na `main` mas está **não-bloqueante** (`continue-on-error`) enquanto o
+token/escopo não está 100%. O erro observado foi `vercel pull → "Could not retrieve Project
+Settings"`, típico de **token sem escopo do time** (o projeto está sob o time
+`schulzeedis-projects`). Correção:
+1. Gerar um token em https://vercel.com/account/tokens com **escopo do time** `schulzeedis-projects`
+   (ou "Full Account"), e atualizar o secret `VERCEL_TOKEN`.
+2. Confirmar `VERCEL_ORG_ID` = `team_...` (o ID do time) e `VERCEL_PROJECT_ID` = `prj_...`.
+3. Quando o deploy passar, remover o `continue-on-error: true` do job `deploy`.
+
 ## Secrets/variáveis usados pelo workflow
 | Nome | Tipo | Para quê |
 |---|---|---|
