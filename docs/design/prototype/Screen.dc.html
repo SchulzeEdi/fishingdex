@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+</style>
+</helmet>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;font-size:14px;overflow:hidden">
+
+  <div style="flex:0 0 auto;height:42px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 6px;font-size:11px;font-weight:600;color:var(--txm);font-variant-numeric:tabular-nums">
+    <span>9:41</span>
+    <span style="letter-spacing:1px">5G ▮▮▮</span>
+  </div>
+
+  <sc-if value="{{ hasHeader }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:6px 16px 12px">
+      <sc-if value="{{ canBack }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ back }}" style="width:34px;height:34px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;color:var(--tx);cursor:pointer" style-active="background:var(--surfm)">‹</div>
+      </sc-if>
+      <div style="flex:1;font-family:Sora,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.4px">{{ title }}</div>
+      <sc-if value="{{ hasHeaderAction }}" hint-placeholder-val="{{ true }}">
+        <div style="padding:8px 12px;border-radius:12px;background:var(--surfm);font-size:12px;font-weight:600;color:var(--txm)">{{ headerAction }}</div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <div style="flex:1 1 auto;min-height:0;overflow:auto;position:relative">
+
+    <sc-if value="{{ sOnb }}">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--pri);color:var(--priOn)">
+        <div style="flex:1;margin:16px;border-radius:24px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.10),rgba(255,255,255,.10) 8px,rgba(255,255,255,.04) 8px,rgba(255,255,255,.04) 16px);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px">
+          <span style="font-family:ui-monospace,monospace;font-size:11px;opacity:.85;line-height:1.6">foto de captura<br />em close (4:5)</span>
+        </div>
+        <div style="padding:8px 28px 32px">
+          <div style="display:flex;gap:6px;margin-bottom:20px">
+            <div style="width:22px;height:4px;border-radius:2px;background:var(--acc)"></div>
+            <div style="width:8px;height:4px;border-radius:2px;background:rgba(255,255,255,.35)"></div>
+            <div style="width:8px;height:4px;border-radius:2px;background:rgba(255,255,255,.35)"></div>
+          </div>
+          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:32px;line-height:1.15;letter-spacing:-0.8px">Registre suas capturas</div>
+          <div style="margin-top:12px;font-size:15px;line-height:1.5;opacity:.82">Foto, espécie, tamanho e o setup que você usou. Seu diário de pesca no bolso.</div>
+          <div onClick="{{ goLogin }}" style="margin-top:28px;height:48px;border-radius:12px;background:var(--acc);color:var(--accOn);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;cursor:pointer" style-active="opacity:.85">Começar</div>
+          <div onClick="{{ goLogin }}" style="margin-top:12px;height:44px;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px;opacity:.8;cursor:pointer">Já tenho conta</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sLogin }}">
+      <div style="padding:8px 20px 28px;display:flex;flex-direction:column;gap:16px">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">E-mail</div>
+          <div style="height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--surf);display:flex;align-items:center;padding:0 14px;color:var(--txm)">voce@email.com</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">Senha</div>
+          <div style="height:48px;border-radius:12px;border:2px solid var(--pri);box-shadow:0 0 0 4px color-mix(in oklab,var(--acc) 22%,transparent);background:var(--surf);display:flex;align-items:center;justify-content:space-between;padding:0 14px;letter-spacing:3px">••••••••<span style="font-size:11px;letter-spacing:0;font-weight:600;color:var(--pri)">MOSTRAR</span></div>
+          <div style="margin-top:8px;font-size:12px;font-weight:600;color:var(--pri)">Esqueci a senha</div>
+        </div>
+        <div onClick="{{ goFeed }}" style="height:48px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;cursor:pointer" style-active="opacity:.85">Entrar</div>
+        <div style="display:flex;align-items:center;gap:12px;color:var(--txm);font-size:11px;font-weight:600">
+          <div style="flex:1;height:1px;background:var(--bd)"></div>OU<div style="flex:1;height:1px;background:var(--bd)"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--surf);display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600"><span style="width:16px;height:16px;border-radius:8px;background:var(--bd);display:inline-block"></span>Continuar com Google</div>
+          <div style="height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--surf);display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600"><span style="width:16px;height:16px;border-radius:8px;background:var(--bd);display:inline-block"></span>Continuar com Apple</div>
+        </div>
+        <div style="text-align:center;font-size:11px;line-height:1.6;color:var(--txm)">Ao entrar você aceita os <span style="font-weight:600;color:var(--pri)">Termos de Uso</span> e a <span style="font-weight:600;color:var(--pri)">Política de Privacidade</span>.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ fDef }}">
+      <div style="padding:0 14px 20px;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ catches }}" as="c" hint-placeholder-count="2">
+          <div onClick="{{ c.open }}" style="border-radius:20px;background:var(--surf);border:1px solid var(--bd);overflow:hidden;box-shadow:0 1px 3px rgba(11,31,36,.06);cursor:pointer">
+            <div style="aspect-ratio:4/3;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 8px,var(--bd) 8px,var(--bd) 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">{{ c.ph }}</div>
+            <div style="padding:14px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+                <div style="font-family:Sora,sans-serif;font-weight:600;font-size:17px">{{ c.species }}</div>
+                <div style="font-family:Sora,sans-serif;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums">{{ c.size }}</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+                <sc-for list="{{ c.chips }}" as="t" hint-placeholder-count="2">
+                  <div style="padding:5px 10px;border-radius:999px;background:var(--surfm);font-size:11px;font-weight:600;color:var(--txm)">{{ t }}</div>
+                </sc-for>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:14px">
+                <div style="width:28px;height:28px;border-radius:999px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">{{ c.initials }}</div>
+                <div style="flex:1;font-size:13px;font-weight:500">{{ c.user }}</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--txm)"><span style="width:14px;height:14px;border-radius:999px;border:2px solid var(--acc);display:inline-block"></span>{{ c.likes }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ fLoad }}">
+      <div style="padding:0 14px 20px;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ three }}" as="n" hint-placeholder-count="3">
+          <div style="border-radius:20px;background:var(--surf);border:1px solid var(--bd);overflow:hidden">
+            <div style="aspect-ratio:4/3;background:var(--surfm)"></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+              <div style="height:14px;width:55%;border-radius:7px;background:var(--surfm)"></div>
+              <div style="height:10px;width:35%;border-radius:5px;background:var(--surfm)"></div>
+              <div style="display:flex;gap:8px;margin-top:4px"><div style="height:22px;width:60px;border-radius:999px;background:var(--surfm)"></div><div style="height:22px;width:74px;border-radius:999px;background:var(--surfm)"></div></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ fEmpty }}">
+      <div style="padding:48px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div style="width:72px;height:72px;border-radius:24px;background:var(--surfm);border:1px solid var(--bd)"></div>
+        <div style="font-family:Sora,sans-serif;font-weight:600;font-size:19px">Seu feed está vazio</div>
+        <div style="font-size:14px;line-height:1.55;color:var(--txm)">Siga outros pescadores ou registre sua primeira captura para começar.</div>
+        <div onClick="{{ goReg }}" style="margin-top:6px;height:48px;padding:0 22px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;font-weight:600;cursor:pointer">Registrar captura</div>
+        <div style="height:44px;padding:0 22px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;font-weight:600;color:var(--tx)">Descobrir pescadores</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ fErr }}">
+      <div style="padding:48px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div style="width:56px;height:56px;border-radius:999px;background:var(--dg);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:26px">!</div>
+        <div style="font-family:Sora,sans-serif;font-weight:600;font-size:19px">Sem conexão</div>
+        <div style="font-size:14px;line-height:1.55;color:var(--txm)">O fishingdex precisa de internet para carregar o feed. Verifique sua rede.</div>
+        <div style="margin-top:6px;height:48px;padding:0 22px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;font-weight:600">Tentar de novo</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ fLock }}">
+      <div style="position:relative;min-height:100%">
+        <div style="padding:0 14px;display:flex;flex-direction:column;gap:14px;filter:blur(7px);opacity:.75;pointer-events:none">
+          <sc-for list="{{ catches }}" as="c" hint-placeholder-count="2">
+            <div style="border-radius:20px;background:var(--surf);border:1px solid var(--bd);overflow:hidden">
+              <div style="aspect-ratio:4/3;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 8px,var(--bd) 8px,var(--bd) 16px)"></div>
+              <div style="padding:14px"><div style="font-family:Sora,sans-serif;font-weight:600;font-size:17px">{{ c.species }}</div><div style="margin-top:8px;height:10px;width:40%;border-radius:5px;background:var(--surfm)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:16px;background:linear-gradient(to bottom,transparent,color-mix(in oklab,var(--bg) 82%,transparent) 45%,var(--bg))">
+          <div style="width:100%;border-radius:24px;background:var(--surf);border:1px solid var(--bd);padding:22px;box-shadow:0 8px 28px rgba(11,31,36,.14)">
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:var(--hi);color:var(--hiOn);font-size:11px;font-weight:700;letter-spacing:.4px">PRO</div>
+            <div style="margin-top:14px;font-family:Sora,sans-serif;font-weight:700;font-size:22px;line-height:1.2;letter-spacing:-0.4px">O feed é do time Pro</div>
+            <div style="margin-top:10px;font-size:14px;line-height:1.55;color:var(--txm)">Veja as capturas de quem você segue, curta e seja visto. No plano Free você registra até 3 capturas por mês, só para você.</div>
+            <div onClick="{{ goPay }}" style="margin-top:18px;height:48px;border-radius:12px;background:var(--hi);color:var(--hiOn);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;cursor:pointer" style-active="opacity:.88">Assinar Pro · R$ 19,90/mês</div>
+            <div style="margin-top:12px;text-align:center;font-size:12px;font-weight:600;color:var(--txm)">Ver o que vem no Pro</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sDetail }}">
+      <div>
+        <div style="aspect-ratio:4/3;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 8px,var(--bd) 8px,var(--bd) 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">foto da captura 4:3</div>
+        <div style="padding:18px 18px 24px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.6px">Tucunaré-açu</div>
+              <div style="margin-top:4px;font-size:12px;color:var(--txm)">12 mar 2026 · Rio Negro, AM</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:-1px">72<span style="font-size:15px"> cm</span></div><div style="font-size:11px;color:var(--txm)">4,1 kg</div></div>
+          </div>
+          <div style="margin-top:16px;padding:14px;border-radius:16px;background:var(--surfm);display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--txm)">SETUP</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ setup }}" as="t" hint-placeholder-count="4">
+                <div style="padding:6px 11px;border-radius:999px;background:var(--surf);border:1px solid var(--bd);font-size:11px;font-weight:600">{{ t }}</div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:14px;height:120px;border-radius:16px;overflow:hidden;background:var(--surfm);border:1px solid var(--bd);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">mapa · local público</span>
+            <div style="position:absolute;top:50%;left:50%;width:16px;height:16px;border-radius:999px;background:var(--pri);border:3px solid var(--surf)"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:18px">
+            <div onClick="{{ goProfile }}" style="width:36px;height:36px;border-radius:999px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer">MR</div>
+            <div style="flex:1"><div style="font-weight:600">Marcos Ribeiro</div><div style="font-size:11px;color:var(--txm)">Manaus, BR · 128 capturas</div></div>
+            <div style="height:38px;padding:0 16px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;font-size:13px;font-weight:600">Seguir</div>
+          </div>
+          <div style="margin-top:18px;display:flex;gap:10px">
+            <div style="flex:1;height:48px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600"><span style="width:16px;height:16px;border-radius:999px;border:2px solid var(--acc);display:inline-block"></span>Curtir · 34</div>
+            <div style="width:48px;height:48px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:18px">⋯</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sR1 }}">
+      <div style="padding:0 18px 24px">
+        <div style="display:flex;gap:6px;margin-bottom:18px">
+          <div style="flex:1;height:4px;border-radius:2px;background:var(--pri)"></div><div style="flex:1;height:4px;border-radius:2px;background:var(--bd)"></div><div style="flex:1;height:4px;border-radius:2px;background:var(--bd)"></div>
+        </div>
+        <div style="aspect-ratio:4/3;border-radius:20px;border:2px dashed var(--bd);background:var(--surf);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+          <div style="width:56px;height:56px;border-radius:18px;background:var(--surfm)"></div>
+          <span style="font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">preview da foto · recortar 4:3</span>
+        </div>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+          <div onClick="{{ goR2 }}" style="height:48px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;cursor:pointer">Tirar foto</div>
+          <div onClick="{{ goR2 }}" style="height:48px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-weight:600;cursor:pointer">Escolher da galeria</div>
+        </div>
+        <div style="margin-top:20px;padding:14px;border-radius:16px;background:var(--surfm);font-size:12px;line-height:1.55;color:var(--txm)">A foto é obrigatória e comprova o tamanho para o ranking.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sR2 }}">
+      <div style="padding:0 18px 24px">
+        <div style="display:flex;gap:6px;margin-bottom:16px">
+          <div style="flex:1;height:4px;border-radius:2px;background:var(--pri)"></div><div style="flex:1;height:4px;border-radius:2px;background:var(--pri)"></div><div style="flex:1;height:4px;border-radius:2px;background:var(--bd)"></div>
+        </div>
+        <div style="height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--surf);display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--txm)"><span style="width:14px;height:14px;border-radius:999px;border:2px solid var(--txm);display:inline-block"></span>Buscar espécie</div>
+        <div style="display:flex;padding:4px;border-radius:12px;background:var(--surfm);margin-top:14px">
+          <div style="flex:1;height:36px;border-radius:9px;background:var(--surf);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(11,31,36,.08)">Água doce</div>
+          <div style="flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--txm)">Água salgada</div>
+        </div>
+        <div style="margin-top:10px">
+          <sc-for list="{{ species }}" as="s" hint-placeholder-count="5">
+            <div onClick="{{ s.pick }}" style="display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--bd);cursor:pointer">
+              <div style="width:44px;height:44px;border-radius:12px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 6px,var(--bd) 6px,var(--bd) 12px)"></div>
+              <div style="flex:1"><div style="font-weight:600">{{ s.name }}</div><div style="font-size:11px;color:var(--txm)">{{ s.sci }}</div></div>
+              <sc-if value="{{ s.owned }}"><div style="padding:4px 9px;border-radius:999px;background:var(--acc);color:var(--accOn);font-size:10px;font-weight:700">NA DEX</div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sR3 }}">
+      <div style="padding:0 18px 24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;gap:6px">
+          <div style="flex:1;height:4px;border-radius:2px;background:var(--pri)"></div><div style="flex:1;height:4px;border-radius:2px;background:var(--pri)"></div><div style="flex:1;height:4px;border-radius:2px;background:var(--pri)"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--surfm)">
+          <div style="width:52px;height:52px;border-radius:12px;background:repeating-linear-gradient(45deg,var(--surf),var(--surf) 6px,var(--bd) 6px,var(--bd) 12px)"></div>
+          <div><div style="font-family:Sora,sans-serif;font-weight:600;font-size:16px">Tucunaré-açu</div><div style="font-size:11px;color:var(--txm)">Água doce · trocar</div></div>
+        </div>
+        <div style="display:flex;gap:12px">
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">Tamanho *</div><div style="height:48px;border-radius:12px;border:2px solid var(--pri);background:var(--surf);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-weight:600;font-variant-numeric:tabular-nums">72<span style="font-size:12px;color:var(--txm)">cm</span></div></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">Peso</div><div style="height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--surf);display:flex;align-items:center;justify-content:space-between;padding:0 14px;color:var(--txm)">—<span style="font-size:12px">kg</span></div></div>
+        </div>
+        <div><div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">Data</div><div style="height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--surf);display:flex;align-items:center;padding:0 14px;font-weight:500">12 mar 2026</div></div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">Local</div>
+          <div style="height:110px;border-radius:16px;background:var(--surfm);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;position:relative">
+            <span style="font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">mapa · arraste o pin</span>
+            <div style="position:absolute;top:50%;left:50%;width:16px;height:16px;border-radius:999px;background:var(--pri);border:3px solid var(--surf)"></div>
+          </div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--surf);border:1px solid var(--bd)">
+            <div style="flex:1"><div style="font-weight:600;font-size:13px">Local privado</div><div style="font-size:11px;color:var(--txm)">Ninguém vê o ponto exato</div></div>
+            <div style="width:48px;height:28px;border-radius:999px;background:var(--pri);padding:3px;display:flex;justify-content:flex-end"><div style="width:22px;height:22px;border-radius:999px;background:var(--priOn)"></div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:8px">Setup (opcional)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ setupFields }}" as="t" hint-placeholder-count="4">
+              <div style="padding:10px 14px;border-radius:12px;border:1px dashed var(--bd);font-size:12px;font-weight:600;color:var(--txm)">{{ t }}</div>
+            </sc-for>
+          </div>
+        </div>
+        <div onClick="{{ goOk }}" style="margin-top:6px;height:48px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;cursor:pointer">Salvar captura</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sOk }}">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;gap:16px">
+        <div style="width:84px;height:84px;border-radius:999px;background:var(--acc);color:var(--accOn);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:700">✓</div>
+        <div style="font-family:Sora,sans-serif;font-weight:700;font-size:28px;letter-spacing:-0.6px">Captura registrada!</div>
+        <div style="font-size:14px;line-height:1.55;color:var(--txm)">Tucunaré-açu de 72 cm entrou no seu diário.</div>
+        <div style="width:100%;padding:16px;border-radius:18px;background:var(--hi);color:var(--hiOn);text-align:left">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.6px">RANKING</div>
+          <div style="margin-top:6px;font-family:Sora,sans-serif;font-weight:700;font-size:19px">Você entrou no top 10 de Tucunaré-açu</div>
+          <div style="margin-top:4px;font-size:12px;font-weight:600;opacity:.85">8º lugar · mês de março</div>
+        </div>
+        <div style="width:100%;padding:12px 14px;border-radius:14px;background:var(--surfm);font-size:12px;font-weight:600;color:var(--txm);text-align:left">Plano Free · 2 de 3 capturas do mês usadas</div>
+        <div onClick="{{ goUnlock }}" style="width:100%;height:48px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;cursor:pointer">Ver no feed</div>
+        <div onClick="{{ goR1 }}" style="width:100%;height:48px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-weight:600;cursor:pointer">Nova captura</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sUnlock }}">
+      <div style="position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 18%,color-mix(in oklab,var(--acc) 22%,#0A3743),#0A3743 55%,#04222A);color:#EAF2F1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;gap:14px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--acc)">NOVA ESPÉCIE DESBLOQUEADA</div>
+        <div style="width:210px;height:210px;border-radius:32px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.14),rgba(255,255,255,.14) 8px,rgba(255,255,255,.05) 8px,rgba(255,255,255,.05) 16px);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 24px 60px rgba(0,0,0,.35)">
+          <span style="font-family:ui-monospace,monospace;font-size:11px;opacity:.85;line-height:1.6">silhueta → foto<br />(reveal animado)</span>
+        </div>
+        <div style="font-family:Sora,sans-serif;font-weight:700;font-size:30px;letter-spacing:-0.8px">Tucunaré-açu</div>
+        <div style="font-size:13px;opacity:.8">Cichla temensis · água doce · raridade incomum</div>
+        <div style="width:100%;margin-top:6px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:8px"><span>Sua Dex</span><span style="font-variant-numeric:tabular-nums">43 de 180</span></div>
+          <div style="height:8px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden"><div style="width:24%;height:100%;background:var(--acc)"></div></div>
+        </div>
+        <div onClick="{{ goDex }}" style="margin-top:10px;width:100%;height:48px;border-radius:12px;background:var(--acc);color:var(--accOn);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;cursor:pointer">Ver na Dex</div>
+        <div onClick="{{ goFeed }}" style="height:44px;font-weight:600;font-size:14px;opacity:.8;cursor:pointer;display:flex;align-items:center">Continuar</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ dDef }}">
+      <div style="padding:0 14px 20px">
+        <div style="display:flex;padding:4px;border-radius:12px;background:var(--surfm)">
+          <div style="flex:1;height:36px;border-radius:9px;background:var(--surf);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(11,31,36,.08)">Água doce</div>
+          <div style="flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--txm)">Água salgada</div>
+        </div>
+        <div style="margin-top:14px;padding:16px;border-radius:18px;background:var(--surf);border:1px solid var(--bd)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-family:Sora,sans-serif;font-weight:700;font-size:18px">43 de 180 capturadas</div>
+            <div style="font-size:12px;font-weight:700;color:var(--acc);font-variant-numeric:tabular-nums">24%</div>
+          </div>
+          <div style="margin-top:10px;height:8px;border-radius:999px;background:var(--surfm);overflow:hidden"><div style="width:24%;height:100%;background:var(--acc)"></div></div>
+          <div style="margin-top:10px;font-size:12px;color:var(--txm)">+1 nesta semana · faltam 6 para o próximo marco</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px;overflow:auto">
+          <sc-for list="{{ dexFilters }}" as="f" hint-placeholder-count="3">
+            <div style="padding:8px 13px;border-radius:999px;border:1px solid var(--bd);font-size:12px;font-weight:600;white-space:nowrap;color:var(--txm)">{{ f }}</div>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <sc-for list="{{ dex }}" as="d" hint-placeholder-count="9">
+            <div onClick="{{ d.open }}" style="cursor:pointer">
+              <div style="aspect-ratio:1;border-radius:16px;overflow:hidden;background:{{ d.bg }};border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;position:relative">
+                <sc-if value="{{ d.locked }}"><div style="width:22px;height:26px;border-radius:5px;background:color-mix(in oklab,var(--tx) 45%,transparent);display:flex;align-items:flex-start;justify-content:center"><div style="width:12px;height:12px;border-radius:999px;border:3px solid color-mix(in oklab,var(--tx) 45%,transparent);margin-top:-8px"></div></div></sc-if>
+              </div>
+              <div style="margin-top:6px;font-size:11px;font-weight:600;color:{{ d.tone }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ dLoad }}">
+      <div style="padding:0 14px 20px">
+        <div style="height:44px;border-radius:12px;background:var(--surfm)"></div>
+        <div style="margin-top:14px;height:96px;border-radius:18px;background:var(--surfm)"></div>
+        <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <sc-for list="{{ nine }}" as="n" hint-placeholder-count="9">
+            <div><div style="aspect-ratio:1;border-radius:16px;background:var(--surfm)"></div><div style="margin-top:6px;height:9px;width:70%;border-radius:5px;background:var(--surfm)"></div></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ dEmpty }}">
+      <div style="padding:44px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div style="width:96px;height:96px;border-radius:28px;background:var(--surfm);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center"><div style="width:26px;height:30px;border-radius:6px;background:var(--bd)"></div></div>
+        <div style="font-family:Sora,sans-serif;font-weight:600;font-size:19px">Sua Dex começa agora</div>
+        <div style="font-size:14px;line-height:1.55;color:var(--txm)">São 180 espécies para colecionar. Registre uma captura e a primeira silhueta vira foto.</div>
+        <div onClick="{{ goReg }}" style="margin-top:6px;height:48px;padding:0 22px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;font-weight:600;cursor:pointer">Registrar captura</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sSpecies }}">
+      <div>
+        <div style="aspect-ratio:1;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 8px,var(--bd) 8px,var(--bd) 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">foto da espécie 1:1</div>
+        <div style="padding:18px 18px 24px">
+          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.6px">Tucunaré-açu</div>
+          <div style="margin-top:4px;font-size:12px;color:var(--txm);line-height:1.6">Tucunaré (pt) · Pavón (es) · Peacock bass (en)<br /><span style="font-style:italic">Cichla temensis</span></div>
+          <div style="display:flex;gap:6px;margin-top:14px;flex-wrap:wrap">
+            <div style="padding:6px 11px;border-radius:999px;background:var(--acc);color:var(--accOn);font-size:11px;font-weight:700">Água doce</div>
+            <div style="padding:6px 11px;border-radius:999px;background:var(--surfm);font-size:11px;font-weight:600;color:var(--txm)">Raridade: incomum</div>
+            <div style="padding:6px 11px;border-radius:999px;background:var(--surfm);font-size:11px;font-weight:600;color:var(--txm)">Norte · Amazônia</div>
+          </div>
+          <div style="margin-top:18px;padding:16px;border-radius:18px;background:var(--surf);border:1px solid var(--bd)">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--txm)">SUA MELHOR CAPTURA</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:12px">
+              <div style="width:64px;height:64px;border-radius:14px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 6px,var(--bd) 6px,var(--bd) 12px)"></div>
+              <div style="flex:1"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:22px;font-variant-numeric:tabular-nums">72 cm</div><div style="font-size:11px;color:var(--txm)">12 mar 2026 · desbloqueada em 12 mar</div></div>
+            </div>
+            <div style="margin-top:14px;height:44px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">Ver minhas 4 capturas desta espécie</div>
+          </div>
+          <div style="margin-top:14px;padding:16px;border-radius:18px;background:var(--surfm);font-size:13px;line-height:1.6;color:var(--txm)"><span style="font-weight:700;color:var(--tx)">Dica de pesca.</span> Amanhecer em água clara, perto de galhadas. Iscas de superfície funcionam bem na seca.</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ rDef }}">
+      <div style="padding:0 14px 20px">
+        <div style="display:flex;gap:8px;overflow:auto;padding-bottom:4px">
+          <sc-for list="{{ rankFilters }}" as="f" hint-placeholder-count="4">
+            <div onClick="{{ f.open }}" style="padding:9px 14px;border-radius:999px;background:{{ f.bg }};color:{{ f.fg }};border:1px solid var(--bd);font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer">{{ f.label }}</div>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ podium }}" as="p" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:var(--surf);border:1px solid {{ p.bd }};box-shadow:0 1px 3px rgba(11,31,36,.06)">
+              <div style="width:34px;font-family:Sora,sans-serif;font-weight:700;font-size:24px;font-variant-numeric:tabular-nums;text-align:center;color:{{ p.numColor }}">{{ p.pos }}</div>
+              <div style="width:44px;height:44px;border-radius:999px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">{{ p.initials }}</div>
+              <div style="flex:1;min-width:0"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div><div style="font-size:11px;color:var(--txm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.meta }}</div></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;color:var(--hi)">{{ p.size }}</div>
+              <div style="width:44px;height:44px;border-radius:12px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 6px,var(--bd) 6px,var(--bd) 12px)"></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:12px">
+          <sc-for list="{{ rankRest }}" as="p" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--bd)">
+              <div style="width:28px;font-family:Sora,sans-serif;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;text-align:center;color:var(--txm)">{{ p.pos }}</div>
+              <div style="width:34px;height:34px;border-radius:999px;background:var(--surfm);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--txm)">{{ p.initials }}</div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div><div style="font-size:11px;color:var(--txm)">{{ p.meta }}</div></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums">{{ p.size }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px;padding:14px;border-radius:16px;background:var(--surfm);display:flex;align-items:center;gap:12px">
+          <div style="width:28px;font-family:Sora,sans-serif;font-weight:700;font-size:15px;text-align:center;color:var(--txm)">8</div>
+          <div style="flex:1;font-size:13px;font-weight:600">Você · Tucunaré-açu</div>
+          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:15px;color:var(--hi)">72 cm</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ rLock }}">
+      <div style="position:relative;min-height:100%">
+        <div style="padding:0 14px;filter:blur(7px);opacity:.75;pointer-events:none;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ podium }}" as="p" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:var(--surf);border:1px solid var(--bd)">
+              <div style="width:34px;font-family:Sora,sans-serif;font-weight:700;font-size:24px;text-align:center">{{ p.pos }}</div>
+              <div style="width:44px;height:44px;border-radius:999px;background:var(--surfm)"></div>
+              <div style="flex:1;height:12px;border-radius:6px;background:var(--surfm)"></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:20px;color:var(--hi)">{{ p.size }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;padding:16px;background:linear-gradient(to bottom,color-mix(in oklab,var(--bg) 60%,transparent),color-mix(in oklab,var(--bg) 88%,transparent))">
+          <div style="width:100%;border-radius:24px;background:var(--surf);border:1px solid var(--bd);padding:22px;box-shadow:0 8px 28px rgba(11,31,36,.14);text-align:center">
+            <div style="width:52px;height:60px;margin:0 auto;border-radius:10px;background:var(--hi);display:flex;align-items:flex-start;justify-content:center"><div style="width:22px;height:22px;border-radius:999px;border:5px solid var(--hi);margin-top:-14px"></div></div>
+            <div style="margin-top:16px;font-family:Sora,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.4px">Quem é o maior peixe?</div>
+            <div style="margin-top:10px;font-size:14px;line-height:1.55;color:var(--txm)">O ranking por espécie, país e período faz parte do Pro. Suas capturas continuam salvas.</div>
+            <div onClick="{{ goPay }}" style="margin-top:18px;height:48px;border-radius:12px;background:var(--hi);color:var(--hiOn);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;cursor:pointer">Assinar Pro</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sRankF }}">
+      <div style="position:absolute;inset:0;background:color-mix(in oklab,#04222A 45%,transparent);display:flex;align-items:flex-end">
+        <div style="width:100%;border-radius:24px 24px 0 0;background:var(--surf);padding:20px 18px 26px;box-shadow:0 -8px 30px rgba(4,34,42,.2)">
+          <div style="width:40px;height:4px;border-radius:2px;background:var(--bd);margin:0 auto 18px"></div>
+          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:20px">Filtros do ranking</div>
+          <div style="margin-top:18px;font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--txm)">ESPÉCIE</div>
+          <div style="margin-top:10px;height:48px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-weight:600">Tucunaré-açu<span style="color:var(--txm)">›</span></div>
+          <div style="margin-top:18px;font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--txm)">PERÍODO</div>
+          <div style="display:flex;padding:4px;border-radius:12px;background:var(--surfm);margin-top:10px">
+            <div style="flex:1;height:36px;border-radius:9px;background:var(--surf);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(11,31,36,.08)">Mês</div>
+            <div style="flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--txm)">Ano</div>
+            <div style="flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--txm)">Sempre</div>
+          </div>
+          <div style="margin-top:18px;font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--txm)">PAÍS</div>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <sc-for list="{{ countries }}" as="c" hint-placeholder-count="4">
+              <div style="padding:9px 14px;border-radius:999px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid var(--bd);font-size:12px;font-weight:600">{{ c.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:22px">
+            <div onClick="{{ goRank }}" style="flex:1;height:48px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-weight:600;cursor:pointer">Limpar</div>
+            <div onClick="{{ goRank }}" style="flex:2;height:48px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-weight:600;cursor:pointer">Aplicar filtros</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sMap }}">
+      <div style="position:absolute;inset:0;background:var(--surfm)">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,color-mix(in oklab,var(--bd) 60%,transparent),color-mix(in oklab,var(--bd) 60%,transparent) 1px,transparent 1px,transparent 44px),repeating-linear-gradient(90deg,color-mix(in oklab,var(--bd) 60%,transparent),color-mix(in oklab,var(--bd) 60%,transparent) 1px,transparent 1px,transparent 44px)"></div>
+        <div style="position:absolute;top:14%;left:16%;width:20px;height:20px;border-radius:999px;background:var(--pri);border:3px solid var(--surf);box-shadow:0 2px 6px rgba(0,0,0,.2)"></div>
+        <div style="position:absolute;top:32%;left:62%;width:20px;height:20px;border-radius:999px;background:var(--pri);border:3px solid var(--surf);box-shadow:0 2px 6px rgba(0,0,0,.2)"></div>
+        <div style="position:absolute;top:47%;left:34%;width:26px;height:26px;border-radius:999px;background:var(--acc);border:3px solid var(--surf);box-shadow:0 2px 10px rgba(0,0,0,.25)"></div>
+        <div style="position:absolute;top:22%;left:44%;width:14px;height:14px;border-radius:999px;background:var(--accOn);opacity:.35"></div>
+        <div style="position:absolute;top:12px;left:14px;right:14px;height:46px;border-radius:14px;background:var(--surf);border:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;color:var(--txm);font-weight:500;box-shadow:0 2px 8px rgba(11,31,36,.1)">Buscar pesqueiro ou espécie</div>
+        <div style="position:absolute;bottom:14px;left:14px;right:14px;border-radius:20px;background:var(--surf);border:1px solid var(--bd);padding:12px;display:flex;gap:12px;box-shadow:0 8px 24px rgba(11,31,36,.16)">
+          <div style="width:72px;height:72px;border-radius:14px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 6px,var(--bd) 6px,var(--bd) 12px)"></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:Sora,sans-serif;font-weight:600;font-size:16px">Pesqueiro Lago Azul</div>
+            <div style="font-size:11px;color:var(--txm);margin-top:2px">12 km · Atibaia, SP</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><div style="padding:4px 9px;border-radius:999px;background:var(--surfm);font-size:10px;font-weight:600;color:var(--txm)">Tilápia</div><div style="padding:4px 9px;border-radius:999px;background:var(--surfm);font-size:10px;font-weight:600;color:var(--txm)">Tambaqui</div></div>
+          </div>
+          <div onClick="{{ goSpot }}" style="width:40px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer">›</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ spDef }}">
+      <div style="padding:0 14px 20px">
+        <div style="height:46px;border-radius:14px;background:var(--surf);border:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;color:var(--txm);font-weight:500">Buscar por espécie ou estado</div>
+        <div style="display:flex;gap:8px;margin-top:12px;overflow:auto">
+          <sc-for list="{{ spotFilters }}" as="f" hint-placeholder-count="3">
+            <div style="padding:8px 13px;border-radius:999px;border:1px solid var(--bd);font-size:12px;font-weight:600;white-space:nowrap;color:var(--txm)">{{ f }}</div>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ spots }}" as="s" hint-placeholder-count="3">
+            <div onClick="{{ s.open }}" style="border-radius:20px;background:var(--surf);border:1px solid var(--bd);overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(11,31,36,.06)">
+              <div style="height:118px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 8px,var(--bd) 8px,var(--bd) 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">foto do pesqueiro 16:9</div>
+              <div style="padding:14px">
+                <div style="display:flex;justify-content:space-between;gap:8px"><div style="font-family:Sora,sans-serif;font-weight:600;font-size:16px">{{ s.name }}</div><div style="font-size:12px;font-weight:600;color:var(--txm);white-space:nowrap">{{ s.dist }}</div></div>
+                <div style="font-size:11px;color:var(--txm);margin-top:2px">{{ s.place }}</div>
+                <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+                  <sc-for list="{{ s.species }}" as="t" hint-placeholder-count="2">
+                    <div style="padding:5px 10px;border-radius:999px;background:var(--surfm);font-size:11px;font-weight:600;color:var(--txm)">{{ t }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ spErr }}">
+      <div style="padding:44px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div style="width:56px;height:56px;border-radius:999px;background:var(--warn);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:26px">!</div>
+        <div style="font-family:Sora,sans-serif;font-weight:600;font-size:19px">Não foi possível carregar</div>
+        <div style="font-size:14px;line-height:1.55;color:var(--txm)">A lista de pesqueiros não respondeu. Isso costuma ser a conexão.</div>
+        <div style="margin-top:6px;height:48px;padding:0 22px;border-radius:12px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;font-weight:600">Tentar de novo</div>
+        <div style="height:44px;padding:0 22px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;font-weight:600">Ver no mapa</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sSpot }}">
+      <div>
+        <div style="height:220px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 8px,var(--bd) 8px,var(--bd) 16px);display:flex;align-items:flex-end;justify-content:center;padding:12px;font-family:ui-monospace,monospace;font-size:11px;color:var(--txm);position:relative">
+          galeria · 5 fotos
+          <div style="position:absolute;bottom:12px;right:12px;padding:5px 10px;border-radius:999px;background:color-mix(in oklab,#04222A 70%,transparent);color:#EAF2F1;font-size:11px;font-weight:600">1 / 5</div>
+        </div>
+        <div style="padding:18px 18px 24px">
+          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.6px">Pesqueiro Lago Azul</div>
+          <div style="margin-top:4px;font-size:12px;color:var(--txm)">Atibaia, SP · 12 km de você · aberto 6h–18h</div>
+          <div style="display:flex;gap:6px;margin-top:14px;flex-wrap:wrap">
+            <sc-for list="{{ spotSpecies }}" as="t" hint-placeholder-count="3">
+              <div style="padding:6px 11px;border-radius:999px;background:var(--surfm);font-size:11px;font-weight:600;color:var(--txm)">{{ t }}</div>
+            </sc-for>
+          </div>
+          <div style="margin-top:16px;font-size:14px;line-height:1.6;color:var(--txm)">Cinco lagos com tilápia, tambaqui e pacu. Aluguel de vara, lanchonete e área coberta. Pesque e solte nos lagos 4 e 5.</div>
+          <div style="margin-top:16px;height:130px;border-radius:16px;background:var(--surfm);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;position:relative"><span style="font-family:ui-monospace,monospace;font-size:11px;color:var(--txm)">mapa · rota</span><div style="position:absolute;top:50%;left:50%;width:18px;height:18px;border-radius:999px;background:var(--acc);border:3px solid var(--surf)"></div></div>
+          <div style="margin-top:18px;height:48px;border-radius:12px;background:#25D366;color:#06231E;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:15px"><span style="width:16px;height:16px;border-radius:999px;background:#06231E;display:inline-block"></span>Falar no WhatsApp</div>
+          <div style="margin-top:10px;height:44px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px">Ver capturas registradas aqui</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sProfile }}">
+      <div style="padding:0 16px 20px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:68px;height:68px;border-radius:999px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-size:22px;font-weight:700">LG</div>
+          <div style="flex:1">
+            <div style="font-family:Sora,sans-serif;font-weight:700;font-size:20px">Lucas Guedes</div>
+            <div style="font-size:12px;color:var(--txm);margin-top:2px">Brasil · desde jan 2026</div>
+          </div>
+          <div style="height:38px;padding:0 14px;border-radius:12px;border:1px solid var(--bd);display:flex;align-items:center;font-size:13px;font-weight:600">Editar</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:18px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+            <div style="flex:1;padding:14px 12px;border-radius:16px;background:var(--surf);border:1px solid var(--bd)">
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:22px;font-variant-numeric:tabular-nums;color:{{ s.color }}">{{ s.value }}</div>
+              <div style="font-size:11px;color:var(--txm);margin-top:2px">{{ s.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div onClick="{{ goPay }}" style="margin-top:14px;padding:16px;border-radius:18px;background:var(--hi);color:var(--hiOn);display:flex;align-items:center;gap:12px;cursor:pointer">
+          <div style="flex:1"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:16px">Você está no Free</div><div style="font-size:12px;font-weight:600;opacity:.85;margin-top:2px">2 de 3 capturas usadas neste mês</div></div>
+          <div style="font-size:18px;font-weight:700">›</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px">
+          <div style="font-family:Sora,sans-serif;font-weight:600;font-size:16px">Minhas capturas</div>
+          <div style="font-size:12px;font-weight:600;color:var(--txm)">Grade · Lista</div>
+        </div>
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+          <sc-for list="{{ nine }}" as="n" hint-placeholder-count="9">
+            <div style="aspect-ratio:1;border-radius:10px;background:repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 6px,var(--bd) 6px,var(--bd) 12px)"></div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ settings }}" as="s" hint-placeholder-count="4">
+            <div style="height:50px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);font-size:14px;font-weight:500">{{ s }}<span style="color:var(--txm)">›</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sPaywall }}">
+      <div style="padding:0 18px 28px">
+        <div style="font-family:Sora,sans-serif;font-weight:700;font-size:28px;line-height:1.15;letter-spacing:-0.8px">Pesque, compare, colecione.</div>
+        <div style="margin-top:10px;font-size:14px;line-height:1.55;color:var(--txm)">O Pro abre o feed, o ranking do maior peixe e a Dex completa, sem limite de capturas.</div>
+        <div style="display:flex;padding:4px;border-radius:12px;background:var(--surfm);margin-top:18px">
+          <div style="flex:1;height:38px;border-radius:9px;background:var(--surf);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(11,31,36,.08)">Mensal</div>
+          <div style="flex:1;height:38px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:600;color:var(--txm)">Anual<span style="padding:3px 7px;border-radius:999px;background:var(--acc);color:var(--accOn);font-size:10px;font-weight:700">-40%</span></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px">
+          <div style="flex:1;padding:16px;border-radius:18px;background:var(--surf);border:1px solid var(--bd)">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--txm)">FREE</div>
+            <div style="margin-top:8px;font-family:Sora,sans-serif;font-weight:700;font-size:22px">R$ 0</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.4;color:var(--txm)">
+              <div>3 capturas/mês</div><div>Diário só seu</div><div>Sem feed</div><div>Sem ranking</div>
+            </div>
+          </div>
+          <div style="flex:1.15;padding:16px;border-radius:18px;background:var(--pri);color:var(--priOn);border:1px solid var(--pri);position:relative">
+            <div style="position:absolute;top:-10px;right:12px;padding:4px 9px;border-radius:999px;background:var(--hi);color:var(--hiOn);font-size:10px;font-weight:700">POPULAR</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:.5px;opacity:.8">PRO</div>
+            <div style="margin-top:8px;font-family:Sora,sans-serif;font-weight:700;font-size:22px">R$ 19,90<span style="font-size:12px;font-weight:600;opacity:.75">/mês</span></div>
+            <div style="font-size:11px;opacity:.75;margin-top:2px">US$ 6,99/mês</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.4">
+              <div>Capturas ilimitadas</div><div>Feed e curtidas</div><div>Ranking completo</div><div>Dex e estatísticas</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:var(--txm);line-height:1.5">Anual: R$ 149/ano · US$ 49,99/ano. Renovação automática, cancele quando quiser.</div>
+        <div onClick="{{ goFeed }}" style="margin-top:16px;height:48px;border-radius:12px;background:var(--hi);color:var(--hiOn);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;cursor:pointer">Assinar Pro</div>
+        <div style="margin-top:12px;display:flex;justify-content:center;gap:18px;font-size:12px;font-weight:600;color:var(--txm)"><span>Restaurar compra</span><span>Termos</span></div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:0 0 auto;position:relative;height:74px;border-top:1px solid var(--bd);background:var(--surf);box-shadow:0 -2px 12px rgba(11,31,36,.06);display:flex;align-items:center;padding:0 6px 10px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+        <div onClick="{{ t.go }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:10px;cursor:pointer">
+          <div style="width:{{ t.w }};height:{{ t.h }};border-radius:{{ t.r }};background:{{ t.mark }};transform:{{ t.rot }}"></div>
+          <div style="font-size:10px;font-weight:600;color:{{ t.fg }}">{{ t.label }}</div>
+        </div>
+      </sc-for>
+      <div onClick="{{ goR1 }}" style="position:absolute;left:50%;top:-22px;margin-left:-28px;width:56px;height:56px;border-radius:999px;background:var(--pri);color:var(--priOn);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:300;box-shadow:0 6px 18px color-mix(in oklab,var(--pri) 45%,transparent);cursor:pointer" style-active="opacity:.85">＋</div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;screen&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;feed&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;st&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onNav&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(k: string) =&gt; void&quot;}}">
+class Component extends DCLogic {
+  go(k) { if (this.props.onNav) this.props.onNav(k); }
+  renderVals() {
+    const s = this.props.screen || "feed";
+    const st = this.props.st || "default";
+    const go = (k) => () => this.go(k);
+    const titles = {
+      login: "Entrar", feed: "Feed", detail: "Captura", r1: "Foto", r2: "Espécie", r3: "Detalhes",
+      dex: "Dex", species: "Espécie", rank: "Ranking", rankf: "Ranking", spots: "Pesqueiros",
+      spot: "Pesqueiro", profile: "Meu perfil", paywall: "Planos"
+    };
+    const tabScreens = ["feed", "rank", "dex", "profile", "map", "spots"];
+    const noHeader = ["onb", "ok", "unlock", "map"];
+    const backable = ["detail", "r1", "r2", "r3", "species", "spot", "paywall", "login"];
+    const mk = (label, key, active, shape) => ({
+      label, go: go(key),
+      mark: active ? "var(--pri)" : "var(--txm)",
+      fg: active ? "var(--pri)" : "var(--txm)",
+      w: shape === "sq" ? "18px" : "20px",
+      h: shape === "sq" ? "18px" : "20px",
+      r: shape === "circle" ? "999px" : shape === "sq" ? "5px" : "4px",
+      rot: shape === "diamond" ? "rotate(45deg)" : "none"
+    });
+    const cur = (k) => s === k || (k === "rank" && s === "rankf") || (k === "spots" && s === "map");
+    const catches = [
+      { id: 1, species: "Dourado", size: "84 cm", user: "Marcos Ribeiro", initials: "MR", likes: 34, chips: ["Isca artificial", "Vara 20lb", "Rio Paraná"], ph: "foto da captura 4:3", open: go("detail") },
+      { id: 2, species: "Robalo-flecha", size: "61 cm", user: "Ana Quintela", initials: "AQ", likes: 21, chips: ["Jig 14g", "Água salgada"], ph: "foto da captura 4:3", open: go("detail") },
+      { id: 3, species: "Tambaqui", size: "58 cm", user: "Iván Sosa", initials: "IS", likes: 12, chips: ["Massa", "Pesqueiro Lago Azul"], ph: "foto da captura 4:3", open: go("detail") }
+    ];
+    const dexNames = ["Tucunaré-açu", "Dourado", "Pacu", "Tambaqui", "???", "Pirarara", "???", "???", "Traíra", "???", "???", "Piraíba"];
+    const dexLocked = [false, false, false, false, true, false, true, true, false, true, true, false];
+    const dex = dexNames.map((n, i) => ({
+      label: dexLocked[i] ? "???" : n,
+      locked: dexLocked[i],
+      bg: dexLocked[i] ? "var(--surfm)" : "repeating-linear-gradient(45deg,var(--surfm),var(--surfm) 6px,var(--bd) 6px,var(--bd) 12px)",
+      tone: dexLocked[i] ? "var(--txm)" : "var(--tx)",
+      open: go("species")
+    }));
+    const rank = [
+      { pos: 1, name: "Marcos Ribeiro", initials: "MR", meta: "Dourado · Brasil · mar 2026", size: "84 cm" },
+      { pos: 2, name: "Ana Quintela", initials: "AQ", meta: "Dourado · Brasil · mar 2026", size: "81 cm" },
+      { pos: 3, name: "Iván Sosa", initials: "IS", meta: "Dourado · Argentina · mar 2026", size: "79 cm" },
+      { pos: 4, name: "Pedro Lemos", initials: "PL", meta: "Dourado · Brasil", size: "76 cm" },
+      { pos: 5, name: "Sofía Herrera", initials: "SH", meta: "Dourado · Argentina", size: "75 cm" },
+      { pos: 6, name: "Tom Keller", initials: "TK", meta: "Dourado · EUA", size: "74 cm" },
+      { pos: 7, name: "Rafa Dutra", initials: "RD", meta: "Dourado · Brasil", size: "73 cm" }
+    ];
+    const medal = ["var(--hi)", "color-mix(in oklab,var(--txm) 60%,var(--bd))", "color-mix(in oklab,var(--hi) 45%,var(--bd))"];
+    return {
+      title: titles[s] || "fishingdex",
+      hasHeader: noHeader.indexOf(s) === -1,
+      canBack: backable.indexOf(s) !== -1,
+      hasHeaderAction: s === "feed" || s === "dex" || s === "profile",
+      headerAction: s === "dex" ? "Buscar" : s === "profile" ? "Ajustes" : "Filtrar",
+      showTabs: tabScreens.indexOf(s) !== -1 || s === "rankf",
+      sOnb: s === "onb", sLogin: s === "login", sDetail: s === "detail",
+      sR1: s === "r1", sR2: s === "r2", sR3: s === "r3", sOk: s === "ok", sUnlock: s === "unlock",
+      sSpecies: s === "species", sRankF: s === "rankf", sMap: s === "map", sSpot: s === "spot",
+      sProfile: s === "profile", sPaywall: s === "paywall",
+      fDef: s === "feed" && st === "default", fEmpty: s === "feed" && st === "empty",
+      fLoad: s === "feed" && st === "loading", fErr: s === "feed" && st === "error",
+      fLock: s === "feed" && st === "locked",
+      rDef: s === "rank" && st !== "locked", rLock: s === "rank" && st === "locked",
+      dDef: s === "dex" && st === "default", dLoad: s === "dex" && st === "loading",
+      dEmpty: s === "dex" && (st === "empty" || st === "locked"),
+      spDef: s === "spots" && st !== "error", spErr: s === "spots" && st === "error",
+      catches, dex,
+      three: [1, 2, 3], nine: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      setup: ["Isca: plug de superfície", "Vara: 6' 20lb", "Carretilha: perfil baixo", "Linha: multi 30lb"],
+      setupFields: ["Isca", "Vara", "Carretilha", "Linha"],
+      species: [
+        { name: "Tucunaré-açu", sci: "Cichla temensis", owned: true, pick: go("r3") },
+        { name: "Tucunaré-paca", sci: "Cichla pinima", owned: false, pick: go("r3") },
+        { name: "Dourado", sci: "Salminus brasiliensis", owned: true, pick: go("r3") },
+        { name: "Pacu", sci: "Piaractus mesopotamicus", owned: false, pick: go("r3") },
+        { name: "Traíra", sci: "Hoplias malabaricus", owned: false, pick: go("r3") },
+        { name: "Pirarara", sci: "Phractocephalus h.", owned: false, pick: go("r3") }
+      ],
+      dexFilters: ["Todas", "Só desbloqueadas", "Faltando", "Raras"],
+      rankFilters: [
+        { label: "Global", bg: "var(--pri)", fg: "var(--priOn)", open: go("rankf") },
+        { label: "Dourado", bg: "var(--surf)", fg: "var(--tx)", open: go("rankf") },
+        { label: "Este mês", bg: "var(--surf)", fg: "var(--tx)", open: go("rankf") },
+        { label: "Brasil", bg: "var(--surf)", fg: "var(--tx)", open: go("rankf") },
+        { label: "Mais filtros", bg: "var(--surf)", fg: "var(--txm)", open: go("rankf") }
+      ],
+      podium: rank.slice(0, 3).map((r, i) => Object.assign({}, r, {
+        bd: i === 0 ? "var(--hi)" : "var(--bd)",
+        numColor: medal[i]
+      })),
+      rankRest: rank.slice(3),
+      countries: [
+        { label: "Todos", bg: "var(--pri)", fg: "var(--priOn)" },
+        { label: "Brasil", bg: "var(--surf)", fg: "var(--tx)" },
+        { label: "Argentina", bg: "var(--surf)", fg: "var(--tx)" },
+        { label: "EUA", bg: "var(--surf)", fg: "var(--tx)" }
+      ],
+      spotFilters: ["Perto de mim", "Água doce", "Pesque e solte", "Aberto agora"],
+      spots: [
+        { name: "Pesqueiro Lago Azul", dist: "12 km", place: "Atibaia, SP", species: ["Tilápia", "Tambaqui", "Pacu"], open: go("spot") },
+        { name: "Recanto do Dourado", dist: "48 km", place: "Piracicaba, SP", species: ["Dourado", "Pintado"], open: go("spot") },
+        { name: "Estância Pesca Viva", dist: "96 km", place: "Corumbá, MS", species: ["Pacu", "Piraputanga"], open: go("spot") }
+      ],
+      spotSpecies: ["Tilápia", "Tambaqui", "Pacu", "Pintado", "Carpa"],
+      stats: [
+        { value: "128", label: "Capturas", color: "var(--tx)" },
+        { value: "84 cm", label: "Maior peixe", color: "var(--hi)" },
+        { value: "43/180", label: "Dex", color: "var(--acc)" }
+      ],
+      settings: ["Idioma · Português", "Tema · Sistema", "Assinatura", "Termos e privacidade"],
+      tabs: [
+        mk("Feed", "feed", cur("feed"), "sq"),
+        mk("Ranking", "rank", cur("rank"), "diamond"),
+        Object.assign(mk("", "r1", false, "sq"), { label: "", mark: "transparent", w: "20px", h: "20px" }),
+        mk("Dex", "dex", cur("dex"), "circle"),
+        mk("Perfil", "profile", cur("profile"), "circle")
+      ],
+      back: () => this.go("back"),
+      goLogin: go("login"), goFeed: go("feed"), goReg: go("r1"), goR1: go("r1"), goR2: go("r2"),
+      goOk: go("ok"), goUnlock: go("unlock"), goDex: go("dex"), goPay: go("paywall"),
+      goRank: go("rank"), goProfile: go("profile"), goSpot: go("spot")
+    };
+  }
+}
+
+</script>
+</body>
+</html>

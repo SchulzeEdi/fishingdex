@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#12181A}
+a{color:#21C0A8;text-decoration:none}
+a:hover{color:#2FA6BC}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#12181A;color:#EAF2F1;font-family:Inter,system-ui,sans-serif;padding:24px 20px 56px">
+
+  <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:22px">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:Sora,sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.6px">fishingdex</div>
+        <div style="margin-top:4px;font-size:13px;color:#9DB3B3">Protótipo navegável · Águas Profundas · 390×844 · pt-BR</div>
+      </div>
+      <div style="display:flex;gap:6px;padding:4px;border-radius:12px;background:#1B2426">
+        <div onClick="{{ showProto }}" style="padding:9px 16px;border-radius:9px;background:{{ protoBg }};color:{{ protoFg }};font-size:13px;font-weight:600;cursor:pointer">Protótipo</div>
+        <div onClick="{{ showGuide }}" style="padding:9px 16px;border-radius:9px;background:{{ guideBg }};color:{{ guideFg }};font-size:13px;font-weight:600;cursor:pointer">Style guide</div>
+      </div>
+    </div>
+
+    <sc-if value="{{ isProto }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:18px">
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <div style="width:104px;flex:0 0 104px;font-size:10px;font-weight:700;letter-spacing:.8px;color:#5F7375">{{ g.label }}</div>
+              <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="4">
+                <div onClick="{{ i.go }}" style="padding:8px 13px;border-radius:999px;border:1px solid {{ i.bd }};background:{{ i.bg }};color:{{ i.fg }};font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">{{ i.label }}</div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:4px;border-top:1px solid #1E3D47">
+          <div style="width:104px;flex:0 0 104px;font-size:10px;font-weight:700;letter-spacing:.8px;color:#5F7375">ESTADO</div>
+          <sc-for list="{{ states }}" as="s" hint-placeholder-count="5">
+            <div onClick="{{ s.go }}" style="padding:8px 13px;border-radius:999px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }};font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;opacity:{{ s.op }}">{{ s.label }}</div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;gap:28px;flex-wrap:wrap;justify-content:center;padding-top:8px">
+          <div style="display:flex;flex-direction:column;gap:10px;align-items:center">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#9DB3B3">TEMA CLARO</div>
+            <div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;border:1px solid #2A3638;box-shadow:0 20px 60px rgba(0,0,0,.45);--bg:#F7F5F0;--surf:#FFFFFF;--surfm:#EFEDE6;--bd:#E2DFD6;--tx:#0B1F24;--txm:#5A564C;--pri:#0E4D5C;--priOn:#FFFFFF;--acc:#21C0A8;--accOn:#06231E;--hi:#FF7A1A;--hiOn:#221200;--ok:#16A34A;--warn:#D97706;--dg:#DC2626">
+              <dc-import name="Screen" screen="{{ screen }}" st="{{ st }}" onNav="{{ nav }}" hint-size="390px,844px"></dc-import>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;align-items:center">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#9DB3B3">TEMA ESCURO</div>
+            <div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;border:1px solid #1E3D47;box-shadow:0 20px 60px rgba(0,0,0,.55);--bg:#071519;--surf:#0E2229;--surfm:#13303A;--bd:#1E3D47;--tx:#EAF2F1;--txm:#9DB3B3;--pri:#2FA6BC;--priOn:#04222A;--acc:#21C0A8;--accOn:#06231E;--hi:#FF8A33;--hiOn:#1A0E00;--ok:#22C55E;--warn:#F59E0B;--dg:#F87171">
+              <dc-import name="Screen" screen="{{ screen }}" st="{{ st }}" onNav="{{ nav }}" hint-size="390px,844px"></dc-import>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;font-size:12px;color:#5F7375;line-height:1.6">Toque nos cards, na tab bar e no ＋ para navegar — os dois temas andam juntos.<br />Regra de ouro: laranja só em ranking e “Assinar Pro”.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isGuide }}">
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:300px;border-radius:20px;background:#F7F5F0;color:#0B1F24;padding:22px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#5A564C">PALETA · CLARO</div>
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px">
+              <sc-for list="{{ lightSwatches }}" as="s" hint-placeholder-count="8">
+                <div>
+                  <div style="height:56px;border-radius:12px;background:{{ s.hex }};border:1px solid #E2DFD6"></div>
+                  <div style="margin-top:6px;font-size:11px;font-weight:600">{{ s.role }}</div>
+                  <div style="font-family:ui-monospace,monospace;font-size:10px;color:#5A564C">{{ s.hex }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="flex:1;min-width:300px;border-radius:20px;background:#071519;color:#EAF2F1;padding:22px;border:1px solid #1E3D47">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#9DB3B3">PALETA · ESCURO</div>
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px">
+              <sc-for list="{{ darkSwatches }}" as="s" hint-placeholder-count="8">
+                <div>
+                  <div style="height:56px;border-radius:12px;background:{{ s.hex }};border:1px solid #1E3D47"></div>
+                  <div style="margin-top:6px;font-size:11px;font-weight:600">{{ s.role }}</div>
+                  <div style="font-family:ui-monospace,monospace;font-size:10px;color:#9DB3B3">{{ s.hex }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:20px;background:#F7F5F0;color:#0B1F24;padding:22px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#5A564C">TIPOGRAFIA · SORA (títulos, números) + INTER (corpo)</div>
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:Sora,sans-serif;font-weight:700;font-size:48px;line-height:1;letter-spacing:-1.4px">5xl 48 · 84 cm</div>
+            <div style="font-family:Sora,sans-serif;font-weight:700;font-size:30px;letter-spacing:-0.8px">3xl 30 · Nova espécie desbloqueada</div>
+            <div style="font-family:Sora,sans-serif;font-weight:600;font-size:20px">xl 20 · Ranking do maior peixe</div>
+            <div style="font-size:16px;line-height:1.55;max-width:640px">base 16 · Corpo em Inter 400. O texto precisa caber em pt, es e en — espanhol e inglês pedem até 20% mais espaço, então botões e chips nunca travam a largura.</div>
+            <div style="font-size:14px;color:#5A564C">sm 14 · metadados e labels</div>
+            <div style="font-size:12px;color:#5A564C;font-variant-numeric:tabular-nums">xs 12 · tabular figures 0123456789 para ranking</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <sc-for list="{{ guidePanels }}" as="p" hint-placeholder-count="2">
+            <div style="flex:1;min-width:320px;border-radius:20px;padding:22px;background:{{ p.bg }};color:{{ p.tx }};border:1px solid {{ p.bd }}">
+              <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:{{ p.txm }}">BOTÕES E ESTADOS · {{ p.name }}</div>
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px">
+                <div style="height:48px;border-radius:12px;background:{{ p.pri }};color:{{ p.priOn }};display:flex;align-items:center;justify-content:center;font-weight:600">Primário · default</div>
+                <div style="height:48px;border-radius:12px;background:{{ p.pri }};color:{{ p.priOn }};display:flex;align-items:center;justify-content:center;font-weight:600;opacity:.82;transform:scale(.99)">Primário · pressed</div>
+                <div style="height:48px;border-radius:12px;background:{{ p.pri }};color:{{ p.priOn }};display:flex;align-items:center;justify-content:center;font-weight:600;box-shadow:0 0 0 4px {{ p.halo }}">Primário · foco</div>
+                <div style="height:48px;border-radius:12px;background:{{ p.surfm }};color:{{ p.txm }};display:flex;align-items:center;justify-content:center;font-weight:600">Primário · desabilitado</div>
+                <div style="height:48px;border-radius:12px;border:1px solid {{ p.bd }};display:flex;align-items:center;justify-content:center;font-weight:600">Secundário (contorno)</div>
+                <div style="height:48px;display:flex;align-items:center;justify-content:center;font-weight:600;color:{{ p.pri }}">Ghost</div>
+                <div style="height:48px;border-radius:12px;background:{{ p.hi }};color:{{ p.hiOn }};display:flex;align-items:center;justify-content:center;font-weight:700">Assinar Pro (só ranking/paywall)</div>
+                <div style="height:48px;border-radius:12px;background:#25D366;color:#06231E;display:flex;align-items:center;justify-content:center;font-weight:700">Falar no WhatsApp</div>
+                <div style="height:48px;border-radius:12px;background:{{ p.dg }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600">Destrutivo</div>
+              </div>
+              <div style="margin-top:20px;font-size:10px;font-weight:700;letter-spacing:1px;color:{{ p.txm }}">INPUT</div>
+              <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px">
+                <div style="height:48px;border-radius:12px;border:1px solid {{ p.bd }};background:{{ p.surf }};display:flex;align-items:center;padding:0 14px;color:{{ p.txm }}">default</div>
+                <div style="height:48px;border-radius:12px;border:2px solid {{ p.pri }};box-shadow:0 0 0 4px {{ p.halo }};background:{{ p.surf }};display:flex;align-items:center;padding:0 14px;font-weight:500">foco</div>
+                <div>
+                  <div style="height:48px;border-radius:12px;border:2px solid {{ p.dg }};background:{{ p.surf }};display:flex;align-items:center;padding:0 14px;font-weight:500">erro</div>
+                  <div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:{{ p.dg }}"><span style="width:14px;height:14px;border-radius:999px;background:{{ p.dg }};color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center">!</span>Informe o tamanho para entrar no ranking</div>
+                </div>
+              </div>
+              <div style="margin-top:20px;font-size:10px;font-weight:700;letter-spacing:1px;color:{{ p.txm }}">CHIPS · SKELETON · STAT</div>
+              <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                <div style="padding:6px 11px;border-radius:999px;background:{{ p.acc }};color:{{ p.accOn }};font-size:11px;font-weight:700">Água doce</div>
+                <div style="padding:6px 11px;border-radius:999px;background:{{ p.surfm }};color:{{ p.txm }};font-size:11px;font-weight:600">Isca artificial</div>
+                <div style="padding:6px 11px;border-radius:999px;border:1px dashed {{ p.bd }};color:{{ p.txm }};font-size:11px;font-weight:600">+ Vara</div>
+              </div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+                <div style="height:14px;width:60%;border-radius:7px;background:{{ p.surfm }}"></div>
+                <div style="height:14px;width:35%;border-radius:7px;background:{{ p.surfm }}"></div>
+              </div>
+              <div style="margin-top:16px;display:flex;gap:10px">
+                <div style="flex:1;padding:14px;border-radius:16px;background:{{ p.surf }};border:1px solid {{ p.bd }}"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:22px;font-variant-numeric:tabular-nums">128</div><div style="font-size:11px;color:{{ p.txm }}">Capturas</div></div>
+                <div style="flex:1;padding:14px;border-radius:16px;background:{{ p.surf }};border:1px solid {{ p.bd }}"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:22px;color:{{ p.hi }};font-variant-numeric:tabular-nums">84 cm</div><div style="font-size:11px;color:{{ p.txm }}">Maior peixe</div></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="border-radius:20px;background:#F7F5F0;color:#0B1F24;padding:22px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#5A564C">ESPAÇAMENTO (BASE 4) E RAIOS</div>
+          <div style="margin-top:16px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+            <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="9">
+              <div style="text-align:center"><div style="width:{{ s.px }};height:28px;background:#0E4D5C;border-radius:4px"></div><div style="margin-top:6px;font-family:ui-monospace,monospace;font-size:10px;color:#5A564C">{{ s.label }}</div></div>
+            </sc-for>
+          </div>
+          <div style="margin-top:22px;display:flex;gap:14px;flex-wrap:wrap">
+            <sc-for list="{{ radii }}" as="r" hint-placeholder-count="5">
+              <div style="text-align:center"><div style="width:72px;height:56px;background:#FFFFFF;border:1px solid #E2DFD6;border-radius:{{ r.px }}"></div><div style="margin-top:6px;font-family:ui-monospace,monospace;font-size:10px;color:#5A564C">{{ r.label }}</div></div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { view: "proto", screen: "feed", st: "default", hist: [] };
+  nav = (k) => {
+    if (k === "back") {
+      this.setState((s) => {
+        const h = s.hist.slice();
+        const prev = h.pop() || "feed";
+        return { screen: prev, hist: h };
+      });
+      return;
+    }
+    this.setState((s) => ({ screen: k, hist: s.hist.concat([s.screen]).slice(-12), st: "default" }));
+  };
+  pick(screen) { this.setState((s) => ({ screen, hist: s.hist.concat([s.screen]).slice(-12), st: "default" })); }
+  renderVals() {
+    const cur = this.state.screen;
+    const st = this.state.st;
+    const chip = (label, key) => ({
+      label, go: () => this.pick(key),
+      bg: cur === key ? "#21C0A8" : "#1B2426",
+      fg: cur === key ? "#06231E" : "#C7D6D6",
+      bd: cur === key ? "#21C0A8" : "#243032"
+    });
+    const stateFor = { feed: ["default", "loading", "empty", "error", "locked"], dex: ["default", "loading", "empty"], rank: ["default", "locked"], spots: ["default", "error"] };
+    const allowed = stateFor[cur] || ["default"];
+    const labels = { default: "Padrão", loading: "Skeleton", empty: "Vazio", error: "Erro", locked: "Bloqueado (Free)" };
+    const states = ["default", "loading", "empty", "error", "locked"].map((k) => {
+      const on = allowed.indexOf(k) !== -1;
+      return {
+        label: labels[k],
+        op: on ? "1" : "0.32",
+        bg: st === k && on ? "#FF8A33" : "#1B2426",
+        fg: st === k && on ? "#1A0E00" : "#C7D6D6",
+        bd: st === k && on ? "#FF8A33" : "#243032",
+        go: on ? () => this.setState({ st: k }) : () => {}
+      };
+    });
+    const sw = (role, hex) => ({ role, hex });
+    return {
+      isProto: this.state.view === "proto",
+      isGuide: this.state.view === "guide",
+      showProto: () => this.setState({ view: "proto" }),
+      showGuide: () => this.setState({ view: "guide" }),
+      protoBg: this.state.view === "proto" ? "#0E4D5C" : "transparent",
+      protoFg: this.state.view === "proto" ? "#FFFFFF" : "#9DB3B3",
+      guideBg: this.state.view === "guide" ? "#0E4D5C" : "transparent",
+      guideFg: this.state.view === "guide" ? "#FFFFFF" : "#9DB3B3",
+      screen: cur, st, nav: this.nav, states,
+      groups: [
+        { label: "ENTRADA", items: [chip("Onboarding", "onb"), chip("Entrar", "login")] },
+        { label: "FEED", items: [chip("Feed", "feed"), chip("Detalhe da captura", "detail"), chip("Perfil", "profile"), chip("Paywall", "paywall")] },
+        { label: "REGISTRAR", items: [chip("1 · Foto", "r1"), chip("2 · Espécie", "r2"), chip("3 · Detalhes", "r3"), chip("Sucesso", "ok"), chip("Desbloqueio", "unlock")] },
+        { label: "DEX", items: [chip("Dex", "dex"), chip("Ficha da espécie", "species")] },
+        { label: "RANKING", items: [chip("Ranking", "rank"), chip("Filtros", "rankf")] },
+        { label: "PESQUEIROS", items: [chip("Mapa", "map"), chip("Lista", "spots"), chip("Detalhe", "spot")] }
+      ],
+      lightSwatches: [sw("background", "#F7F5F0"), sw("surface", "#FFFFFF"), sw("surface-muted", "#EFEDE6"), sw("border", "#E2DFD6"), sw("text", "#0B1F24"), sw("text-muted", "#5A564C"), sw("primary", "#0E4D5C"), sw("accent", "#21C0A8"), sw("highlight", "#FF7A1A"), sw("success", "#16A34A"), sw("warning", "#D97706"), sw("danger", "#DC2626")],
+      darkSwatches: [sw("background", "#071519"), sw("surface", "#0E2229"), sw("surface-muted", "#13303A"), sw("border", "#1E3D47"), sw("text", "#EAF2F1"), sw("text-muted", "#9DB3B3"), sw("primary", "#2FA6BC"), sw("accent", "#21C0A8"), sw("highlight", "#FF8A33"), sw("success", "#22C55E"), sw("warning", "#F59E0B"), sw("danger", "#F87171")],
+      guidePanels: [
+        { name: "CLARO", bg: "#F7F5F0", surf: "#FFFFFF", surfm: "#EFEDE6", bd: "#E2DFD6", tx: "#0B1F24", txm: "#5A564C", pri: "#0E4D5C", priOn: "#FFFFFF", acc: "#21C0A8", accOn: "#06231E", hi: "#FF7A1A", hiOn: "#221200", dg: "#DC2626", halo: "rgba(33,192,168,.35)" },
+        { name: "ESCURO", bg: "#071519", surf: "#0E2229", surfm: "#13303A", bd: "#1E3D47", tx: "#EAF2F1", txm: "#9DB3B3", pri: "#2FA6BC", priOn: "#04222A", acc: "#21C0A8", accOn: "#06231E", hi: "#FF8A33", hiOn: "#1A0E00", dg: "#F87171", halo: "rgba(33,192,168,.30)" }
+      ],
+      spacing: [2, 4, 8, 12, 16, 24, 32, 48, 64].map((n) => ({ px: n + "px", label: String(n) })),
+      radii: [{ px: "8px", label: "sm 8" }, { px: "12px", label: "md 12" }, { px: "16px", label: "lg 16" }, { px: "24px", label: "xl 24" }, { px: "999px", label: "full" }]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

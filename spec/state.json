@@ -1,0 +1,30 @@
+{
+  "project": "fishingdex",
+  "createdAt": "2026-09-19T00:00:00Z",
+  "currentPhase": "monetize",
+  "git": { "defaultBranch": "main", "branchPerFeature": true },
+  "profile": { "billing": true, "markets": ["USD", "BRL"], "cloud": "none", "budgetUsd": 0 },
+  "architecture": "feature-sliced-design",
+  "phases": {
+    "opportunity":  { "status": "completed", "gatePassed": true, "artifact": "spec/opportunity.md" },
+    "constitution": { "status": "completed", "gatePassed": true, "artifact": "spec/constitution.md" },
+    "prd":          { "status": "completed", "gatePassed": true, "artifact": "spec/prds/" },
+    "design":       { "status": "completed", "gatePassed": true, "artifact": "spec/design-system.md" },
+    "architect":    { "status": "completed", "gatePassed": true, "artifact": "spec/architecture.md" },
+    "monetize":     { "status": "pending", "gatePassed": false, "artifact": "spec/monetization.md" },
+    "tasks":        { "status": "pending", "gatePassed": false, "artifact": "spec/tasks/" }
+  },
+  "sprints": [],
+  "prds": [
+    { "id": "PRD-V1-01", "title": "fishingdex MVP", "status": "aprovado", "artifact": "spec/prds/PRD-V1-01.md" }
+  ],
+  "bugs": [],
+  "deploys": [],
+  "loadtests": [],
+  "changes": [
+    { "id": "CHG-001", "artifact": "constitution", "type": "emenda", "summary": "Stack de UI/deploy: Next.js web -> React Native + Expo", "date": "2026-09-19" },
+    { "id": "CHG-002", "artifact": "PRD-V1-01", "type": "emenda", "summary": "Dex (D-12), integridade do ranking (D-13), catálogo regionalizado (D-14) + PostGIS (ADR-0007)", "date": "2026-09-20" }
+  ],
+  "logbook": { "interactions": 0, "tokensIn": 0, "tokensOut": 0, "costUsd": 0, "timeMin": 0 },
+  "experiments": []
+}
