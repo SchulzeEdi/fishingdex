@@ -1,0 +1,42 @@
+# CI do harness SDD — roda os mesmos gates locais no PR para a main.
+# Copie para .github/workflows/ci.yml no projeto. Portavel: usa os scripts npm do proprio projeto.
+name: ci
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: typecheck
+        run: npm run --if-present typecheck
+      - name: lint
+        run: npm run --if-present lint
+      - name: test
+        run: npm run --if-present test
+      - name: build
+        run: npm run --if-present build
+      # Checks do harness (se os scripts foram vendados em scripts/sdd/):
+      - name: validate-state
+        run: '[ -f scripts/sdd/validate-state.mjs ] && node scripts/sdd/validate-state.mjs || echo "skip (scripts do harness nao vendados)"'
+      - name: check-docs
+        run: '[ -f scripts/sdd/check-docs.mjs ] && node scripts/sdd/check-docs.mjs || echo "skip"'
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - name: npm audit (high+)
+        run: npm audit --audit-level=high

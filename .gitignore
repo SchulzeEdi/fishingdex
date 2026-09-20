@@ -1,0 +1,18 @@
+# deps
+node_modules/
+# env / secrets
+.env
+.env.*
+!.env.example
+# build
+.next/
+dist/
+build/
+out/
+# infra
+.sst/
+cdk.out/
+# misc
+.DS_Store
+coverage/
+*.log

@@ -1,0 +1,80 @@
+{
+  "$comment": "Fonte de verdade dos tokens de design do fishingdex (Fase 3). Gera o tema do NativeWind (Tailwind p/ React Native). Direcao: Aguas Profundas. Dois temas: light (padrao) e dark.",
+  "brand": {
+    "primary":   "#0E4D5C",
+    "accent":    "#21C0A8",
+    "highlight": "#FF7A1A"
+  },
+  "neutral": {
+    "50":  "#F7F5F0",
+    "100": "#EFEDE6",
+    "200": "#E2DFD6",
+    "300": "#CBC7BB",
+    "400": "#A7A296",
+    "500": "#7C776B",
+    "600": "#5A564C",
+    "700": "#403D36",
+    "800": "#20303A",
+    "900": "#0B1F24"
+  },
+  "status": {
+    "success": "#16A34A",
+    "warning": "#D97706",
+    "danger":  "#DC2626"
+  },
+  "theme": {
+    "light": {
+      "background":          "#F7F5F0",
+      "surface":             "#FFFFFF",
+      "surface-muted":       "#EFEDE6",
+      "border":              "#E2DFD6",
+      "text":                "#0B1F24",
+      "text-muted":          "#5A564C",
+      "primary":             "#0E4D5C",
+      "primary-foreground":  "#FFFFFF",
+      "accent":              "#21C0A8",
+      "accent-foreground":   "#06231E",
+      "highlight":           "#FF7A1A",
+      "highlight-foreground":"#221200",
+      "success":             "#16A34A",
+      "warning":             "#D97706",
+      "danger":              "#DC2626",
+      "on-status":           "#FFFFFF"
+    },
+    "dark": {
+      "background":          "#071519",
+      "surface":             "#0E2229",
+      "surface-muted":       "#13303A",
+      "border":              "#1E3D47",
+      "text":                "#EAF2F1",
+      "text-muted":          "#9DB3B3",
+      "primary":             "#2FA6BC",
+      "primary-foreground":  "#04222A",
+      "accent":              "#21C0A8",
+      "accent-foreground":   "#04221D",
+      "highlight":           "#FF8A33",
+      "highlight-foreground":"#1A0E00",
+      "success":             "#22C55E",
+      "warning":             "#F59E0B",
+      "danger":              "#F87171",
+      "on-status":           "#04140A"
+    }
+  },
+  "font": {
+    "display": "Sora",
+    "body":    "Inter"
+  },
+  "fontSize": {
+    "xs": 12, "sm": 14, "base": 16, "lg": 18,
+    "xl": 20, "2xl": 24, "3xl": 30, "4xl": 36, "5xl": 48
+  },
+  "fontWeight": { "regular": "400", "medium": "500", "semibold": "600", "bold": "700" },
+  "lineHeight": { "tight": 1.15, "normal": 1.4, "relaxed": 1.6 },
+  "spacing": [2, 4, 8, 12, 16, 24, 32, 48, 64],
+  "radius": { "sm": 8, "md": 12, "lg": 16, "xl": 24, "full": 9999 },
+  "shadow": {
+    "sm": { "color": "#0B1F24", "opacity": 0.06, "radius": 3, "offsetY": 1, "elevation": 1 },
+    "md": { "color": "#0B1F24", "opacity": 0.10, "radius": 8, "offsetY": 3, "elevation": 3 },
+    "lg": { "color": "#0B1F24", "opacity": 0.14, "radius": 18, "offsetY": 8, "elevation": 8 }
+  }
+}
