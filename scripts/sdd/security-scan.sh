@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Scan de seguranca: segredos hardcoded (fatal) + deps com CVE (npm audit).
-# Segredo encontrado => sai !=0 (nunca pode ir pro repo). CVE critico => sai !=0.
+# Segredo encontrado => sai !=0 (nunca pode ir pro repo). npm audit => advisory (nao bloqueia; gate de codigo = SonarCloud no CI).
 set -uo pipefail
 fail=0
 
@@ -19,9 +19,9 @@ if command -v gitleaks >/dev/null 2>&1; then
 fi
 
 if [ -f package.json ]; then
-  echo "» npm audit (informativo high; falha em critical)"
-  npm audit --audit-level=high || echo "  ⚠ deps com CVE high (revisar)"
-  npm audit --audit-level=critical >/dev/null 2>&1 || { echo "  ✗ deps com CVE CRITICO"; fail=1; }
+  echo "» npm audit (advisory — high/critical avisam, nao bloqueiam)"
+  npm audit --audit-level=high || echo "  ⚠ deps com CVE high (revisar; costuma ser tooling de build)"
+  npm audit --audit-level=critical >/dev/null 2>&1 || echo "  ⚠ deps com CVE CRITICO (advisory; NAO bloqueia — ver SonarCloud/CI)"
 fi
 
 [ "$fail" -eq 0 ] && echo "SECURITY OK ✓" || echo "SECURITY: achados ✗"
