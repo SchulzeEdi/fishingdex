@@ -65,6 +65,9 @@ Pescadores amadores e esportivos registram capturas de forma solta e perdida (fo
 | D-9 | Paywall | Free = 3 capturas/mês isolado (não vê nem é visto); Pro = tudo. Listagem de pesqueiro paga desde a V1 | Monetizar cedo (constitution: cobrança desde o MVP) |
 | D-10 | Offline | Online-only na V1 | Simplicidade; sync fica pra depois |
 | D-11 | Catálogo de espécies | Curadoria posterior do time (varredura) | Dados confiáveis sem depender de cadastro do usuário |
+| D-12 | Coleção de espécies (Dex/Pokédex) | Espécies bloqueadas até a 1ª captura; progresso por habitat | Mecânica-âncora do produto (CHG-002) |
+| D-13 | Integridade do ranking (anti "mentira de pescador") | Tetos plausíveis por espécie (tamanho/peso) + denúncia da comunidade | Ranking só vale se for confiável (CHG-002) |
+| D-14 | Catálogo regionalizado | `regions[]` por espécie; filtro por mercado (BR/AR/US) | Não rolar 800 nomes; relevância por região (CHG-002) |
 
 ## 6. Criterios de sucesso (com numero)
 | Metrica | Alvo |

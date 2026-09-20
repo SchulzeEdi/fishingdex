@@ -34,15 +34,19 @@ Slices por entidade/feature, não `modules/`:
 | Entidade | Campos-chave | Relações | Dono/escopo |
 |---|---|---|---|
 | `users` | id, name, avatar_url, country, plan(free/pro) | 1-N catches, follows | próprio |
-| `fish_species` | id, name_pt, name_es, name_en, scientific, habitat(doce/salgada), rarity | 1-N catches | público (curado) |
-| `catches` | id, **user_id**, **species_id**, photo_url, size_cm, weight_kg, caught_at, lat, lng, is_private, bait, rod, reel, line | N-1 user, N-1 species | dono (user_id) + visibilidade |
+| `fish_species` | id, name_pt/es/en, scientific, habitat, rarity, **regions[]**, **max_plausible_size_cm**, **max_plausible_weight_kg** | 1-N catches | público (curado, regionalizado) |
+| `catches` | id, **user_id**, **species_id**, photo_url, size_cm, weight_kg, caught_at, **geom (PostGIS Point)**, is_private, bait, rod, reel, line | N-1 user, N-1 species | dono (user_id) + visibilidade |
+| `reports` | id, reporter_id, catch_id, reason, created_at | N-1 catch | moderação da comunidade |
 | `dex_unlocks` | id, **user_id**, **species_id**, first_catch_id, unlocked_at | única por (user, species) | dono |
 | `follows` | follower_id, followee_id | grafo social | próprio |
 | `likes` | user_id, catch_id | N-N | próprio |
-| `fisheries` | id, **owner_id**, name, lat, lng, species[], photos[], whatsapp, description, listing_active | N-1 owner | dono |
+| `fisheries` | id, **owner_id**, name, **geom (PostGIS Point)**, species[], photos[], whatsapp, description, listing_active | N-1 owner | dono |
 | `subscriptions` | id, user_id, plan, provider(iap/stripe), status, current_period_end | 1-1 user | dono |
 
-- **Índices:** `catches(user_id)`, `catches(species_id)`, `catches(size_cm desc)` p/ ranking, `catches(caught_at)`; `dex_unlocks(user_id, species_id)` único; `follows(follower_id)`, `likes(catch_id)`; `fisheries` índice geoespacial (lat/lng).
+- **Índices:** `catches(user_id)`, `catches(species_id)`, `catches(size_cm desc)` p/ ranking, `catches(caught_at)`; `dex_unlocks(user_id, species_id)` único; `follows(follower_id)`, `likes(catch_id)`; **índice GiST (PostGIS)** em `fisheries.geom` e `catches.geom` p/ queries de raio.
+- **PostGIS (ADR-0007):** extensão ligada no dia 1. Locais como `geometry(Point,4326)`; "pesqueiros num raio de X km" via `ST_DWithin`, ordenação por `ST_Distance`. Evita full-scan e cálculo de distância na aplicação.
+- **Anti "mentira de pescador" (D-13):** cada espécie tem `max_plausible_size_cm`/`max_plausible_weight_kg`; o registro valida contra esses tetos (`features/register-catch` → `isPlausibleCatch`) antes de entrar no ranking. Defesa complementar: **denúncia da comunidade** (`reports`) — captura muito denunciada é ocultada/revisada.
+- **Catálogo regionalizado (D-14):** `fish_species.regions[]` filtra o seed por mercado (BR/AR/US) — o usuário não rola 800 nomes; `entities/fish-species` expõe `speciesForRegion`.
 - **Dex:** desbloqueio = existir linha em `dex_unlocks` para (user, species); criada na 1ª captura daquela espécie (trigger/transação no `register-catch`). Progresso = count(dex_unlocks) / count(fish_species por habitat).
 - **Multi-tenancy:** **não se aplica** — produto B2C, sem `tenant_id`. Isolamento é **por dono (`user_id`/`owner_id`) + visibilidade** (público/privado; Free não vê social). Defesa em profundidade via **RLS do Supabase** por `auth.uid()` (ADR-0005).
 
@@ -52,7 +56,8 @@ Slices por entidade/feature, não `modules/`:
 - `GET /ranking?scope=global|species|period|country&...` (auth, Pro) — ranking por tamanho.
 - `GET /dex` (auth) — grade de espécies com flag unlocked; `GET /species/:id`.
 - `POST /follows`, `DELETE /follows/:id`, `POST /likes`, `DELETE /likes/:id` (auth, Pro).
-- `GET /fisheries?bbox=` , `GET /fisheries/:id`; `POST/PUT /fisheries` (dono).
+- `GET /fisheries?lat=&lng=&radiusKm=` (PostGIS `ST_DWithin`), `GET /fisheries/:id`; `POST/PUT /fisheries` (dono).
+- `POST /catches/:id/reports` (auth) — denunciar captura (moderação da comunidade).
 - `POST /subscriptions/webhook` — RevenueCat (Pro) e Stripe (listagem). Idempotente.
 Auth: JWT do Supabase Auth no header; Zod valida todo payload.
 
@@ -77,6 +82,7 @@ Auth: JWT do Supabase Auth no header; Zod valida todo payload.
 - ADR-0004 — Pagamentos: IAP (RevenueCat) para Pro + Stripe para listagem
 - ADR-0005 — B2C sem multi-tenant; isolamento por dono + RLS
 - ADR-0006 — CI/CD: GitHub Actions + SonarCloud + Vercel/EAS
+- ADR-0007 — PostGIS para dados espaciais (pesqueiros/locais por raio)
 
 ---
 **Gate:**

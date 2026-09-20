@@ -22,7 +22,8 @@
   "deploys": [],
   "loadtests": [],
   "changes": [
-    { "id": "CHG-001", "artifact": "constitution", "type": "emenda", "summary": "Stack de UI/deploy: Next.js web -> React Native + Expo", "date": "2026-09-19" }
+    { "id": "CHG-001", "artifact": "constitution", "type": "emenda", "summary": "Stack de UI/deploy: Next.js web -> React Native + Expo", "date": "2026-09-19" },
+    { "id": "CHG-002", "artifact": "PRD-V1-01", "type": "emenda", "summary": "Dex (D-12), integridade do ranking (D-13), catálogo regionalizado (D-14) + PostGIS (ADR-0007)", "date": "2026-09-20" }
   ],
   "logbook": { "interactions": 0, "tokensIn": 0, "tokensOut": 0, "costUsd": 0, "timeMin": 0 },
   "experiments": []

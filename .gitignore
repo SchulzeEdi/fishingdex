@@ -9,9 +9,12 @@ node_modules/
 dist/
 build/
 out/
-# infra
+# infra / plataformas
 .sst/
 cdk.out/
+.vercel/
+# expo
+.expo/
 # misc
 .DS_Store
 coverage/

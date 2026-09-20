@@ -47,6 +47,7 @@
 | ADR-0004 | Pagamentos IAP (RevenueCat) p/ Pro + Stripe p/ listagem | architect | aceito |
 | ADR-0005 | B2C sem multi-tenant; isolamento por dono + RLS | architect | aceito |
 | ADR-0006 | CI/CD GitHub Actions + SonarCloud + Vercel/EAS | architect | aceito |
+| ADR-0007 | PostGIS para dados espaciais (raio/mapa) | architect / CHG-002 | aceito |
 | D-1 | Plataforma React Native + Expo (app nas lojas) | PRD-V1-01 / CHG-001 | vigente |
 | D-2 | Identificacao de especie manual na V1 (IA depois) | PRD-V1-01 | vigente |
 | D-3 | App trilingue pt/es/en desde a V1 | PRD-V1-01 | vigente |
@@ -58,6 +59,9 @@
 | D-9 | Free = 3 capturas/mes isolado; Pro = tudo; listagem de pesqueiro paga desde a V1 | PRD-V1-01 | vigente |
 | D-10 | Online-only na V1 (sem offline/sync) | PRD-V1-01 | vigente |
 | D-11 | Catalogo de especies por curadoria posterior | PRD-V1-01 | vigente |
+| D-12 | Colecao de especies (Dex/Pokedex) | PRD-V1-01 / CHG-002 | vigente |
+| D-13 | Integridade do ranking: tetos por especie + denuncia | PRD-V1-01 / CHG-002 | vigente |
+| D-14 | Catalogo regionalizado (regions[] por mercado) | PRD-V1-01 / CHG-002 | vigente |
 
 ## Bugs
 **Em aberto:**
@@ -85,6 +89,7 @@
 | ID | Artefato alterado | Motivo | Impacto |
 |----|-------------------|--------|---------|
 | CHG-001 | constitution (P4/P5/P12/aditivos) | Stack de UI/deploy: Next.js web -> React Native + Expo (app nas lojas) | Sem tasks reabertas (Fase 2); Fase 4 nasce com stack Expo. Ver `spec/changes/CHG-001-*.md` |
+| CHG-002 | PRD-V1-01 (D-12/D-13/D-14) + architecture + ADR-0007 | Dex, integridade do ranking (anti "mentira de pescador"), catálogo regionalizado, PostGIS | Backlog da Fase 6 cobre; refletido no scaffold. Ver `spec/changes/CHG-002-*.md` |
 
 ## Logbook (resumo acumulado)
 > Detalhe por interacao em `spec/logbook/`. Aqui so o agregado, para o TCC.
