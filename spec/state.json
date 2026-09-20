@@ -1,7 +1,7 @@
 {
   "project": "fishingdex",
   "createdAt": "2026-09-19T00:00:00Z",
-  "currentPhase": "delivery",
+  "currentPhase": "loop",
   "git": { "defaultBranch": "main", "branchPerFeature": true },
   "profile": { "billing": true, "markets": ["USD", "BRL"], "cloud": "none", "budgetUsd": 0 },
   "architecture": "feature-sliced-design",
