@@ -2,14 +2,14 @@
 
 > **Fonte da verdade** do estado atual, do comeco ao fim do projeto.
 > Toda skill atualiza este arquivo ao concluir (ver `reference/documentation-standards.md`).
-> Fase atual: monetize · Ultima atualizacao: 2026-09-20
+> Fase atual: loop de entrega (SPRINT-001) · Ultima atualizacao: 2026-09-20
 
 <!-- AUTO:START — gerado por scripts/render-status.mjs (state.json e a verdade da maquina); nao editar a mao -->
 <!-- AUTO:END -->
 
 ## Resumo executivo
-- **Fase atual:** monetize
-- **Proximo passo:** Fase 5 — rodar `sdd-monetize`
+- **Fase atual:** loop de entrega — SPRINT-001 (dex-catalogo)
+- **Proximo passo:** implementar T-04 (Dex/catálogo) e T-10 (i18n); depois SPRINT-002 (Supabase/Auth)
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.
@@ -19,7 +19,10 @@
 - **Fase 1 — Constitution:** ✅ aprovada (emendada por CHG-001). Regras inegociaveis: TS strict, 80% cobertura de dominio, ADR obrigatorio, design system, seguranca, cobranca USD+BRL, git branch-per-feature, doc gate, **arquitetura FSD com lint de fronteiras** e **plataforma React Native + Expo** (app nas lojas; backend em Vercel/Supabase; i18n pt/es/en). Artefato: `spec/constitution.md`.
 - **Fase 2 — PRD:** ✅ PRD-V1-01 aprovado (D-1..D-11). Artefato: `spec/prds/PRD-V1-01.md`.
 - **Fase 3 — Design:** ✅ aprovada. Identidade "Aguas Profundas" (2 temas), tokens, playbook e prototipo (Claude Design em `docs/design/prototype/`). Artefatos: `spec/design-system.md`, `spec/design-tokens.json`.
-- **Fase 4 — Architect:** ✅ aprovada. App Expo + backend Vercel + Supabase, FSD, B2C (nao multi-tenant). 6 ADRs. Artefato: `spec/architecture.md`.
+- **Fase 4 — Architect:** ✅ aprovada. App Expo + backend Vercel + Supabase, FSD, B2C (nao multi-tenant). 7 ADRs. Artefato: `spec/architecture.md`.
+- **Fase 5 — Monetize:** ✅ aprovada. Tiers USD/BRL; RevenueCat/IAP p/ Pro + Stripe (USD e BRL/Pix) p/ listagem; camada `PaymentProvider`. Artefato: `spec/monetization.md`.
+- **Fase 6 — Tasks:** ✅ aprovada. PRD quebrado em T-01..T-11 (M0 fundação, M1 MVP pagável, M2 publicação). Artefato: `spec/tasks/TASKS-PRD-V1-01.md`.
+- **Infra do trabalho:** repo GitHub + pipeline GitHub Actions (gates) + SonarCloud (scanner) verdes; deploy Vercel não-bloqueante (pendência: escopo do token — ver `docs/ci/sonarcloud-setup.md`).
 
 ## PRDs
 | PRD | Titulo | Status |
@@ -27,9 +30,9 @@
 | PRD-V1-01 | fishingdex MVP (diario + ranking + marketplace) | aprovado |
 
 ## Sprint atual
-- **SPRINT-NNN** (<slug>) — objetivo: ...
-- Tasks: <T-NN doing>, <T-NN todo> ...
-- Criterio de "sprint pronta": ...
+- **SPRINT-001** (dex-catalogo) — objetivo: Dex/coleção + catálogo regionalizado navegáveis + i18n, sem depender do backend externo.
+- Tasks: T-04 (doing), T-10 (todo)
+- Criterio de "sprint pronta": tasks done + merge na main + pipeline verde (cobertura ≥ 80%).
 
 ## Historico de sprints
 | Sprint | Retro | Resultado | Debitos gerados |

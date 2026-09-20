@@ -1,7 +1,7 @@
 {
   "project": "fishingdex",
   "createdAt": "2026-09-19T00:00:00Z",
-  "currentPhase": "monetize",
+  "currentPhase": "loop",
   "git": { "defaultBranch": "main", "branchPerFeature": true },
   "profile": { "billing": true, "markets": ["USD", "BRL"], "cloud": "none", "budgetUsd": 0 },
   "architecture": "feature-sliced-design",
@@ -11,10 +11,12 @@
     "prd":          { "status": "completed", "gatePassed": true, "artifact": "spec/prds/" },
     "design":       { "status": "completed", "gatePassed": true, "artifact": "spec/design-system.md" },
     "architect":    { "status": "completed", "gatePassed": true, "artifact": "spec/architecture.md" },
-    "monetize":     { "status": "pending", "gatePassed": false, "artifact": "spec/monetization.md" },
-    "tasks":        { "status": "pending", "gatePassed": false, "artifact": "spec/tasks/" }
+    "monetize":     { "status": "completed", "gatePassed": true, "artifact": "spec/monetization.md" },
+    "tasks":        { "status": "completed", "gatePassed": true, "artifact": "spec/tasks/" }
   },
-  "sprints": [],
+  "sprints": [
+    { "id": "SPRINT-001", "slug": "dex-catalogo", "status": "ativa", "tasks": ["T-04", "T-10"], "artifact": "spec/sprints/SPRINT-001-dex-catalogo.md" }
+  ],
   "prds": [
     { "id": "PRD-V1-01", "title": "fishingdex MVP", "status": "aprovado", "artifact": "spec/prds/PRD-V1-01.md" }
   ],
