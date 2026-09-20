@@ -61,7 +61,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # Para SonarCloud, deixe assim. Para SonarQube self-hosted, troque pelo secret SONAR_HOST_URL.
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL || 'https://sonarcloud.io' }}
-      - name: SonarQube Quality Gate (bloqueia se reprovar)
+      # O Quality Gate bloqueia no PR (antes do merge). Na main o gate já foi validado
+      # no PR — lá só rodamos o scan + deploy (evita 403 da API de branch e não trava o deploy).
+      - name: SonarQube Quality Gate (bloqueia se reprovar) — só no PR
+        if: github.event_name == 'pull_request'
         uses: SonarSource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
