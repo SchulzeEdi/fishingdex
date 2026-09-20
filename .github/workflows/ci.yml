@@ -1,6 +1,7 @@
-# CI do harness SDD — roda os mesmos gates locais no PR para a main.
-# Copie para .github/workflows/ci.yml no projeto. Portavel: usa os scripts npm do proprio projeto.
+# CI/CD do fishingdex — gates da constitution + scanner de segurança (SonarQube/SonarCloud)
+# Ver ADR-0006. Roda em PR e no push para main.
 name: ci
+
 on:
   pull_request:
     branches: [main]
@@ -8,6 +9,7 @@ on:
     branches: [main]
 
 jobs:
+  # 1) Gates da constitution (tipos, lint, testes com cobertura, build) + checks do harness
   gates:
     runs-on: ubuntu-latest
     steps:
@@ -19,24 +21,68 @@ jobs:
       - run: npm ci
       - name: typecheck
         run: npm run --if-present typecheck
-      - name: lint
+      - name: lint (inclui fronteiras FSD)
         run: npm run --if-present lint
-      - name: test
-        run: npm run --if-present test
+      - name: test (com cobertura p/ Sonar)
+        run: npm run --if-present test:coverage
       - name: build
         run: npm run --if-present build
-      # Checks do harness (se os scripts foram vendados em scripts/sdd/):
-      - name: validate-state
-        run: '[ -f scripts/sdd/validate-state.mjs ] && node scripts/sdd/validate-state.mjs || echo "skip (scripts do harness nao vendados)"'
-      - name: check-docs
+      - name: validate-state (harness)
+        run: '[ -f scripts/sdd/validate-state.mjs ] && node scripts/sdd/validate-state.mjs || echo "skip"'
+      - name: check-docs (harness)
         run: '[ -f scripts/sdd/check-docs.mjs ] && node scripts/sdd/check-docs.mjs || echo "skip"'
+      - name: upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          if-no-files-found: ignore
 
+  # 2) Segurança: dependências (npm audit) + scanner SonarQube/SonarCloud com Quality Gate
   security:
     runs-on: ubuntu-latest
+    needs: gates
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Sonar precisa do histórico p/ blame/novos códigos
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - run: npm ci
       - name: npm audit (high+)
         run: npm audit --audit-level=high
+        continue-on-error: true   # audit não bloqueia; o gate de segurança é o Sonar
+      - name: test:coverage (gera lcov p/ Sonar)
+        run: npm run --if-present test:coverage
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # Para SonarCloud, deixe assim. Para SonarQube self-hosted, troque pelo secret SONAR_HOST_URL.
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL || 'https://sonarcloud.io' }}
+      - name: SonarQube Quality Gate (bloqueia se reprovar)
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # 3) Deploy na Vercel — só no push para main (produção), depois que gates + segurança passam
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [gates, security]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Deploy Vercel (produção)
+        run: |
+          npm i -g vercel
+          vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          vercel build --prod --token=$VERCEL_TOKEN
+          vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

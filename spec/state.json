@@ -1,7 +1,7 @@
 {
   "project": "fishingdex",
   "createdAt": "2026-09-19T00:00:00Z",
-  "currentPhase": "design",
+  "currentPhase": "monetize",
   "git": { "defaultBranch": "main", "branchPerFeature": true },
   "profile": { "billing": true, "markets": ["USD", "BRL"], "cloud": "none", "budgetUsd": 0 },
   "architecture": "feature-sliced-design",
@@ -9,8 +9,8 @@
     "opportunity":  { "status": "completed", "gatePassed": true, "artifact": "spec/opportunity.md" },
     "constitution": { "status": "completed", "gatePassed": true, "artifact": "spec/constitution.md" },
     "prd":          { "status": "completed", "gatePassed": true, "artifact": "spec/prds/" },
-    "design":       { "status": "pending", "gatePassed": false, "artifact": "spec/design-system.md" },
-    "architect":    { "status": "pending", "gatePassed": false, "artifact": "spec/architecture.md" },
+    "design":       { "status": "completed", "gatePassed": true, "artifact": "spec/design-system.md" },
+    "architect":    { "status": "completed", "gatePassed": true, "artifact": "spec/architecture.md" },
     "monetize":     { "status": "pending", "gatePassed": false, "artifact": "spec/monetization.md" },
     "tasks":        { "status": "pending", "gatePassed": false, "artifact": "spec/tasks/" }
   },

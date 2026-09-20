@@ -2,14 +2,14 @@
 
 > **Fonte da verdade** do estado atual, do comeco ao fim do projeto.
 > Toda skill atualiza este arquivo ao concluir (ver `reference/documentation-standards.md`).
-> Fase atual: design · Ultima atualizacao: 2026-09-19
+> Fase atual: monetize · Ultima atualizacao: 2026-09-20
 
 <!-- AUTO:START — gerado por scripts/render-status.mjs (state.json e a verdade da maquina); nao editar a mao -->
 <!-- AUTO:END -->
 
 ## Resumo executivo
-- **Fase atual:** design
-- **Proximo passo:** Fase 3 — rodar `sdd-design`
+- **Fase atual:** monetize
+- **Proximo passo:** Fase 5 — rodar `sdd-monetize`
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.
@@ -17,6 +17,9 @@
 ## Fases concluidas
 - **Fase 0 — Opportunity:** ✅ aprovada (go). Veredito: **vale a pena seguir**. Diario+rede social de pesca com IA de identificacao de especie, ranking e marketplace de pesqueiros. Modelo hibrido freemium (Pro US$ 6,99 / R$ 19,90 mes) + listagem B2B (US$ 29 / R$ 79 mes). Dois mercados (USD+BRL). Artefato: `spec/opportunity.md`.
 - **Fase 1 — Constitution:** ✅ aprovada (emendada por CHG-001). Regras inegociaveis: TS strict, 80% cobertura de dominio, ADR obrigatorio, design system, seguranca, cobranca USD+BRL, git branch-per-feature, doc gate, **arquitetura FSD com lint de fronteiras** e **plataforma React Native + Expo** (app nas lojas; backend em Vercel/Supabase; i18n pt/es/en). Artefato: `spec/constitution.md`.
+- **Fase 2 — PRD:** ✅ PRD-V1-01 aprovado (D-1..D-11). Artefato: `spec/prds/PRD-V1-01.md`.
+- **Fase 3 — Design:** ✅ aprovada. Identidade "Aguas Profundas" (2 temas), tokens, playbook e prototipo (Claude Design em `docs/design/prototype/`). Artefatos: `spec/design-system.md`, `spec/design-tokens.json`.
+- **Fase 4 — Architect:** ✅ aprovada. App Expo + backend Vercel + Supabase, FSD, B2C (nao multi-tenant). 6 ADRs. Artefato: `spec/architecture.md`.
 
 ## PRDs
 | PRD | Titulo | Status |
@@ -38,6 +41,12 @@
 
 | ID | Decisao | Origem | Status |
 |----|---------|--------|--------|
+| ADR-0001 | Hospedagem Vercel + Supabase (nao AWS) | architect | aceito |
+| ADR-0002 | ORM Drizzle | architect | aceito |
+| ADR-0003 | Auth Supabase (e-mail+Google+Apple) | architect | aceito |
+| ADR-0004 | Pagamentos IAP (RevenueCat) p/ Pro + Stripe p/ listagem | architect | aceito |
+| ADR-0005 | B2C sem multi-tenant; isolamento por dono + RLS | architect | aceito |
+| ADR-0006 | CI/CD GitHub Actions + SonarCloud + Vercel/EAS | architect | aceito |
 | D-1 | Plataforma React Native + Expo (app nas lojas) | PRD-V1-01 / CHG-001 | vigente |
 | D-2 | Identificacao de especie manual na V1 (IA depois) | PRD-V1-01 | vigente |
 | D-3 | App trilingue pt/es/en desde a V1 | PRD-V1-01 | vigente |
