@@ -45,6 +45,7 @@
 | SPRINT-002 (backend-fundacao) | embutido | ✅ T-02/T-03/T-05 (DB+auth+captura) | DT-03 |
 | SPRINT-003 (nucleo-social) | embutido | ✅ T-06/T-07/T-09 (feed/ranking/pesqueiros) | DT-04 |
 | SPRINT-004 (monetizacao) | embutido | ✅ T-08 (Free/Pro + assinatura) | DT-05 |
+| SPRINT-005 (app-shell) | RETRO-005 | ✅ abas + telas (Feed/Ranking/Dex/Perfil) | DT-06 |
 
 ## Indice de decisoes (ADRs + D-N)
 > Toda decisao de arquitetura vira ADR e aparece aqui. Decisoes de produto (D-N) do PRD entram quando relevantes.

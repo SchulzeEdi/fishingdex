@@ -18,7 +18,8 @@
     { "id": "SPRINT-001", "slug": "dex-catalogo", "status": "fechada", "tasks": ["T-04", "T-10"], "retro": "spec/sprints/RETRO-001-dex-catalogo.md", "artifact": "spec/sprints/SPRINT-001-dex-catalogo.md" },
     { "id": "SPRINT-002", "slug": "backend-fundacao", "status": "fechada", "tasks": ["T-02", "T-03", "T-05"], "artifact": "spec/sprints/SPRINT-002-backend-fundacao.md" },
     { "id": "SPRINT-003", "slug": "nucleo-social", "status": "fechada", "tasks": ["T-06", "T-07", "T-09"], "artifact": "spec/sprints/SPRINT-003-nucleo-social.md" },
-    { "id": "SPRINT-004", "slug": "monetizacao", "status": "fechada", "tasks": ["T-08"], "artifact": "spec/sprints/SPRINT-004-monetizacao.md" }
+    { "id": "SPRINT-004", "slug": "monetizacao", "status": "fechada", "tasks": ["T-08"], "artifact": "spec/sprints/SPRINT-004-monetizacao.md" },
+    { "id": "SPRINT-005", "slug": "app-shell", "status": "fechada", "tasks": ["UI-shell"], "retro": "spec/sprints/RETRO-005-app-shell.md", "artifact": "spec/sprints/SPRINT-005-app-shell.md" }
   ],
   "prds": [
     { "id": "PRD-V1-01", "title": "fishingdex MVP", "status": "aprovado", "artifact": "spec/prds/PRD-V1-01.md" }
