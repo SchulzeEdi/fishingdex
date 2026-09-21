@@ -9,7 +9,7 @@
 
 ## Resumo executivo
 - **Fase atual:** loop de entrega — SPRINT-001 (dex-catalogo)
-- **Proximo passo:** SPRINT-002 — T-02 (Supabase/schema/PostGIS/RLS) + T-03 (Auth). Requer provisionamento do Supabase.
+- **Proximo passo:** UI do app (telas RN dos fluxos) + integrações externas (Supabase, RevenueCat/Stripe, EAS/lojas). **Backend do MVP completo e testado.**
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.
@@ -30,12 +30,21 @@
 | PRD-V1-01 | fishingdex MVP (diario + ranking + marketplace) | aprovado |
 
 ## Sprint atual
-- Nenhuma ativa. Próxima: **SPRINT-002** (Supabase + Auth). Ver `spec/tasks/TASKS-PRD-V1-01.md`.
+- Nenhuma ativa. Backend do MVP concluído (SPRINT-001..004). Restam UI + integrações externas.
+
+## Estado do backend (tudo com teste automatizado)
+- **Banco:** Postgres 16 + PostGIS local (Docker, `docker-compose up`); `npm run db:reset` (migrate+seed).
+- **Testes:** `npm test` (unidade/domínio) e `npm run test:integration` (contra o DB). ~33 unidade + 22 integração.
+- **Features:** auth local (bcrypt+JWT) · registrar captura + desbloqueio Dex + anti-cheat · ranking + denúncia · feed/seguir/curtir · pesqueiros por raio (PostGIS) · gating Free/Pro + assinatura.
+- **CI:** gates + job `integration` (serviço PostGIS) + SonarCloud, todos verdes.
 
 ## Historico de sprints
 | Sprint | Retro | Resultado | Debitos gerados |
 |--------|-------|-----------|-----------------|
 | SPRINT-001 (dex-catalogo) | RETRO-001 | ✅ T-04 + T-10 done, merge na main, CI verde | DT-01, DT-02 |
+| SPRINT-002 (backend-fundacao) | embutido | ✅ T-02/T-03/T-05 (DB+auth+captura) | DT-03 |
+| SPRINT-003 (nucleo-social) | embutido | ✅ T-06/T-07/T-09 (feed/ranking/pesqueiros) | DT-04 |
+| SPRINT-004 (monetizacao) | embutido | ✅ T-08 (Free/Pro + assinatura) | DT-05 |
 
 ## Indice de decisoes (ADRs + D-N)
 > Toda decisao de arquitetura vira ADR e aparece aqui. Decisoes de produto (D-N) do PRD entram quando relevantes.
@@ -76,6 +85,10 @@
 |----|-----------|--------|-----------|
 | DT-01 | Sem testes de UI (componente/e2e) das telas RN | SPRINT-001 | media |
 | DT-02 | Deploy Vercel não-bloqueante (token sem escopo do time) | SPRINT-001 | media |
+| DT-03 | RLS por auth.uid() no Postgres (entra com Supabase) | SPRINT-002 | media |
+| DT-04 | Camada HTTP (route handlers) expondo as features | SPRINT-003 | alta |
+| DT-05 | Adapters RevenueCat/Stripe + checkout real | SPRINT-004 | alta |
+| DT-06 | UI dos fluxos (registrar, feed, ranking, pesqueiros, paywall) | SPRINT-003/004 | alta |
 
 ## Deploys
 | Deploy | Data | Ambiente | Commit | Resultado |
