@@ -15,7 +15,7 @@
     "tasks":        { "status": "completed", "gatePassed": true, "artifact": "spec/tasks/" }
   },
   "sprints": [
-    { "id": "SPRINT-001", "slug": "dex-catalogo", "status": "ativa", "tasks": ["T-04", "T-10"], "artifact": "spec/sprints/SPRINT-001-dex-catalogo.md" }
+    { "id": "SPRINT-001", "slug": "dex-catalogo", "status": "fechada", "tasks": ["T-04", "T-10"], "retro": "spec/sprints/RETRO-001-dex-catalogo.md", "artifact": "spec/sprints/SPRINT-001-dex-catalogo.md" }
   ],
   "prds": [
     { "id": "PRD-V1-01", "title": "fishingdex MVP", "status": "aprovado", "artifact": "spec/prds/PRD-V1-01.md" }

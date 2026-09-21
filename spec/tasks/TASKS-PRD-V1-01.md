@@ -58,7 +58,7 @@
 
 ## Milestone M1 — MVP pagável (núcleo + receita)
 ### [T-04] Catálogo de espécies (regionalizado) + Dex
-- estado: doing
+- estado: **done** (PR #6, SPRINT-001)
 - camada: Full
 - estimativa: M
 - depende_de: [T-02]
@@ -133,7 +133,7 @@
 - DoD: gates verdes + UI usa design system + PR merge
 
 ### [T-10] i18n pt/es/en
-- estado: todo
+- estado: **done** (PR #5, SPRINT-001)
 - camada: Front
 - estimativa: P
 - depende_de: [T-01]
