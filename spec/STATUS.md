@@ -9,7 +9,7 @@
 
 ## Resumo executivo
 - **Fase atual:** loop de entrega — SPRINT-001 (dex-catalogo)
-- **Proximo passo:** implementar T-04 (Dex/catálogo) e T-10 (i18n); depois SPRINT-002 (Supabase/Auth)
+- **Proximo passo:** SPRINT-002 — T-02 (Supabase/schema/PostGIS/RLS) + T-03 (Auth). Requer provisionamento do Supabase.
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.
@@ -30,14 +30,12 @@
 | PRD-V1-01 | fishingdex MVP (diario + ranking + marketplace) | aprovado |
 
 ## Sprint atual
-- **SPRINT-001** (dex-catalogo) — objetivo: Dex/coleção + catálogo regionalizado navegáveis + i18n, sem depender do backend externo.
-- Tasks: T-04 (doing), T-10 (todo)
-- Criterio de "sprint pronta": tasks done + merge na main + pipeline verde (cobertura ≥ 80%).
+- Nenhuma ativa. Próxima: **SPRINT-002** (Supabase + Auth). Ver `spec/tasks/TASKS-PRD-V1-01.md`.
 
 ## Historico de sprints
 | Sprint | Retro | Resultado | Debitos gerados |
 |--------|-------|-----------|-----------------|
-| SPRINT-001 | RETRO-001 | ... | DT-.. |
+| SPRINT-001 (dex-catalogo) | RETRO-001 | ✅ T-04 + T-10 done, merge na main, CI verde | DT-01, DT-02 |
 
 ## Indice de decisoes (ADRs + D-N)
 > Toda decisao de arquitetura vira ADR e aparece aqui. Decisoes de produto (D-N) do PRD entram quando relevantes.
@@ -76,7 +74,8 @@
 ## Debitos tecnicos
 | ID | Descricao | Origem | Prioridade |
 |----|-----------|--------|-----------|
-| DT-NN | ... | SPRINT-NNN | alta / media / baixa |
+| DT-01 | Sem testes de UI (componente/e2e) das telas RN | SPRINT-001 | media |
+| DT-02 | Deploy Vercel não-bloqueante (token sem escopo do time) | SPRINT-001 | media |
 
 ## Deploys
 | Deploy | Data | Ambiente | Commit | Resultado |
