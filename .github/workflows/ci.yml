@@ -39,6 +39,32 @@ jobs:
           path: coverage
           if-no-files-found: ignore
 
+  # 1b) Integração: camada de dados contra Postgres/PostGIS real (migrations + repos)
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: fishingdex
+          POSTGRES_PASSWORD: fishingdex_dev_pw
+          POSTGRES_DB: fishingdex
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U fishingdex -d fishingdex"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgres://fishingdex:fishingdex_dev_pw@localhost:5432/fishingdex
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - name: migrate + seed
+        run: npm run db:reset
+      - name: integration tests
+        run: npm run test:integration
+
   # 2) Segurança: dependências (npm audit) + scanner SonarQube/SonarCloud com Quality Gate
   security:
     runs-on: ubuntu-latest
@@ -73,7 +99,7 @@ jobs:
   # 3) Deploy na Vercel — só no push para main (produção), depois que gates + segurança passam
   deploy:
     runs-on: ubuntu-latest
-    needs: [gates, security]
+    needs: [gates, integration, security]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     # Não bloqueia o pipeline: enquanto o token/escopo da Vercel não estiver 100%,
     # o deploy pode falhar sem derrubar gates+scanner. Ver docs/ci/sonarcloud-setup.md.

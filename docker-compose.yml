@@ -1,18 +1,19 @@
-# Ambiente local canonico: Postgres + LocalStack (S3/SQS). Fonte unica — environments.md aponta para ca.
-version: "3.9"
+# Ambiente local do fishingdex: Postgres + PostGIS (ADR-0007).
+# Storage de fotos vai para o Supabase depois; não usamos AWS/LocalStack (profile.cloud=none).
 services:
   db:
-    image: postgres:16
+    image: postgis/postgis:16-3.4
+    container_name: fishingdex-db
     environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app
-      POSTGRES_DB: app
-    ports: ["5432:5432"]
-    volumes: ["pgdata:/var/lib/postgresql/data"]
-  localstack:
-    image: localstack/localstack:latest
-    environment:
-      SERVICES: "s3,sqs"
-    ports: ["4566:4566"]
+      POSTGRES_USER: fishingdex
+      POSTGRES_PASSWORD: fishingdex_dev_pw
+      POSTGRES_DB: fishingdex
+    ports: ['5432:5432']
+    volumes: ['pgdata:/var/lib/postgresql/data']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U fishingdex -d fishingdex']
+      interval: 5s
+      timeout: 5s
+      retries: 10
 volumes:
   pgdata:
