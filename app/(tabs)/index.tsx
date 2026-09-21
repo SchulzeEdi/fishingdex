@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 
-import { DexScreen } from '@/views';
+import { FeedScreen } from '@/views';
 
-export default function Home() {
+export default function FeedTab() {
   return (
     <>
       <StatusBar style="auto" />
-      <DexScreen />
+      <FeedScreen />
     </>
   );
 }
