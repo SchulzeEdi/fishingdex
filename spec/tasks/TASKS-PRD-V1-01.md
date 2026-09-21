@@ -31,8 +31,8 @@
 - teste: unidade (domínio)
 - DoD: ✅ mergeado na main
 
-### [T-02] Supabase: projeto + schema base + PostGIS + RLS
-- estado: todo
+### [T-02] Banco: schema base + PostGIS (+ RLS no Supabase depois)
+- estado: **done** (PR #8, SPRINT-002) — DB local Postgres/PostGIS; RLS por auth.uid() fica p/ Supabase (DT-03)
 - camada: DB
 - estimativa: M
 - depende_de: [T-01]
@@ -45,7 +45,7 @@
 - DoD: gates verdes + PR merge
 
 ### [T-03] Auth (e-mail + Google + Apple)
-- estado: todo
+- estado: **done** (PR #9, SPRINT-002) — backend local bcrypt+JWT; OAuth Google/Apple + UI ficam com Supabase Auth
 - camada: Full
 - estimativa: M
 - depende_de: [T-02]
@@ -71,7 +71,7 @@
 - DoD: gates verdes + UI usa design system + PR merge
 
 ### [T-05] Registrar captura (foto + espécie + detalhes) + desbloqueio
-- estado: todo
+- estado: **done (backend)** (PR #8) — `registerCatch` (transação + desbloqueio + anti-cheat). UI do fluxo 3 passos pendente (DT-06)
 - camada: Full
 - estimativa: G
 - depende_de: [T-03, T-04]
@@ -85,7 +85,7 @@
 - DoD: gates verdes + UI usa design system + PR merge
 
 ### [T-06] Feed + seguir + curtir
-- estado: todo
+- estado: **done (backend)** (PR #11) — feed/follow/like testados. UI do feed pendente (DT-06)
 - camada: Full
 - estimativa: M
 - depende_de: [T-05]
@@ -97,7 +97,7 @@
 - DoD: gates verdes + UI usa design system + PR merge
 
 ### [T-07] Ranking (tamanho) + recortes + denúncia
-- estado: todo
+- estado: **done (backend)** (PR #10) — getRanking + reportCatch testados. UI do ranking pendente (DT-06)
 - camada: Full
 - estimativa: M
 - depende_de: [T-05]
@@ -109,7 +109,7 @@
 - DoD: gates verdes + UI usa design system + PR merge
 
 ### [T-08] Assinatura Pro (RevenueCat/IAP) ← PRIMEIRA TASK DE RECEITA
-- estado: todo
+- estado: **done (lógica)** (PR #12) — gating Free/Pro + assinatura + webhook idempotente. Adapters RevenueCat/Stripe + paywall UI pendentes (DT-05)
 - camada: Full
 - estimativa: G
 - depende_de: [T-03]
@@ -121,7 +121,7 @@
 - DoD: gates verdes + UI usa design system + PR merge
 
 ### [T-09] Marketplace de pesqueiros (mapa + listagem paga)
-- estado: todo
+- estado: **done (backend)** (PR #11) — busca por raio PostGIS + CRUD/listagem. UI mapa + checkout Stripe pendentes (DT-05/DT-06)
 - camada: Full
 - estimativa: G
 - depende_de: [T-02, T-03]
