@@ -14,5 +14,5 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
   ],
-  "exclude": ["node_modules", "dist", ".expo", "vitest.config.ts"]
+  "exclude": ["node_modules", "dist", ".expo", "vitest.config.ts", "vitest.integration.config.ts"]
 }
