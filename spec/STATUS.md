@@ -2,14 +2,14 @@
 
 > **Fonte da verdade** do estado atual, do comeco ao fim do projeto.
 > Toda skill atualiza este arquivo ao concluir (ver `reference/documentation-standards.md`).
-> Fase atual: loop de entrega (SPRINT-001) · Ultima atualizacao: 2026-09-20
+> Fase atual: loop de entrega (SPRINT-006) · Ultima atualizacao: 2026-11-27
 
 <!-- AUTO:START — gerado por scripts/render-status.mjs (state.json e a verdade da maquina); nao editar a mao -->
 <!-- AUTO:END -->
 
 ## Resumo executivo
-- **Fase atual:** loop de entrega — SPRINT-001 (dex-catalogo)
-- **Proximo passo:** UI do app (telas RN dos fluxos) + integrações externas (Supabase, RevenueCat/Stripe, EAS/lojas). **Backend do MVP completo e testado.**
+- **Fase atual:** loop de entrega — SPRINT-006 (ui-design-system-android)
+- **Proximo passo:** login EAS + primeiro build APK/AAB (`docs/release/android-play-store.md`), depois teste interno/fechado na Play. Em seguida: API HTTP (DT-04), Supabase (DT-03) e Play Billing (DT-07).
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.
@@ -30,7 +30,7 @@
 | PRD-V1-01 | fishingdex MVP (diario + ranking + marketplace) | aprovado |
 
 ## Sprint atual
-- Nenhuma ativa. Backend do MVP concluído (SPRINT-001..004). Restam UI + integrações externas.
+- **SPRINT-006 (ui-design-system-android)** — design system v2 em todas as telas, fluxos do MVP no app com dados locais, Expo SDK 58 (targetSdk 36) e Android pronto para a Play (EAS apk/aab, ícones, ficha da loja, política de privacidade). Ver `spec/sprints/SPRINT-006-ui-design-system-android.md`.
 
 ## Estado do backend (tudo com teste automatizado)
 - **Banco:** Postgres 16 + PostGIS local (Docker, `docker-compose up`); `npm run db:reset` (migrate+seed).
@@ -46,6 +46,7 @@
 | SPRINT-003 (nucleo-social) | embutido | ✅ T-06/T-07/T-09 (feed/ranking/pesqueiros) | DT-04 |
 | SPRINT-004 (monetizacao) | embutido | ✅ T-08 (Free/Pro + assinatura) | DT-05 |
 | SPRINT-005 (app-shell) | RETRO-005 | ✅ abas + telas (Feed/Ranking/Dex/Perfil) | DT-06 |
+| SPRINT-006 (ui-design-system-android) | RETRO-006 (parcial) | 🔄 ativa: UI v2 + fluxos + Android/EAS | DT-07, DT-08 |
 
 ## Indice de decisoes (ADRs + D-N)
 > Toda decisao de arquitetura vira ADR e aparece aqui. Decisoes de produto (D-N) do PRD entram quando relevantes.
@@ -89,7 +90,9 @@
 | DT-03 | RLS por auth.uid() no Postgres (entra com Supabase) | SPRINT-002 | media |
 | DT-04 | Camada HTTP (route handlers) expondo as features | SPRINT-003 | alta |
 | DT-05 | Adapters RevenueCat/Stripe + checkout real | SPRINT-004 | alta |
-| DT-06 | UI dos fluxos (registrar, feed, ranking, pesqueiros, paywall) | SPRINT-003/004 | alta |
+| DT-06 | UI dos fluxos (registrar, feed, ranking, paywall ✅ na SPRINT-006 com dados locais; pesqueiros pendente) | SPRINT-003/004 | media |
+| DT-07 | "Assinar Pro" é demonstração — trocar por Google Play Billing/RevenueCat antes da produção | SPRINT-006 | alta |
+| DT-08 | Feed/ranking com exemplos locais da comunidade até a API (DT-04) | SPRINT-006 | alta |
 
 ## Deploys
 | Deploy | Data | Ambiente | Commit | Resultado |
@@ -106,6 +109,7 @@
 |----|-------------------|--------|---------|
 | CHG-001 | constitution (P4/P5/P12/aditivos) | Stack de UI/deploy: Next.js web -> React Native + Expo (app nas lojas) | Sem tasks reabertas (Fase 2); Fase 4 nasce com stack Expo. Ver `spec/changes/CHG-001-*.md` |
 | CHG-002 | PRD-V1-01 (D-12/D-13/D-14) + architecture + ADR-0007 | Dex, integridade do ranking (anti "mentira de pescador"), catálogo regionalizado, PostGIS | Backlog da Fase 6 cobre; refletido no scaffold. Ver `spec/changes/CHG-002-*.md` |
+| CHG-003 | design-tokens (aditivo) + versão do Expo | Design system v2 (Claude Design) + SDK 58 para a Play (targetSdk 36) | Sem tasks reabertas; DT-07/DT-08 novos. Ver `spec/changes/CHG-003-*.md` |
 
 ## Logbook (resumo acumulado)
 > Detalhe por interacao em `spec/logbook/`. Aqui so o agregado, para o TCC.

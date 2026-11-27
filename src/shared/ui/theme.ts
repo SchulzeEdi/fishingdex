@@ -1,47 +1,23 @@
-// Tokens do design system "Águas Profundas" (espelho de spec/design-tokens.json).
-// Fonte de verdade dos valores: spec/design-tokens.json.
+import { useColorScheme } from 'react-native';
+
+import { palettes, shadows, type ColorScheme, type Palette } from './tokens';
 
 export interface Theme {
-  background: string;
-  surface: string;
-  surfaceMuted: string;
-  border: string;
-  text: string;
-  textMuted: string;
-  primary: string;
-  primaryFg: string;
-  accent: string;
-  highlight: string;
-  highlightFg: string;
+  scheme: ColorScheme;
+  colors: Palette;
+  shadow: { sm: string; md: string; lg: string };
 }
 
-export const lightTheme: Theme = {
-  background: '#F7F5F0',
-  surface: '#FFFFFF',
-  surfaceMuted: '#EFEDE6',
-  border: '#E2DFD6',
-  text: '#0B1F24',
-  textMuted: '#5A564C',
-  primary: '#0E4D5C',
-  primaryFg: '#FFFFFF',
-  accent: '#21C0A8',
-  highlight: '#FF7A1A',
-  highlightFg: '#221200',
+const themes: Record<ColorScheme, Theme> = {
+  light: { scheme: 'light', colors: palettes.light, shadow: shadows.light },
+  dark: { scheme: 'dark', colors: palettes.dark, shadow: shadows.dark },
 };
 
-export const darkTheme: Theme = {
-  background: '#071519',
-  surface: '#0E2229',
-  surfaceMuted: '#13303A',
-  border: '#1E3D47',
-  text: '#EAF2F1',
-  textMuted: '#9DB3B3',
-  primary: '#2FA6BC',
-  primaryFg: '#04222A',
-  accent: '#21C0A8',
-  highlight: '#FF8A33',
-  highlightFg: '#1A0E00',
-};
+/** Tema do sistema (claro é o padrão). */
+export function useTheme(): Theme {
+  return themes[useColorScheme() === 'dark' ? 'dark' : 'light'];
+}
 
-export const radius = { sm: 8, md: 12, lg: 16, xl: 24, full: 9999 } as const;
-export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;
+export function getTheme(scheme: ColorScheme): Theme {
+  return themes[scheme];
+}

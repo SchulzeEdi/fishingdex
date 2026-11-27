@@ -1,70 +1,110 @@
-import { FlatList, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useMemo } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 
-import { resolveLocale, translate } from '@/shared/i18n';
-import { darkTheme, lightTheme, radius, spacing, type Theme } from '@/shared/ui';
+import { CatchCard, catchActions, type CatchCardChip } from '@/entities/catch';
+import { SPECIES_SEED, speciesName } from '@/entities/fish-species';
+import { usePlan, useProfile } from '@/entities/user';
+import { canViewSocial, LockedContent } from '@/features/subscribe-pro';
+import { formatRelativeTime, formatSize, formatWeight, useI18n, type Translate } from '@/shared/i18n';
+import { EmptyState, Screen, ScreenHeader, columnStyle, spacing } from '@/shared/ui';
+import { useCommunityFeed, useLeaderboard, type FeedItem } from '@/widgets/community';
 
-// Dados mock até a API HTTP (DT-04). Estrutura espelha FeedItem do backend.
-const MOCK = [
-  { id: '1', user: 'Rafael', species: 'Tucunaré-açu', sizeCm: 62, likes: 24 },
-  { id: '2', user: 'Ana', species: 'Dourado', sizeCm: 58, likes: 12 },
-  { id: '3', user: 'Mike', species: 'Largemouth bass', sizeCm: 71, likes: 40 },
-];
+import { TAB_BAR_SPACE } from './layout';
+
+const SPECIES = new Map(SPECIES_SEED.map((s) => [s.id, s]));
+const MONTH = { period: 'month' } as const;
+
+function chipsOf(item: FeedItem, t: Translate, locale: 'pt' | 'es' | 'en'): CatchCardChip[] {
+  const chips: CatchCardChip[] = [];
+  if (item.bait) chips.push({ label: t('catch.bait'), value: item.bait });
+  if (item.weightKg) chips.push({ label: t('register.weight'), value: formatWeight(locale, item.weightKg) });
+  if (item.isPrivate) chips.push({ icon: 'lock', label: t('feed.privatePlace') });
+  return chips;
+}
 
 export function FeedScreen() {
-  const theme = useColorScheme() === 'dark' ? darkTheme : lightTheme;
-  const lang = resolveLocale('pt-BR');
-  const s = makeStyles(theme);
-  return (
-    <View style={s.container}>
-      <Text style={s.title}>Feed 🌊</Text>
-      <Text style={s.sub}>{translate(lang, 'app.tagline')}</Text>
-      <FlatList
-        data={MOCK}
-        keyExtractor={(i) => i.id}
-        contentContainerStyle={{ gap: spacing.md, paddingTop: spacing.md }}
-        renderItem={({ item }) => (
-          <View style={s.card}>
-            <View style={s.photo}>
-              <Text style={{ fontSize: 40 }}>🐟</Text>
-            </View>
-            <View style={s.row}>
-              <Text style={s.name}>{item.user}</Text>
-              <Text style={s.muted}>❤️ {item.likes}</Text>
-            </View>
-            <Text style={s.catch}>
-              {item.species} · {item.sizeCm} cm
-            </Text>
-          </View>
-        )}
+  const router = useRouter();
+  const { t, locale } = useI18n();
+  const plan = usePlan();
+  const profile = useProfile();
+  const feed = useCommunityFeed();
+  const monthRanking = useLeaderboard(MONTH);
+
+  const podium = useMemo(
+    () => new Map(monthRanking.filter((r) => r.position <= 3).map((r) => [r.id, r.position])),
+    [monthRanking],
+  );
+
+  const renderCard = (item: FeedItem) => {
+    const species = SPECIES.get(item.speciesId);
+    const name = species ? speciesName(species, locale) : item.speciesId;
+    const when = formatRelativeTime(locale, item.caughtAt);
+    const meta = !item.isPrivate && item.place ? `${when} · ${item.place}` : when;
+    const position = podium.get(item.id);
+    return (
+      <CatchCard
+        authorName={item.isMine ? t('feed.you') : item.authorName}
+        authorCountry={item.authorCountry}
+        meta={meta}
+        photoUri={item.photoUrl}
+        speciesName={name}
+        sizeLabel={formatSize(locale, item.sizeCm)}
+        chips={chipsOf(item, t, locale)}
+        likes={item.likes}
+        liked={item.liked}
+        rankTag={position ? t('feed.rankTag', { position }) : undefined}
+        onToggleLike={() => catchActions.toggleLike(item.id)}
+        onOpenSpecies={() => router.push(`/species/${item.speciesId}`)}
       />
-    </View>
+    );
+  };
+
+  const header = <ScreenHeader title={t('feed.title')} subtitle={t('feed.subtitle')} />;
+
+  if (!canViewSocial(plan)) {
+    return (
+      <Screen>
+        <View style={styles.padded}>{header}</View>
+        <View style={[styles.padded, styles.fill]}>
+          <LockedContent
+            icon="feed"
+            title={t('paywall.feedTitle')}
+            message={t('paywall.feedMessage')}
+            country={profile?.country}
+          >
+            <View style={styles.list}>{feed.slice(0, 2).map((item) => <View key={item.id}>{renderCard(item)}</View>)}</View>
+          </LockedContent>
+        </View>
+      </Screen>
+    );
+  }
+
+  return (
+    <Screen>
+      <FlatList
+        data={feed}
+        keyExtractor={(i) => i.id}
+        renderItem={({ item }) => renderCard(item)}
+        ListHeaderComponent={header}
+        ListEmptyComponent={
+          <EmptyState
+            icon="camera"
+            title={t('feed.emptyTitle')}
+            message={t('feed.emptyMessage')}
+            actionLabel={t('catch.register')}
+            onAction={() => router.push('/register')}
+          />
+        }
+        contentContainerStyle={[styles.padded, styles.list, columnStyle, { paddingBottom: TAB_BAR_SPACE }]}
+        showsVerticalScrollIndicator={false}
+      />
+    </Screen>
   );
 }
 
-function makeStyles(t: Theme) {
-  return StyleSheet.create({
-    container: { flex: 1, backgroundColor: t.background, padding: spacing.lg },
-    title: { color: t.text, fontSize: 28, fontWeight: '700' },
-    sub: { color: t.textMuted, fontSize: 14, marginTop: spacing.xs },
-    card: {
-      backgroundColor: t.surface,
-      borderRadius: radius.lg,
-      borderWidth: 1,
-      borderColor: t.border,
-      overflow: 'hidden',
-      padding: spacing.md,
-    },
-    photo: {
-      height: 140,
-      borderRadius: radius.md,
-      backgroundColor: t.surfaceMuted,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: spacing.sm,
-    },
-    row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    name: { color: t.text, fontWeight: '700', fontSize: 15 },
-    muted: { color: t.textMuted, fontSize: 13 },
-    catch: { color: t.text, fontSize: 16, fontWeight: '600', marginTop: spacing.xs },
-  });
-}
+const styles = StyleSheet.create({
+  padded: { paddingHorizontal: spacing.lg },
+  fill: { flex: 1 },
+  list: { gap: spacing.md },
+});
