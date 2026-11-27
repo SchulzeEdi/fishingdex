@@ -8,4 +8,5 @@ export {
   type FieldError,
 } from './model/catch-form';
 export { pickCatchPhoto, type PhotoResult, type PhotoSource } from './lib/catch-photo';
+export { registerCatch, uploadCatchPhoto } from './api/register.api';
 export { SpeciesPicker } from './ui/species-picker';

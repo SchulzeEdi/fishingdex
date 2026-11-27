@@ -2,14 +2,15 @@
 
 > **Fonte da verdade** do estado atual, do comeco ao fim do projeto.
 > Toda skill atualiza este arquivo ao concluir (ver `reference/documentation-standards.md`).
-> Fase atual: loop de entrega (SPRINT-006) · Ultima atualizacao: 2026-11-27
+> Fase atual: loop de entrega (SPRINT-007) · Ultima atualizacao: 2026-11-27
 
 <!-- AUTO:START — gerado por scripts/render-status.mjs (state.json e a verdade da maquina); nao editar a mao -->
 <!-- AUTO:END -->
 
 ## Resumo executivo
-- **Fase atual:** loop de entrega — SPRINT-006 (ui-design-system-android)
-- **Proximo passo:** login EAS + primeiro build APK/AAB (`docs/release/android-play-store.md`), depois teste interno/fechado na Play. Em seguida: API HTTP (DT-04), Supabase (DT-03) e Play Billing (DT-07).
+- **Fase atual:** loop de entrega — SPRINT-007 (online-supabase)
+- **Proximo passo:** testar o APK online no emulador, subir o AAB no teste interno/fechado da Play. Depois: Play Billing via RevenueCat (DT-07) e SMTP próprio (DT-09) antes da produção.
+- **Online:** Supabase `fishingdex` (`mfikwhzvkwdthfraghad`, sa-east-1) — Auth, Postgres com RLS, Storage. Ver ADR-0008.
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.
@@ -30,6 +31,7 @@
 | PRD-V1-01 | fishingdex MVP (diario + ranking + marketplace) | aprovado |
 
 ## Sprint atual
+- **SPRINT-007 (online-supabase)** — contas reais, regras no banco (RLS/triggers/RPC), feed e ranking entre usuários, exclusão de conta, denúncia, termos, preferências de idioma/moeda. Ver `spec/sprints/SPRINT-007-online-supabase.md`.
 - **SPRINT-006 (ui-design-system-android)** — design system v2 em todas as telas, fluxos do MVP no app com dados locais, Expo SDK 58 (targetSdk 36) e Android pronto para a Play (EAS apk/aab, ícones, ficha da loja, política de privacidade). Ver `spec/sprints/SPRINT-006-ui-design-system-android.md`.
 
 ## Estado do backend (tudo com teste automatizado)
@@ -46,7 +48,8 @@
 | SPRINT-003 (nucleo-social) | embutido | ✅ T-06/T-07/T-09 (feed/ranking/pesqueiros) | DT-04 |
 | SPRINT-004 (monetizacao) | embutido | ✅ T-08 (Free/Pro + assinatura) | DT-05 |
 | SPRINT-005 (app-shell) | RETRO-005 | ✅ abas + telas (Feed/Ranking/Dex/Perfil) | DT-06 |
-| SPRINT-006 (ui-design-system-android) | RETRO-006 (parcial) | 🔄 ativa: UI v2 + fluxos + Android/EAS | DT-07, DT-08 |
+| SPRINT-006 (ui-design-system-android) | RETRO-006 (parcial) | ✅ UI v2 + fluxos + Android/EAS (PR #16) | DT-07, DT-08 |
+| SPRINT-007 (online-supabase) | RETRO-007 (parcial) | 🔄 ativa: Supabase + login + social real | DT-09, DT-10, DT-11 |
 
 ## Indice de decisoes (ADRs + D-N)
 > Toda decisao de arquitetura vira ADR e aparece aqui. Decisoes de produto (D-N) do PRD entram quando relevantes.
@@ -60,6 +63,7 @@
 | ADR-0005 | B2C sem multi-tenant; isolamento por dono + RLS | architect | aceito |
 | ADR-0006 | CI/CD GitHub Actions + SonarCloud + Vercel/EAS | architect | aceito |
 | ADR-0007 | PostGIS para dados espaciais (raio/mapa) | architect / CHG-002 | aceito |
+| ADR-0008 | App direto no Supabase (RLS + RPC); Vercel para web e webhooks | SPRINT-007 / CHG-004 | aceito |
 | D-1 | Plataforma React Native + Expo (app nas lojas) | PRD-V1-01 / CHG-001 | vigente |
 | D-2 | Identificacao de especie manual na V1 (IA depois) | PRD-V1-01 | vigente |
 | D-3 | App trilingue pt/es/en desde a V1 | PRD-V1-01 | vigente |
@@ -87,12 +91,15 @@
 |----|-----------|--------|-----------|
 | DT-01 | Sem testes de UI (componente/e2e) das telas RN | SPRINT-001 | media |
 | DT-02 | Deploy Vercel não-bloqueante (token sem escopo do time) | SPRINT-001 | media |
-| DT-03 | RLS por auth.uid() no Postgres (entra com Supabase) | SPRINT-002 | media |
-| DT-04 | Camada HTTP (route handlers) expondo as features | SPRINT-003 | alta |
+| DT-03 | ✅ RLS por auth.uid() no Postgres — feito na SPRINT-007 | SPRINT-002 | — |
+| DT-04 | ✅ Acesso a dados via RLS + RPC no Supabase (ADR-0008) — SPRINT-007 | SPRINT-003 | — |
 | DT-05 | Adapters RevenueCat/Stripe + checkout real | SPRINT-004 | alta |
 | DT-06 | UI dos fluxos (registrar, feed, ranking, paywall ✅ na SPRINT-006 com dados locais; pesqueiros pendente) | SPRINT-003/004 | media |
 | DT-07 | "Assinar Pro" é demonstração — trocar por Google Play Billing/RevenueCat antes da produção | SPRINT-006 | alta |
-| DT-08 | Feed/ranking com exemplos locais da comunidade até a API (DT-04) | SPRINT-006 | alta |
+| DT-08 | ✅ Feed/ranking reais (sem exemplos locais) — SPRINT-007 | SPRINT-006 | — |
+| DT-09 | SMTP próprio (confirmação de cadastro, esqueci a senha) | SPRINT-007 | alta |
+| DT-10 | Seguir pescadores (feed hoje é da comunidade Pro) | SPRINT-007 | media |
+| DT-11 | Login com Google/Apple (D-5) | SPRINT-007 | media |
 
 ## Deploys
 | Deploy | Data | Ambiente | Commit | Resultado |
@@ -109,6 +116,7 @@
 |----|-------------------|--------|---------|
 | CHG-001 | constitution (P4/P5/P12/aditivos) | Stack de UI/deploy: Next.js web -> React Native + Expo (app nas lojas) | Sem tasks reabertas (Fase 2); Fase 4 nasce com stack Expo. Ver `spec/changes/CHG-001-*.md` |
 | CHG-002 | PRD-V1-01 (D-12/D-13/D-14) + architecture + ADR-0007 | Dex, integridade do ranking (anti "mentira de pescador"), catálogo regionalizado, PostGIS | Backlog da Fase 6 cobre; refletido no scaffold. Ver `spec/changes/CHG-002-*.md` |
+| CHG-004 | architecture (camada de API) + ADR-0008 | App online direto no Supabase; feed da comunidade Pro; moderação; exclusão de conta | DT-03/04/08 resolvidos; DT-09/10/11 novos. Ver `spec/changes/CHG-004-*.md` |
 | CHG-003 | design-tokens (aditivo) + versão do Expo | Design system v2 (Claude Design) + SDK 58 para a Play (targetSdk 36) | Sem tasks reabertas; DT-07/DT-08 novos. Ver `spec/changes/CHG-003-*.md` |
 
 ## Logbook (resumo acumulado)

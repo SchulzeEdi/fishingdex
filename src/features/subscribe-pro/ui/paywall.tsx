@@ -1,11 +1,12 @@
 import { useState, type ReactNode } from 'react';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
 
+import { useCurrencyPreference } from '@/shared/config';
 import { useI18n } from '@/shared/i18n';
 import { AppText, Button, Icon, radius, spacing, useTheme, type IconName } from '@/shared/ui';
 
-import { demoPurchase } from '../model/demo-purchase';
-import { proPriceLabels } from '../model/prices';
+import { demoPurchase } from '../api/purchase.client';
+import { proPriceLabels, resolveCurrency } from '../model/prices';
 
 interface PaywallCardProps {
   icon: IconName;
@@ -19,12 +20,15 @@ interface PaywallCardProps {
 export function ProCta({ country }: { country?: string | null }) {
   const { t, locale } = useI18n();
   const [busy, setBusy] = useState(false);
-  const price = proPriceLabels(country, locale);
+  // Moeda escolhida em Perfil › Preferências (ou a do país).
+  const price = proPriceLabels(resolveCurrency(useCurrencyPreference(), country), locale);
 
   const subscribe = async () => {
     setBusy(true);
     try {
       await demoPurchase.subscribe();
+    } catch {
+      Alert.alert(t('paywall.cta'), t('error.unknown'));
     } finally {
       setBusy(false);
     }

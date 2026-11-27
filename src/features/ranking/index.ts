@@ -7,5 +7,6 @@ export {
   type LeaderboardRow,
   type LeaderboardScope,
 } from './model/leaderboard';
+export { fetchRanking } from './api/ranking.client';
 export { Podium, type PodiumSpot } from './ui/podium';
 export { RankingRow, RankingRowSkeleton } from './ui/ranking-row';

@@ -42,6 +42,8 @@ interface Options<T> {
   version: number;
   initial: T;
   storage?: KeyValueStorage;
+  /** false = só em memória (dados que vêm do servidor a cada sessão). */
+  persist?: boolean;
 }
 
 interface Envelope<T> {
@@ -58,11 +60,12 @@ export function createPersistedStore<T extends object>({
   version,
   initial,
   storage,
+  persist: shouldPersist = true,
 }: Options<T>): Store<T> {
   let state = initial;
   let hydrated = false;
   const listeners = new Set<() => void>();
-  const backend = () => storage ?? defaultStorage;
+  const backend = () => (shouldPersist ? (storage ?? defaultStorage) : null);
 
   const emit = () => listeners.forEach((l) => l());
   const persist = () => {

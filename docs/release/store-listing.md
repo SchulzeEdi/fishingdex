@@ -86,21 +86,30 @@ Free plan: 3 catches per month. Pro plan: unlimited catches, feed and ranking.
 - **Tags sugeridas:** pesca, pesca esportiva, diário
 - **Público-alvo:** 18+ (evita os requisitos da política "Famílias")
 - **Anúncios:** não contém anúncios
-- **Classificação de conteúdo (IARC):** sem violência, sem conteúdo sexual, sem apostas,
-  sem interação entre usuários **nesta versão** (feed é só leitura de exemplos locais) →
-  esperado "Livre / Everyone".
+- **Classificação de conteúdo (IARC):** sem violência, sem conteúdo sexual, sem apostas;
+  **há interação entre usuários** (fotos e curtidas visíveis a outros) e conteúdo gerado pelo
+  usuário → marcar no questionário. Esperado "Livre" com aviso de interação.
 
-## Segurança dos dados (Data safety) — respostas para a versão 1.0 (demo)
+## Segurança dos dados (Data safety) — versão online (Supabase)
 
 | Pergunta | Resposta |
 |---|---|
-| O app coleta ou compartilha dados do usuário? | **Não** — tudo fica no aparelho (não sai do dispositivo, então não conta como "coleta") |
-| Os dados são criptografados em trânsito? | Não se aplica (nada é transmitido) |
-| O usuário pode pedir exclusão? | Sim — limpar dados do app / desinstalar |
+| O app coleta ou compartilha dados do usuário? | **Coleta: sim. Compartilha com terceiros: não** (o Supabase é operador, não conta como compartilhamento) |
+| Dados criptografados em trânsito? | **Sim** (HTTPS) |
+| O usuário pode pedir exclusão? | **Sim** — no app (Perfil › Excluir conta) e por e-mail |
+| URL de exclusão de conta (exigida pela Play) | https://github.com/SchulzeEdi/fishingdex/blob/main/docs/legal/privacy-policy.md#5-seus-direitos-e-exclusão-da-conta |
 | Política de privacidade | https://github.com/SchulzeEdi/fishingdex/blob/main/docs/legal/privacy-policy.md |
 
-> Quando o app ligar ao backend (Supabase, DT-03/DT-04), refazer este formulário: passa a
-> haver coleta de nome, e-mail, fotos e localização aproximada.
+Tipos de dados a marcar (todos **coletados**, **obrigatórios** salvo indicação, finalidade
+**Funcionalidade do app** + **Gerenciamento da conta**):
+
+| Categoria da Play | Item | Observação |
+|---|---|---|
+| Informações pessoais | Nome | Exibido no perfil/feed/ranking |
+| Informações pessoais | Endereço de e-mail | Login |
+| Fotos e vídeos | Fotos | Opcional (foto da captura) |
+| Atividade no app | Outro conteúdo gerado pelo usuário | Capturas, curtidas |
+| Local | Local aproximado | **Não** — o local da captura é texto livre digitado (não usamos GPS) |
 
 ## Recursos gráficos
 

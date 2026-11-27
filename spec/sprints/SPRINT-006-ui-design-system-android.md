@@ -1,6 +1,6 @@
 # SPRINT-006: ui-design-system-android
 
-- **PRD:** PRD-V1-01 · **Início:** 2026-11-27 · **Status:** ativa
+- **PRD:** PRD-V1-01 · **Início:** 2026-11-27 · **Status:** fechada (PR #16)
 
 ## Objetivo
 Aplicar o design system v2 (Claude Design) em todas as telas, completar os fluxos do MVP no app

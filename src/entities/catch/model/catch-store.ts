@@ -1,35 +1,42 @@
 import { createPersistedStore, useStore } from '@/shared/lib';
 
 import type { Catch } from './catch';
-import { toggleId } from './catch-log';
 
-/** Id do dono local até a auth real (Supabase, DT-03). */
-export const LOCAL_USER_ID = 'me';
+export type CatchesStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 interface CatchState {
-  /** Capturas do usuário deste aparelho. */
+  status: CatchesStatus;
+  /** Capturas do usuário logado (espelho do servidor nesta sessão). */
   mine: Catch[];
-  /** Capturas curtidas (ids). */
-  liked: string[];
 }
 
-const EMPTY: readonly never[] = [];
+const EMPTY: readonly Catch[] = [];
 
 export const catchStore = createPersistedStore<CatchState>({
   key: 'fishingdex.catches',
-  version: 1,
-  initial: { mine: [], liked: [] },
+  version: 2,
+  initial: { status: 'idle', mine: [] },
+  persist: false,
 });
 
 export const catchActions = {
+  loading() {
+    catchStore.setState((s) => ({ ...s, status: 'loading' }));
+  },
+  loaded(list: Catch[]) {
+    catchStore.setState(() => ({ status: 'ready', mine: list }));
+  },
+  failed() {
+    catchStore.setState((s) => ({ ...s, status: 'error' }));
+  },
   add(entry: Catch) {
-    catchStore.setState((s) => ({ ...s, mine: [entry, ...s.mine] }));
+    catchStore.setState((s) => ({ ...s, mine: [entry, ...s.mine.filter((c) => c.id !== entry.id)] }));
   },
   remove(id: string) {
     catchStore.setState((s) => ({ ...s, mine: s.mine.filter((c) => c.id !== id) }));
   },
-  toggleLike(id: string) {
-    catchStore.setState((s) => ({ ...s, liked: toggleId(s.liked, id) }));
+  clear() {
+    catchStore.setState(() => ({ status: 'idle', mine: [] }));
   },
 };
 
@@ -37,6 +44,6 @@ export function useMyCatches(): readonly Catch[] {
   return useStore(catchStore, (s) => s.mine ?? EMPTY);
 }
 
-export function useLikedIds(): readonly string[] {
-  return useStore(catchStore, (s) => s.liked ?? EMPTY);
+export function useMyCatchesStatus(): CatchesStatus {
+  return useStore(catchStore, (s) => s.status);
 }

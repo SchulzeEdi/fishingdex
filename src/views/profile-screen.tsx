@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import { CatchRow, biggestCatch, catchesThisMonth, sortByRecent, useMyCatches } from '@/entities/catch';
 import { SPECIES_SEED, speciesName } from '@/entities/fish-species';
@@ -13,6 +14,8 @@ import {
   canViewSocial,
   demoPurchase,
 } from '@/features/subscribe-pro';
+import { deleteAccount, signOut } from '@/features/session';
+import { CurrencyPicker, LanguagePicker } from '@/widgets/preferences';
 import { formatRelativeTime, formatSize, useI18n } from '@/shared/i18n';
 import {
   AppText,
@@ -57,6 +60,24 @@ export function ProfileScreen() {
   const isPro = canViewSocial(plan);
   const record = biggestCatch(catches);
   const name = profile?.name ?? '';
+  const [busy, setBusy] = useState<'signOut' | 'delete' | 'plan' | null>(null);
+
+  const run = async (kind: 'signOut' | 'delete' | 'plan', action: () => Promise<unknown>) => {
+    setBusy(kind);
+    try {
+      await action();
+    } catch {
+      Alert.alert(t('error.offlineTitle'), t('error.unknown'));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const confirmDelete = () =>
+    Alert.alert(t('auth.deleteConfirmTitle'), t('auth.deleteConfirmMessage'), [
+      { text: t('register.cancel'), style: 'cancel' },
+      { text: t('auth.deleteConfirm'), style: 'destructive', onPress: () => run('delete', deleteAccount) },
+    ]);
 
   return (
     <Screen scroll bottomInset={TAB_BAR_SPACE}>
@@ -66,8 +87,13 @@ export function ProfileScreen() {
           <AppText variant="heading" accessibilityRole="header">
             {name}
           </AppText>
-          {profile ? <Flag code={profile.country} /> : null}
+          {profile?.country ? <Flag code={profile.country} /> : null}
         </View>
+        {profile?.email ? (
+          <AppText variant="caption" tone="textMuted">
+            {profile.email}
+          </AppText>
+        ) : null}
         <PlanBadge plan={plan} />
       </View>
 
@@ -114,17 +140,43 @@ export function ProfileScreen() {
         )}
       </View>
 
+      <View style={styles.section}>
+        <AppText variant="heading">{t('prefs.title')}</AppText>
+        <LanguagePicker />
+        <CurrencyPicker />
+      </View>
+
       <View style={styles.actions}>
         <Button
           label={t('profile.edit')}
           variant="secondary"
           icon="user"
           block
-          onPress={() => router.push({ pathname: '/onboarding', params: { edit: '1' } })}
+          onPress={() => router.push('/profile-edit')}
+        />
+        <Button
+          label={t('auth.signOut')}
+          variant="secondary"
+          block
+          loading={busy === 'signOut'}
+          onPress={() => run('signOut', signOut)}
         />
         {isPro ? (
-          <Button label={t('profile.backToFree')} variant="ghost" onPress={() => demoPurchase.cancel()} style={styles.center} />
+          <Button
+            label={t('profile.backToFree')}
+            variant="ghost"
+            loading={busy === 'plan'}
+            onPress={() => run('plan', demoPurchase.cancel)}
+            style={styles.center}
+          />
         ) : null}
+        <Button
+          label={t('auth.deleteAccount')}
+          variant="ghost"
+          loading={busy === 'delete'}
+          onPress={confirmDelete}
+          style={styles.center}
+        />
       </View>
 
       <AppText variant="caption" tone="textMuted" align="center" style={styles.note}>

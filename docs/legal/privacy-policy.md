@@ -3,48 +3,58 @@
 _Última atualização: 27 de novembro de 2026_
 
 O **fishingdex** ("app") é um diário de pesca esportiva com coleção de espécies e ranking.
-Esta política explica quais dados o app usa na **versão atual (1.0, demonstração)**.
+Esta política explica quais dados coletamos, para quê e como você controla esses dados.
 
-## 1. Dados que o app usa
+## 1. Dados que coletamos
 
-| Dado | Para quê | Onde fica |
+| Dado | Para quê | Visível para outros? |
 |---|---|---|
-| Nome e país que você informa no primeiro acesso | Mostrar seu perfil e escolher o catálogo de espécies da sua região | Só no seu aparelho |
-| Capturas que você registra (espécie, tamanho, peso, isca, local, data) | Seu diário, a coleção (Dex) e o ranking | Só no seu aparelho |
-| Fotos das capturas (câmera ou galeria) | Comprovar a captura e ilustrar o diário | Só no seu aparelho (pasta do app) |
-| Idioma do aparelho | Exibir o app em português, espanhol ou inglês | Lido do sistema, não é salvo |
+| E-mail e senha | Criar e acessar sua conta (a senha é guardada pelo provedor de autenticação, nunca em texto) | Não |
+| Nome e país | Seu perfil, o catálogo de espécies da sua região e o selo de país no ranking | Sim, para assinantes Pro |
+| Capturas (espécie, tamanho, peso, isca, local, data) | Seu diário, a coleção (Dex), o feed e o ranking | Sim, para assinantes Pro — exceto o **local** de capturas marcadas como "Local privado" |
+| Fotos das capturas | Comprovar a captura e ilustrar o diário, o feed e o ranking | Sim, para assinantes Pro |
+| Curtidas | Contagem de curtidas no feed | Só a contagem |
+| Plano (Free/Pro) | Liberar recursos do Pro | Não |
 
-**Nesta versão, nenhum dado sai do seu aparelho.** O app não tem login, não envia dados a
-servidores, não usa publicidade, não usa ferramentas de análise (analytics) e não compartilha
-dados com terceiros.
+Quem usa o plano **Free** não aparece para outros usuários (feed e ranking).
 
-## 2. Permissões
+Não usamos publicidade, não usamos ferramentas de análise (analytics) de terceiros e não vendemos
+nem compartilhamos seus dados com terceiros para marketing.
+
+## 2. Onde os dados ficam
+
+Os dados são armazenados no **Supabase** (banco de dados, autenticação e armazenamento de fotos),
+contratado como operador, com acesso protegido por regras de segurança por usuário. As
+comunicações são criptografadas (HTTPS).
+
+## 3. Permissões do aparelho
 
 - **Câmera:** só quando você toca em "Tirar foto" para fotografar uma captura.
-- **Fotos:** a escolha de imagem usa o seletor de fotos do sistema; o app só recebe a foto que
-  você escolher.
+- **Fotos:** a escolha de imagem usa o seletor de fotos do sistema; o app só recebe a foto que você escolher.
 
-## 3. Assinatura Pro
+## 4. Assinatura Pro
 
-Na versão de demonstração, "Assinar Pro" ativa os recursos Pro apenas no aparelho, sem
-cobrança. Quando a cobrança real for ativada, ela será processada pelo Google Play; o
-fishingdex não recebe nem guarda dados de cartão.
+Nesta versão de testes, "Assinar Pro" ativa os recursos Pro sem cobrança. Quando a cobrança real
+for ativada, ela será processada pelo Google Play; o fishingdex não recebe nem guarda dados de cartão.
 
-## 4. Exclusão dos dados
+## 5. Seus direitos e exclusão da conta
 
-Todos os dados ficam no armazenamento do app. Para apagá-los, desinstale o app ou limpe os
-dados dele em Configurações › Apps › fishingdex › Armazenamento › Limpar dados.
+Você pode editar nome e país no Perfil. Para **excluir a conta e todos os dados** (perfil,
+capturas, fotos, curtidas e coleção), use **Perfil › Excluir conta** no app — a exclusão é imediata
+e definitiva. Se não tiver mais acesso ao app, peça a exclusão pelo e-mail abaixo informando o
+e-mail da conta; atendemos em até 7 dias.
 
-## 5. Crianças
+Base legal (LGPD): execução do serviço que você solicitou ao criar a conta.
+
+## 6. Crianças
 
 O app não é direcionado a menores de 13 anos.
 
-## 6. Mudanças
+## 7. Mudanças
 
-Quando o app passar a ter conta e servidor (feed, ranking online), esta política será
-atualizada antes da versão que fizer essa mudança, descrevendo os novos dados e a finalidade.
+Mudanças nesta política serão publicadas nesta página, com a data de atualização.
 
-## 7. Contato
+## 8. Contato
 
 edersonschulze@gmail.com
 
@@ -54,15 +64,19 @@ edersonschulze@gmail.com
 
 _Last updated: November 27, 2026_
 
-**fishingdex** is a sport fishing log with a species collection and a ranking. In the current
-version (1.0, demo), **no data leaves your device**: the name and country you enter, the
-catches you log and their photos are stored only in the app's local storage. There is no
-account, no server, no ads, no analytics and no sharing with third parties.
+**fishingdex** is a sport fishing log with a species collection and a ranking.
 
-- **Camera:** used only when you tap "Take photo" to photograph a catch.
-- **Photos:** picked through the system photo picker; the app only receives the photo you choose.
-- **Pro:** in the demo, "Go Pro" unlocks Pro features on the device at no charge. Real billing
-  will be handled by Google Play; fishingdex never receives card data.
-- **Deleting data:** uninstall the app or clear its storage in Android settings.
+- **What we collect:** email and password (account), name and country (profile, regional catalog,
+  country badge), catches (species, size, weight, lure, spot, date), catch photos, likes and your
+  plan. Pro subscribers can see other Pro anglers' name, country, catches and photos — never the
+  spot of catches marked "Private spot". Free users are not shown to others.
+- **No ads, no third-party analytics, no selling or sharing data for marketing.**
+- **Storage:** Supabase (database, authentication and photo storage), protected by per-user
+  security rules; all traffic uses HTTPS.
+- **Device permissions:** camera only when you tap "Take photo"; photos through the system picker.
+- **Pro:** in this test version "Go Pro" unlocks Pro at no charge. Real billing will be handled by
+  Google Play; fishingdex never receives card data.
+- **Account deletion:** **Profile › Delete account** in the app deletes your account and all data
+  immediately. Without app access, email us from the account's address and we delete within 7 days.
 - **Children:** the app is not directed to children under 13.
 - **Contact:** edersonschulze@gmail.com

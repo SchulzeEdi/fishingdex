@@ -1,7 +1,7 @@
 import { Redirect, useRouter } from 'expo-router';
 import { Tabs } from 'expo-router/js-tabs';
 
-import { useProfile } from '@/entities/user';
+import { useSessionStatus } from '@/entities/user';
 import { useI18n } from '@/shared/i18n';
 import { useTheme } from '@/shared/ui';
 import { TabBar, type TabItem } from '@/widgets/tab-bar';
@@ -11,9 +11,9 @@ export default function TabsLayout() {
   const router = useRouter();
   const { t } = useI18n();
   const { colors } = useTheme();
-  const profile = useProfile();
+  const status = useSessionStatus();
 
-  if (!profile) return <Redirect href="/onboarding" />;
+  if (status !== 'signedIn') return <Redirect href="/auth" />;
 
   const tabs: TabItem[] = [
     { route: 'index', label: t('tab.feed'), icon: 'feed' },
