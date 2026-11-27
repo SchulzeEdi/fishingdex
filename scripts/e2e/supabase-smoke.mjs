@@ -64,14 +64,19 @@ check(errMsg(feedFree.error).includes('pro_required'), 'feed bloqueado para Free
 check(!(await b.sb.rpc('set_demo_plan', { p_plan: 'pro' })).error, 'assinatura de demonstração ativa o Pro');
 await b.sb.from('catches').insert({ species_id: 'black-bass', size_cm: 61, photo_url: photoUrl, place: 'Lake Fork, TX' });
 const feedB1 = await b.sb.rpc('get_feed');
-check(!feedB1.error && feedB1.data.every((c) => c.user_id === b.uid), 'Free (Ana) não aparece no feed dos outros');
+check(!feedB1.error && !feedB1.data.some((c) => c.user_id === a.uid), 'Free (Ana) não aparece no feed dos outros');
 
 // A vira Pro: passa a aparecer, curte e denuncia
 await a.sb.rpc('set_demo_plan', { p_plan: 'pro' });
 const feedB2 = await b.sb.rpc('get_feed');
 check(feedB2.data?.some((c) => c.user_id === a.uid), 'Pro aparece no feed dos outros');
+// O servidor pode ter capturas reais: olha só as das contas de teste.
 const rank = await b.sb.rpc('get_ranking', { p_period: 'all' });
-check(!rank.error && rank.data.length === 2 && rank.data[0].size_cm === 61, 'ranking: só com foto, maior primeiro');
+const ours = (rank.data ?? []).filter((r) => r.user_id === a.uid || r.user_id === b.uid);
+check(
+  !rank.error && ours.length === 2 && ours[0].size_cm === 61 && ours[0].rank_position < ours[1].rank_position,
+  'ranking: só com foto, maior primeiro',
+);
 const bass = feedB2.data.find((c) => c.species_id === 'black-bass');
 await a.sb.from('likes').upsert({ catch_id: bass.catch_id }, { onConflict: 'user_id,catch_id', ignoreDuplicates: true });
 const feedA = await a.sb.rpc('get_feed');
@@ -84,7 +89,7 @@ check(!feedA2.data.some((c) => c.catch_id === bass.catch_id), 'denunciada some d
 const anon = client();
 const anonCatches = await anon.from('catches').select('id');
 const anonSpecies = await anon.from('fish_species').select('id');
-check((anonCatches.data ?? []).length === 0 && anonSpecies.data?.length === 37, 'sem login: só o catálogo de espécies');
+check((anonCatches.data ?? []).length === 0 && anonSpecies.data?.length >= 113, 'sem login: só o catálogo de espécies (113+)');
 
 // Limpeza: fotos + contas (a exclusão em cascata apaga capturas, curtidas, denúncias)
 await a.sb.storage.from('catch-photos').remove([path]);

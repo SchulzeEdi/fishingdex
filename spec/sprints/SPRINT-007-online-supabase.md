@@ -29,6 +29,12 @@ denúncia, termos).
 - **Preferências:** idioma (aparelho/pt/es/en) e moeda (país/BRL/USD) em Perfil e no login.
 - **Play:** termos de uso, política de privacidade e Data safety atualizados para a versão online.
 - **Vercel:** web em modo SPA com as variáveis públicas do Supabase.
+- **Catálogo ampliado (D-11):** de 37 para **113 espécies** esportivas (BR 81, AR 39, US 65),
+  doce e salgada, com nomes pt/es/en, nome científico, raridade e tetos plausíveis perto do
+  recorde. Sem espécies protegidas (ex.: mero, tubarões). Fonte única `species.data.ts` →
+  `scripts/db/gen-species-sql.mjs` gera o seed local e a migration do Supabase.
+- **Ajustes do teste no emulador:** Preferências no topo do Perfil; avatar com as iniciais do nome
+  real (não de "Você"); selo "Nº no ranking" recarrega junto com o feed.
 
 ## Verificação
 - `npm run db:test:supabase` (e no CI): migrations + regras + RLS num Postgres com shim do Supabase.

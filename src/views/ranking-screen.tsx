@@ -66,6 +66,7 @@ export function RankingScreen() {
   const podium: PodiumSpot[] = rows.slice(0, 3).map((r) => ({
     position: r.position as 1 | 2 | 3,
     name: nameOf(r),
+    avatarName: r.authorName,
     country: r.country,
     speciesName: speciesOf(r.speciesId),
     sizeLabel: formatSize(locale, r.sizeCm),

@@ -173,7 +173,7 @@ end $$;
 begin;
 set local role anon;
 do $$ begin
-  assert (select count(*) from public.fish_species) = 37, 'anon lê o catálogo';
+  assert (select count(*) from public.fish_species) = 113, 'anon lê o catálogo (113 espécies)';
   assert (select count(*) from public.catches) = 0, 'anon não lê capturas';
   assert (select count(*) from public.users) = 0, 'anon não lê usuários';
   begin

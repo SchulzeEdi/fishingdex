@@ -111,6 +111,12 @@ export function ProfileScreen() {
       ) : null}
 
       <View style={styles.section}>
+        <AppText variant="heading">{t('prefs.title')}</AppText>
+        <LanguagePicker />
+        <CurrencyPicker />
+      </View>
+
+      <View style={styles.section}>
         <AppText variant="heading">{t('profile.myCatches')}</AppText>
         {catches.length === 0 ? (
           <EmptyState
@@ -138,12 +144,6 @@ export function ProfileScreen() {
             })}
           </View>
         )}
-      </View>
-
-      <View style={styles.section}>
-        <AppText variant="heading">{t('prefs.title')}</AppText>
-        <LanguagePicker />
-        <CurrencyPicker />
       </View>
 
       <View style={styles.actions}>
