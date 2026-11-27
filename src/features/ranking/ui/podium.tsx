@@ -5,7 +5,10 @@ import { AppText, Avatar, Flag, fonts, radius, spacing, textStyles, useTheme } f
 
 export interface PodiumSpot {
   position: 1 | 2 | 3;
+  /** Nome exibido (pode ser "Você"). */
   name: string;
+  /** Nome real para as iniciais do avatar (padrão: name). */
+  avatarName?: string;
   country?: string | null;
   speciesName: string;
   sizeLabel: string;
@@ -37,7 +40,7 @@ function Spot({ spot }: { spot: PodiumSpot }) {
       accessible
       accessibilityLabel={`${t('ranking.position', { n: spot.position })}: ${spot.name}, ${spot.speciesName}, ${spot.sizeLabel}`}
     >
-      <Avatar name={spot.name} size={first ? 'podium' : 'md'} />
+      <Avatar name={spot.avatarName ?? spot.name} size={first ? 'podium' : 'md'} />
       <View style={styles.nameRow}>
         <AppText style={styles.name} numberOfLines={1}>
           {spot.name.split(' ')[0]}

@@ -11,6 +11,7 @@
 - **Fase atual:** loop de entrega — SPRINT-007 (online-supabase)
 - **Proximo passo:** testar o APK online no emulador, subir o AAB no teste interno/fechado da Play. Depois: Play Billing via RevenueCat (DT-07) e SMTP próprio (DT-09) antes da produção.
 - **Online:** Supabase `fishingdex` (`mfikwhzvkwdthfraghad`, sa-east-1) — Auth, Postgres com RLS, Storage. Ver ADR-0008.
+- **Catálogo:** 113 espécies esportivas (BR 81 · AR 39 · US 65), doce e salgada.
 - **Saude da doc:** ok
 - **Arquitetura:** Feature-Sliced Design (FSD) — ver `docs/architecture/feature-sliced-design.md` e `CLAUDE.md` (override do default Modular Monolith do harness).
 - **Deploy/infra:** Vercel + Postgres gerenciado (Supabase/Neon) — `profile.cloud = none` (nao-AWS). Cobertura de dominio: 80%.

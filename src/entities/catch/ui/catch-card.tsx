@@ -26,7 +26,10 @@ export interface CatchCardChip {
 }
 
 interface CatchCardProps {
+  /** Nome exibido (pode ser "Você"). */
   authorName: string;
+  /** Nome real para as iniciais do avatar (padrão: authorName). */
+  avatarName?: string;
   authorCountry?: string | null;
   /** "há 2 h · Rio Araguaia, GO" (sem local se privado). */
   meta: string;
@@ -47,6 +50,7 @@ interface CatchCardProps {
 /** Card de captura do feed: autor, foto 4:3 de borda a borda, espécie + tamanho, setup, curtir. */
 export function CatchCard({
   authorName,
+  avatarName,
   authorCountry,
   meta,
   photoUri,
@@ -78,7 +82,7 @@ export function CatchCard({
   return (
     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
       <View style={styles.head}>
-        <Avatar name={authorName} />
+        <Avatar name={avatarName ?? authorName} />
         <View style={styles.who}>
           <View style={styles.nameRow}>
             <AppText variant="bodyStrong" numberOfLines={1} style={styles.name}>

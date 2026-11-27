@@ -54,7 +54,13 @@ export function FeedScreen() {
   const isPro = canViewSocial(plan);
   const feed = useAsync(() => fetchFeed(), `feed:${profile?.id}`, isPro);
   const top = useAsync(() => fetchRanking({ period: 'month' }, 3), `top:${profile?.id}`, isPro);
-  useRefreshOnFocus(feed.refresh);
+  const { refresh: refreshFeed } = feed;
+  const { refresh: refreshTop } = top;
+  const refreshAll = useCallback(() => {
+    refreshFeed();
+    refreshTop();
+  }, [refreshFeed, refreshTop]);
+  useRefreshOnFocus(refreshAll);
 
   const podium = useMemo(() => new Map((top.data ?? []).map((r) => [r.id, r.position])), [top.data]);
 
@@ -90,6 +96,7 @@ export function FeedScreen() {
     return (
       <CatchCard
         authorName={item.userId === profile?.id ? t('feed.you') : item.authorName}
+        avatarName={item.authorName}
         authorCountry={item.authorCountry}
         meta={meta}
         photoUri={item.photoUrl}
@@ -142,10 +149,7 @@ export function FeedScreen() {
         refreshControl={
           <RefreshControl
             refreshing={feed.status === 'loading' && feed.data !== null}
-            onRefresh={() => {
-              feed.refresh();
-              top.refresh();
-            }}
+            onRefresh={refreshAll}
             tintColor={colors.primary}
             colors={[colors.primary]}
           />
