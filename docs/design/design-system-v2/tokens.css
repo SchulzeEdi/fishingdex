@@ -1,0 +1,192 @@
+/* fishingdex — generated from tokens.json */
+:root, [data-theme="light"] {
+  --background: #f7f5f0; /* Fundo de toda tela (areia no claro, abismo no escuro). */
+  --surface: #ffffff; /* Cards, sheets, tab bar, inputs. */
+  --surface-muted: #efede6; /* Fundo de foto ausente, chips inativos, células da Dex bloqueadas, skeletons. */
+  --border: #e2dfd6; /* Divisórias e contorno decorativo de cards (não carrega significado). */
+  --border-strong: #8f8a7e; /* NOVO. Contorno de input, segmented e controles: 3:1 sobre surface e background nos dois temas. */
+  --text: #0b1f24; /* Texto principal sobre background, surface e surface-muted (≥12:1 nos dois temas). */
+  --text-muted: #5a564c; /* Texto secundário (espécie, legenda, contadores) sobre background, surface e surface-muted (≥6:1). */
+  --primary: #0e4d5c; /* Marca e ação principal: botão primário, aba ativa, segmented ativo, anel de foco, barra de progresso da Dex. Como texto: links sobre background/surface (≥5.7:1). */
+  --primary-foreground: #ffffff; /* Texto e ícone sobre primary (9.4:1 claro, 5.8:1 escuro). */
+  --accent: #21c0a8; /* Água: ícones grandes, preenchimentos, halo de foco de input. Nunca texto pequeno no tema claro (2.3:1) — use accent-ink. */
+  --accent-foreground: #06231e; /* Texto sobre fundo accent. */
+  --accent-ink: #0a7364; /* NOVO. Accent legível como texto pequeno: tags de habitat, "Nova espécie" (5.3:1 sobre background claro; accent no escuro, 7:1). */
+  --highlight: #ff7a1a; /* Laranja da competição — SÓ ranking e CTA "Assinar Pro", sempre como FUNDO com highlight-foreground. Como texto no claro dá 2.4:1: proibido. */
+  --highlight-foreground: #221200; /* Texto sobre highlight (7:1). */
+  --highlight-ink: #b34a00; /* NOVO. Laranja como texto: tamanho no ranking, posição 1 (5.0:1 sobre background claro; 7:1 no escuro). Substitui o uso atual de highlight em texto. */
+  --success: #16a34a; /* Ícone e borda de sucesso. Texto branco sobre ele dá 3.3:1 no claro: só em label ≥18px bold; em toast use ícone + text. */
+  --warning: #d97706; /* Ícone e borda de aviso (ex.: última captura grátis do mês). */
+  --danger: #dc2626; /* Erro de input, botão destrutivo (texto on-status, 4.8:1 no claro). */
+  --on-status: #ffffff; /* Texto sobre danger; sobre success/warning só em texto grande. */
+  --silhouette: #2a3f47; /* NOVO. Silhueta do peixe em célula bloqueada da Dex, sobre surface-muted (9.4:1 claro, 3.4:1 escuro). */
+  --rarity-common: #5a564c; /* NOVO. Raridade comum (1 pip) — label e pips sobre surface. */
+  --rarity-uncommon: var(--accent-ink); /* NOVO. Raridade incomum (2 pips). */
+  --rarity-rare: #1f5fb8; /* NOVO. Raridade rara (3 pips) — 6.2:1 claro, 7.6:1 escuro. */
+  --rarity-legendary: #8a5a00; /* NOVO. Raridade lendária (4 pips) — ouro, não o laranja da competição. */
+  --whatsapp: #25d366; /* Exceção de marca externa: só o botão "Falar no WhatsApp" do pesqueiro, com texto text claro (#0b1f24). */
+  --scrim: rgba(11, 31, 36, 0.48); /* Fundo atrás de sheet/modal e véu do paywall. */
+  --neutral-50: #f7f5f0; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-100: #efede6; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-200: #e2dfd6; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-300: #cbc7bb; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-400: #a7a296; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-500: #7c776b; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-600: #5a564c; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-700: #403d36; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-800: #20303a; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --neutral-900: #0b1f24; /* Escala areia (primitivo). Use os tokens semânticos acima; neutral-300/500 só para botão desabilitado. */
+  --shadow-sm: 0 1px 3px rgba(11, 31, 36, 0.06); /* Card em lista (opcional — preferir border). */
+  --shadow-md: 0 3px 8px rgba(11, 31, 36, 0.10); /* Tab bar, card pressionado. */
+  --shadow-lg: 0 8px 18px rgba(11, 31, 36, 0.14); /* FAB Registrar, bottom sheet, toast. */
+}
+[data-theme="dark"] {
+  --background: #071519;
+  --surface: #0e2229;
+  --surface-muted: #13303a;
+  --border: #1e3d47;
+  --border-strong: #5c7d87;
+  --text: #eaf2f1;
+  --text-muted: #9db3b3;
+  --primary: #2fa6bc;
+  --primary-foreground: #04222a;
+  --accent: #21c0a8;
+  --accent-foreground: #04221d;
+  --accent-ink: var(--accent);
+  --highlight: #ff8a33;
+  --highlight-foreground: #1a0e00;
+  --highlight-ink: var(--highlight);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #f87171;
+  --on-status: #04140a;
+  --silhouette: #5b8390;
+  --rarity-common: #9db3b3;
+  --rarity-uncommon: var(--accent);
+  --rarity-rare: #7fb2ff;
+  --rarity-legendary: #e8b64a;
+  --whatsapp: #25d366;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 3px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 18px rgba(0, 0, 0, 0.6);
+}
+:root {
+  --space-xxs: 2px; /* Entre pips de raridade. */
+  --space-xs: 4px; /* Ícone↔texto pequeno, título↔subtítulo. */
+  --space-sm: 8px; /* Entre chips, padding vertical de chip. */
+  --space-md: 12px; /* Gap entre cards e células da Dex, padding de card. */
+  --space-lg: 16px; /* Margem lateral da tela, padding de sheet. */
+  --space-xl: 24px; /* Entre seções; padding horizontal do botão. */
+  --space-xxl: 32px; /* Topo do perfil, respiro antes do paywall. */
+  --space-3xl: 48px; /* Estados vazios. */
+  --space-4xl: 64px; /* Momento de desbloqueio. */
+  --radius-sm: 8px; /* Chips de setup, thumbnails do ranking. */
+  --radius-md: 12px; /* Botões, inputs, foto dentro de card. */
+  --radius-lg: 16px; /* Cards de captura, células da Dex, paywall. */
+  --radius-xl: 24px; /* Topo de bottom sheet, card de desbloqueio. */
+  --radius-full: 9999px; /* Avatar, segmented, selos, FAB, barra de progresso. */
+  --touch-min: 44px; /* Alvo de toque mínimo (iOS/Android). */
+  --control-height: 48px; /* Botão e input. */
+  --tabbar-height: 64px; /* Tab bar inferior, sem a safe area. */
+  --fab-size: 56px; /* Botão Registrar central. */
+  --content-max: 480px; /* Largura máxima da coluna no web/tablet: o app é portrait, centralize. */
+  --font-display: "Sora", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --text-display: 700 48px/52px var(--font-display); /* Número herói: tamanho do recorde, % da Dex, momento de desbloqueio. Tabular figures. */
+  --text-rank-number: 700 36px/40px var(--font-display); /* Posição no pódio do ranking. Tabular figures. */
+  --text-title: 700 30px/36px var(--font-display); /* Título de tela (Feed, Ranking, Coleção, Perfil). Um por tela. */
+  --text-heading: 600 20px/26px var(--font-display); /* Nome da espécie no card, título de sheet e de seção. */
+  --text-metric: 700 18px/24px var(--font-display); /* Tamanho na linha de ranking e no card de captura. */
+  --text-button: 600 16px/20px var(--font-display); /* Rótulo de botão. */
+  --text-body-lg: 400 18px/26px var(--font-body); /* Frase de estado vazio e paywall. */
+  --text-body: 400 16px/22px var(--font-body); /* Texto corrido, inputs. */
+  --text-body-strong: 600 16px/22px var(--font-body); /* Nome do pescador. */
+  --text-label: 500 14px/20px var(--font-body); /* Label de input, chip, segmented, subtítulo de tela. */
+  --text-caption: 500 12px/16px var(--font-body); /* Metadado, rótulo da tab bar, contador. */
+  --text-overline: 700 11px/14px var(--font-body); /* Selo de plano e raridade, em caixa alta. */
+}
+.display {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 52px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.rank-number {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.heading {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.metric {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.button {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.body-lg {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.body-strong {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.caption {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.overline {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}

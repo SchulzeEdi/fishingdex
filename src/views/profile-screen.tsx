@@ -1,84 +1,146 @@
-import { Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
-import type { Plan } from '@/entities/user';
-import { canViewSocial, remainingCatches } from '@/features/subscribe-pro';
-import { resolveLocale, translate } from '@/shared/i18n';
-import { darkTheme, lightTheme, radius, spacing, type Theme } from '@/shared/ui';
+import { CatchRow, biggestCatch, catchesThisMonth, sortByRecent, useMyCatches } from '@/entities/catch';
+import { SPECIES_SEED, speciesName } from '@/entities/fish-species';
+import { usePlan, useProfile } from '@/entities/user';
+import { unlockedSpeciesIds } from '@/features/dex-collection';
+import {
+  FREE_MONTHLY_CATCH_LIMIT,
+  PlanBadge,
+  ProCta,
+  QuotaMeter,
+  canViewSocial,
+  demoPurchase,
+} from '@/features/subscribe-pro';
+import { formatRelativeTime, formatSize, useI18n } from '@/shared/i18n';
+import {
+  AppText,
+  Avatar,
+  Button,
+  EmptyState,
+  Flag,
+  Screen,
+  radius,
+  spacing,
+  useTheme,
+} from '@/shared/ui';
 
-// Mock até auth/API (DT-04). Troque `plan` para 'pro' para ver o estado assinante.
-const MOCK_USER = { name: 'Rafael Souza', country: '🇧🇷', plan: 'free' as Plan, catches: 2 };
+import { TAB_BAR_SPACE } from './layout';
 
-export function ProfileScreen() {
-  const theme = useColorScheme() === 'dark' ? darkTheme : lightTheme;
-  const lang = resolveLocale('pt-BR');
-  const s = makeStyles(theme);
-  const isPro = canViewSocial(MOCK_USER.plan);
-  const left = remainingCatches(MOCK_USER.plan, MOCK_USER.catches);
+const SPECIES = new Map(SPECIES_SEED.map((s) => [s.id, s]));
 
+function Stat({ label, value }: { label: string; value: string }) {
+  const { colors } = useTheme();
   return (
-    <View style={s.container}>
-      <View style={s.avatar}>
-        <Text style={{ fontSize: 36 }}>🎣</Text>
-      </View>
-      <Text style={s.name}>
-        {MOCK_USER.name} {MOCK_USER.country}
-      </Text>
-      <View style={[s.badge, isPro ? s.badgePro : s.badgeFree]}>
-        <Text style={s.badgeText}>{isPro ? 'PRO' : 'FREE'}</Text>
-      </View>
-
-      {!isPro && (
-        <View style={s.paywall}>
-          <Text style={s.paywallText}>
-            {left > 0
-              ? `Você tem ${left} captura(s) grátis este mês.`
-              : 'Limite grátis do mês atingido.'}
-          </Text>
-          <Text style={s.paywallSub}>Feed e ranking são do Pro.</Text>
-          <Pressable style={s.cta}>
-            <Text style={s.ctaText}>{translate(lang, 'paywall.cta')}</Text>
-          </Pressable>
-        </View>
-      )}
+    <View
+      accessible
+      accessibilityLabel={`${label}: ${value}`}
+      style={[styles.stat, { backgroundColor: colors.surface, borderColor: colors.border }]}
+    >
+      <AppText variant="metric" tabular align="center">
+        {value}
+      </AppText>
+      <AppText variant="caption" tone="textMuted" align="center">
+        {label}
+      </AppText>
     </View>
   );
 }
 
-function makeStyles(t: Theme) {
-  return StyleSheet.create({
-    container: { flex: 1, backgroundColor: t.background, padding: spacing.lg, alignItems: 'center' },
-    avatar: {
-      width: 84,
-      height: 84,
-      borderRadius: radius.full,
-      backgroundColor: t.surfaceMuted,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: spacing.xl,
-    },
-    name: { color: t.text, fontSize: 20, fontWeight: '700', marginTop: spacing.md },
-    badge: { borderRadius: radius.full, paddingVertical: 4, paddingHorizontal: 12, marginTop: spacing.sm },
-    badgePro: { backgroundColor: t.primary },
-    badgeFree: { backgroundColor: t.surfaceMuted },
-    badgeText: { color: t.primaryFg, fontWeight: '700', fontSize: 12 },
-    paywall: {
-      marginTop: spacing.xl,
-      backgroundColor: t.surface,
-      borderWidth: 1,
-      borderColor: t.border,
-      borderRadius: radius.lg,
-      padding: spacing.lg,
-      alignItems: 'center',
-      alignSelf: 'stretch',
-    },
-    paywallText: { color: t.text, fontSize: 15, fontWeight: '600', textAlign: 'center' },
-    paywallSub: { color: t.textMuted, fontSize: 13, marginTop: spacing.xs, marginBottom: spacing.md },
-    cta: {
-      backgroundColor: t.highlight,
-      borderRadius: radius.md,
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.xl,
-    },
-    ctaText: { color: t.highlightFg, fontWeight: '700', fontSize: 15 },
-  });
+export function ProfileScreen() {
+  const router = useRouter();
+  const { t, locale } = useI18n();
+  const profile = useProfile();
+  const plan = usePlan();
+  const catches = useMyCatches();
+  const isPro = canViewSocial(plan);
+  const record = biggestCatch(catches);
+  const name = profile?.name ?? '';
+
+  return (
+    <Screen scroll bottomInset={TAB_BAR_SPACE}>
+      <View style={styles.top}>
+        <Avatar name={name} size="lg" />
+        <View style={styles.nameRow}>
+          <AppText variant="heading" accessibilityRole="header">
+            {name}
+          </AppText>
+          {profile ? <Flag code={profile.country} /> : null}
+        </View>
+        <PlanBadge plan={plan} />
+      </View>
+
+      <View style={styles.stats}>
+        <Stat label={t('profile.catches')} value={String(catches.length)} />
+        <Stat label={t('profile.species')} value={String(unlockedSpeciesIds(catches).size)} />
+        <Stat label={t('profile.record')} value={record ? formatSize(locale, record.sizeCm) : '—'} />
+      </View>
+
+      {!isPro ? (
+        <View style={styles.section}>
+          <QuotaMeter used={catchesThisMonth(catches)} limit={FREE_MONTHLY_CATCH_LIMIT} />
+          <ProCta country={profile?.country} />
+        </View>
+      ) : null}
+
+      <View style={styles.section}>
+        <AppText variant="heading">{t('profile.myCatches')}</AppText>
+        {catches.length === 0 ? (
+          <EmptyState
+            icon="camera"
+            title={t('profile.emptyTitle')}
+            message={t('feed.emptyMessage')}
+            actionLabel={t('catch.register')}
+            onAction={() => router.push('/register')}
+          />
+        ) : (
+          <View>
+            {sortByRecent(catches).map((c) => {
+              const s = SPECIES.get(c.speciesId);
+              const when = formatRelativeTime(locale, c.caughtAt);
+              return (
+                <CatchRow
+                  key={c.id}
+                  speciesName={s ? speciesName(s, locale) : c.speciesId}
+                  sizeLabel={formatSize(locale, c.sizeCm)}
+                  meta={!c.isPrivate && c.place ? `${when} · ${c.place}` : when}
+                  photoUri={c.photoUrl}
+                  onPress={() => router.push(`/species/${c.speciesId}`)}
+                />
+              );
+            })}
+          </View>
+        )}
+      </View>
+
+      <View style={styles.actions}>
+        <Button
+          label={t('profile.edit')}
+          variant="secondary"
+          icon="user"
+          block
+          onPress={() => router.push({ pathname: '/onboarding', params: { edit: '1' } })}
+        />
+        {isPro ? (
+          <Button label={t('profile.backToFree')} variant="ghost" onPress={() => demoPurchase.cancel()} style={styles.center} />
+        ) : null}
+      </View>
+
+      <AppText variant="caption" tone="textMuted" align="center" style={styles.note}>
+        {t('app.demoNote')}
+      </AppText>
+    </Screen>
+  );
 }
+
+const styles = StyleSheet.create({
+  top: { alignItems: 'center', gap: spacing.sm, paddingTop: spacing.xxl },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
+  stats: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.xl },
+  stat: { flex: 1, paddingVertical: spacing.md, borderRadius: radius.lg, borderWidth: 1, gap: 2 },
+  section: { gap: spacing.md, marginTop: spacing.xl },
+  actions: { gap: spacing.sm, marginTop: spacing.xl },
+  center: { alignSelf: 'center' },
+  note: { marginTop: spacing.lg },
+});

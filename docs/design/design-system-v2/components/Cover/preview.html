@@ -1,0 +1,71 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>fishingdex</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--background); color:var(--text); font-family:var(--font-body); overflow:hidden; }
+  .cover { position:relative; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .brand { fill:var(--primary); }
+  .water { fill:var(--accent); }
+  .deep { fill:var(--text); }
+  .prize { fill:var(--highlight); }
+  .cut { fill:var(--background); }
+  .silh { fill:var(--surface-muted); }
+  .words { position:absolute; left:var(--space-xl); bottom:var(--space-xl); max-width:440px; }
+  .name { margin:0; font:700 72px/.92 var(--font-display); letter-spacing:-.03em; color:var(--text); }
+  .tag { margin:var(--space-sm) 0 0 4px; font:500 14px/20px var(--font-body); color:var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      primary 208x264 bled off the top (the brand, largest) · accent 136x136 (water) · text/ink 120x200 bleeding off the right · highlight 48px disc, once (prize = ranking only)
+  arrangement one tall teal slab with satellites, bottoms on one line space-xl above the edge, space-lg gutters
+  pattern     literal motif "Águas Profundas": scalloped waves = half-discs r=radius-md at a space-xl pitch, three offset rows cut out of the slab in background; a fish silhouette cut from the ink block
+  scales      gutters space-lg; pitch space-xl; corners radius-lg (blocks), radius-full (disc), wave rx radius-md
+-->
+<rect class="brand" x="0" y="-24" width="208" height="288" rx="16"/>
+<path class="cut" d="M16 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M40 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M64 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M88 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M112 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M136 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M160 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M184 168 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M28 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M52 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M76 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M100 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M124 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M148 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M172 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M196 192 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M16 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M40 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M64 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M88 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M112 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M136 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M160 216 a12 12 0 0 1 24 0z"/>
+<path class="cut" d="M184 216 a12 12 0 0 1 24 0z"/>
+<rect class="water" x="224" y="128" width="136" height="136" rx="16"/>
+<rect class="deep" x="376" y="64" width="120" height="200" rx="16"/>
+<path class="silh" d="M388 172 C396 158 418 152 434 163 L452 152 v40 l-18-11 C418 192 396 186 388 172z"/>
+<circle class="prize" cx="248" cy="96" r="24"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">fishingdex</h1>
+<p class="tag">Pesque, colecione as espécies, dispute o maior peixe.</p>
+</div>
+</div>
+</body>
+</html>

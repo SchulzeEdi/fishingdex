@@ -1,155 +1,97 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { useRouter } from 'expo-router';
+import { useMemo, useState } from 'react';
+import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import type { Catch } from '@/entities/catch';
-import {
-  InMemorySpeciesRepository,
-  type FishSpecies,
-  type Habitat,
-  type Region,
-} from '@/entities/fish-species';
-import { buildDex, type DexEntry } from '@/features/dex-collection';
-import { resolveLocale, translate, type Locale } from '@/shared/i18n';
-import { darkTheme, lightTheme, radius, spacing, type Theme } from '@/shared/ui';
+import { biggestCatch, useMyCatches } from '@/entities/catch';
+import { SPECIES_SEED, speciesForRegion, speciesName, type Habitat } from '@/entities/fish-species';
+import { useProfile } from '@/entities/user';
+import { DexCell, DexProgressBar, buildDex, isNewUnlock, useSeenSpecies } from '@/features/dex-collection';
+import { useI18n } from '@/shared/i18n';
+import { Screen, ScreenHeader, SegmentedControl, columnStyle, spacing } from '@/shared/ui';
 
-const repository = new InMemorySpeciesRepository();
+import { TAB_BAR_SPACE } from './layout';
 
-// Demo local até auth + backend (T-02/T-03): uma captura, pra mostrar bloqueada×desbloqueada.
-const DEMO_CATCHES: readonly Catch[] = [
-  { id: 'c1', userId: 'me', speciesId: 'tilapia', sizeCm: 32, caughtAt: '2026-09-20T09:00:00Z', isPrivate: false },
-];
-
-interface DexScreenProps {
-  region?: Region;
-  locale?: Locale;
-}
-
-export function DexScreen({ region = 'BR', locale }: DexScreenProps) {
-  const scheme = useColorScheme();
-  const theme = scheme === 'dark' ? darkTheme : lightTheme;
-  const lang = locale ?? resolveLocale('pt-BR');
-  const styles = makeStyles(theme);
-
-  const [species, setSpecies] = useState<FishSpecies[] | null>(null);
+export function DexScreen() {
+  const router = useRouter();
+  const { t, locale } = useI18n();
+  const profile = useProfile();
+  const catches = useMyCatches();
+  const seen = useSeenSpecies();
+  const { fontScale } = useWindowDimensions();
   const [habitat, setHabitat] = useState<Habitat>('freshwater');
 
-  useEffect(() => {
-    let active = true;
-    repository.listByRegion(region).then((list) => {
-      if (active) setSpecies(list);
-    });
-    return () => {
-      active = false;
-    };
-  }, [region]);
+  const regional = useMemo(() => speciesForRegion(SPECIES_SEED, profile?.country ?? 'BR'), [profile?.country]);
+  const fresh = useMemo(() => buildDex(regional, catches, 'freshwater'), [regional, catches]);
+  const salt = useMemo(() => buildDex(regional, catches, 'saltwater'), [regional, catches]);
+  const dex = habitat === 'freshwater' ? fresh : salt;
 
-  const dex = useMemo(
-    () => (species ? buildDex(species, DEMO_CATCHES, habitat) : null),
-    [species, habitat],
-  );
+  // 3 colunas no celular; 2 só com fonte ampliada.
+  const columns = fontScale > 1.3 ? 2 : 3;
 
-  if (!dex) {
-    return (
-      <View style={[styles.container, styles.center]}>
-        <ActivityIndicator color={theme.primary} />
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{translate(lang, 'dex.title')}</Text>
-      <Text style={styles.progress}>
-        {translate(lang, 'dex.progress', { unlocked: dex.unlocked, total: dex.total })} · {dex.percent}%
-      </Text>
-
-      <View style={styles.tabs}>
-        <HabitatTab label="🐟 doce" active={habitat === 'freshwater'} onPress={() => setHabitat('freshwater')} theme={theme} />
-        <HabitatTab label="🌊 salgada" active={habitat === 'saltwater'} onPress={() => setHabitat('saltwater')} theme={theme} />
-      </View>
-
-      <FlatList
-        data={dex.entries}
-        keyExtractor={(e) => e.species.id}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => <DexCell entry={item} theme={theme} lang={lang} />}
+  const header = (
+    <View style={styles.header}>
+      <ScreenHeader title={t('dex.title')} subtitle={t('dex.subtitle')} />
+      <DexProgressBar unlocked={dex.unlocked} total={dex.total} percent={dex.percent} />
+      <SegmentedControl
+        accessibilityLabel={t('dex.habitat')}
+        stretch
+        value={habitat}
+        onChange={setHabitat}
+        options={[
+          {
+            value: 'freshwater',
+            label: t('habitat.freshwater'),
+            icon: 'fish',
+            count: `${fresh.unlocked}/${fresh.total}`,
+          },
+          {
+            value: 'saltwater',
+            label: t('habitat.saltwater'),
+            icon: 'feed',
+            count: `${salt.unlocked}/${salt.total}`,
+          },
+        ]}
       />
     </View>
   );
-}
 
-function HabitatTab({
-  label,
-  active,
-  onPress,
-  theme,
-}: {
-  label: string;
-  active: boolean;
-  onPress: () => void;
-  theme: Theme;
-}) {
-  const styles = makeStyles(theme);
   return (
-    <Pressable onPress={onPress} style={[styles.tab, active && styles.tabActive]} accessibilityRole="tab">
-      <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>{label}</Text>
-    </Pressable>
+    <Screen>
+      <FlatList
+        key={columns}
+        data={dex.entries}
+        keyExtractor={(e) => e.species.id}
+        numColumns={columns}
+        ListHeaderComponent={header}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={[styles.list, columnStyle, { paddingBottom: TAB_BAR_SPACE }]}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => {
+          const best = item.unlocked ? biggestCatch(catches, item.species.id) : null;
+          return (
+            <View style={[styles.cellWrap, { maxWidth: `${100 / columns}%` }]}>
+              <DexCell
+                number={item.number}
+                name={speciesName(item.species, locale)}
+                rarity={item.species.rarity}
+                unlocked={item.unlocked}
+                isNew={isNewUnlock(item.unlocked, item.species.id, seen)}
+                photoUri={best?.photoUrl}
+                onPress={() => router.push(`/species/${item.species.id}`)}
+              />
+            </View>
+          );
+        }}
+      />
+    </Screen>
   );
 }
 
-function DexCell({ entry, theme, lang }: { entry: DexEntry; theme: Theme; lang: Locale }) {
-  const styles = makeStyles(theme);
-  const { species, unlocked } = entry;
-  return (
-    <View style={[styles.cell, unlocked ? styles.cellUnlocked : styles.cellLocked]}>
-      <Text style={styles.emoji}>{unlocked ? '🐟' : '🔒'}</Text>
-      <Text style={styles.name} numberOfLines={1}>
-        {unlocked ? species.namePt : translate(lang, 'dex.locked')}
-      </Text>
-    </View>
-  );
-}
+const GAP = spacing.md;
 
-function makeStyles(theme: Theme) {
-  return StyleSheet.create({
-    container: { flex: 1, backgroundColor: theme.background, padding: spacing.lg },
-    center: { alignItems: 'center', justifyContent: 'center' },
-    title: { color: theme.text, fontSize: 28, fontWeight: '700' },
-    progress: { color: theme.textMuted, fontSize: 14, marginTop: spacing.xs, marginBottom: spacing.md },
-    tabs: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.lg },
-    tab: {
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.lg,
-      borderRadius: radius.full,
-      backgroundColor: theme.surfaceMuted,
-    },
-    tabActive: { backgroundColor: theme.primary },
-    tabLabel: { color: theme.textMuted, fontWeight: '600' },
-    tabLabelActive: { color: theme.primaryFg },
-    list: { gap: spacing.md },
-    row: { gap: spacing.md },
-    cell: {
-      flex: 1,
-      aspectRatio: 1,
-      borderRadius: radius.lg,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: theme.border,
-    },
-    cellUnlocked: { backgroundColor: theme.surface },
-    cellLocked: { backgroundColor: theme.surfaceMuted },
-    emoji: { fontSize: 34 },
-    name: { color: theme.text, marginTop: spacing.sm, fontWeight: '600' },
-  });
-}
+const styles = StyleSheet.create({
+  header: { gap: spacing.lg, marginBottom: spacing.lg, paddingHorizontal: GAP / 2 },
+  list: { paddingHorizontal: spacing.lg - GAP / 2 },
+  row: { marginBottom: GAP },
+  cellWrap: { flex: 1, paddingHorizontal: GAP / 2 },
+});

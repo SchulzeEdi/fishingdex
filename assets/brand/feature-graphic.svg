@@ -1,0 +1,21 @@
+<!-- Arte de destaque da Google Play (1024×500): wordmark + motivo da capa do design system. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500">
+  <rect width="1024" height="500" fill="#f7f5f0"/>
+  <g transform="translate(500 75) scale(1.2)">
+    <rect x="0" y="-24" width="208" height="288" rx="16" fill="#0e4d5c"/>
+    <g fill="#f7f5f0">
+      <path d="M16 168a12 12 0 0 1 24 0zM40 168a12 12 0 0 1 24 0zM64 168a12 12 0 0 1 24 0zM88 168a12 12 0 0 1 24 0zM112 168a12 12 0 0 1 24 0zM136 168a12 12 0 0 1 24 0zM160 168a12 12 0 0 1 24 0zM184 168a12 12 0 0 1 24 0z"/>
+      <path d="M28 192a12 12 0 0 1 24 0zM52 192a12 12 0 0 1 24 0zM76 192a12 12 0 0 1 24 0zM100 192a12 12 0 0 1 24 0zM124 192a12 12 0 0 1 24 0zM148 192a12 12 0 0 1 24 0zM172 192a12 12 0 0 1 24 0z"/>
+      <path d="M16 216a12 12 0 0 1 24 0zM40 216a12 12 0 0 1 24 0zM64 216a12 12 0 0 1 24 0zM88 216a12 12 0 0 1 24 0zM112 216a12 12 0 0 1 24 0zM136 216a12 12 0 0 1 24 0zM160 216a12 12 0 0 1 24 0zM184 216a12 12 0 0 1 24 0z"/>
+    </g>
+    <rect x="224" y="128" width="136" height="136" rx="16" fill="#21c0a8"/>
+    <rect x="376" y="64" width="120" height="200" rx="16" fill="#0b1f24"/>
+    <path fill="#efede6" d="M388 172C396 158 418 152 434 163L452 152v40l-18-11C418 192 396 186 388 172z"/>
+    <circle cx="248" cy="96" r="24" fill="#ff7a1a"/>
+  </g>
+  <text x="56" y="246" font-family="Sora" font-weight="700" font-size="72" letter-spacing="-2" fill="#0b1f24">fishingdex</text>
+  <text font-family="Inter" font-weight="500" font-size="24" fill="#5a564c">
+    <tspan x="60" y="300">{LINE1}</tspan>
+    <tspan x="60" y="334">{LINE2}</tspan>
+  </text>
+</svg>

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { Catch } from '@/entities/catch';
 import { SPECIES_SEED } from '@/entities/fish-species';
 
-import { buildDex, isFirstCatchOfSpecies, unlockedSpeciesIds } from './dex';
+import { buildDex, formatDexNumber, isFirstCatchOfSpecies, unlockedSpeciesIds } from './dex';
 
 const mkCatch = (speciesId: string, id = speciesId): Catch => ({
   id,
@@ -49,6 +49,21 @@ describe('buildDex', () => {
     const salt = buildDex(SPECIES_SEED, [mkCatch('robalo')], 'saltwater');
     expect(salt.entries.every((e) => e.species.habitat === 'saltwater')).toBe(true);
     expect(salt.unlocked).toBe(1);
+  });
+
+  it('numera pela posição no catálogo, estável entre abas', () => {
+    const all = buildDex(SPECIES_SEED, []);
+    const salt = buildDex(SPECIES_SEED, [], 'saltwater');
+    const robaloAll = all.entries.find((e) => e.species.id === 'robalo');
+    const robaloSalt = salt.entries.find((e) => e.species.id === 'robalo');
+    expect(all.entries[0]?.number).toBe(1);
+    expect(robaloSalt?.number).toBe(robaloAll?.number);
+  });
+
+  it('formata o Nº com 3 dígitos', () => {
+    expect(formatDexNumber(1)).toBe('001');
+    expect(formatDexNumber(27)).toBe('027');
+    expect(formatDexNumber(120)).toBe('120');
   });
 
   it('percent = 0 quando não há espécies no escopo', () => {

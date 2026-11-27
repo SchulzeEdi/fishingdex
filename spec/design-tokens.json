@@ -1,5 +1,5 @@
 {
-  "$comment": "Fonte de verdade dos tokens de design do fishingdex (Fase 3). Gera o tema do NativeWind (Tailwind p/ React Native). Direcao: Aguas Profundas. Dois temas: light (padrao) e dark.",
+  "$comment": "Fonte de verdade dos tokens de design do fishingdex (Fase 3, revisada no CHG-003). Espelhada em src/shared/ui/tokens.ts. Direcao: Aguas Profundas. Dois temas: light (padrao) e dark. Referencia completa (componentes, icones): docs/design/design-system-v2/.",
   "brand": {
     "primary":   "#0E4D5C",
     "accent":    "#21C0A8",
@@ -39,7 +39,17 @@
       "success":             "#16A34A",
       "warning":             "#D97706",
       "danger":              "#DC2626",
-      "on-status":           "#FFFFFF"
+      "on-status":           "#FFFFFF",
+      "border-strong":       "#8F8A7E",
+      "accent-ink":          "#0A7364",
+      "highlight-ink":       "#B34A00",
+      "silhouette":          "#2A3F47",
+      "rarity-common":       "#5A564C",
+      "rarity-uncommon":     "#0A7364",
+      "rarity-rare":         "#1F5FB8",
+      "rarity-legendary":    "#8A5A00",
+      "whatsapp":            "#25D366",
+      "scrim":               "rgba(11, 31, 36, 0.48)"
     },
     "dark": {
       "background":          "#071519",
@@ -57,7 +67,17 @@
       "success":             "#22C55E",
       "warning":             "#F59E0B",
       "danger":              "#F87171",
-      "on-status":           "#04140A"
+      "on-status":           "#04140A",
+      "border-strong":       "#5C7D87",
+      "accent-ink":          "#21C0A8",
+      "highlight-ink":       "#FF8A33",
+      "silhouette":          "#5B8390",
+      "rarity-common":       "#9DB3B3",
+      "rarity-uncommon":     "#21C0A8",
+      "rarity-rare":         "#7FB2FF",
+      "rarity-legendary":    "#E8B64A",
+      "whatsapp":            "#25D366",
+      "scrim":               "rgba(0, 0, 0, 0.6)"
     }
   },
   "font": {

@@ -2,20 +2,74 @@
   "expo": {
     "name": "fishingdex",
     "slug": "fishingdex",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "scheme": "fishingdex",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": { "supportsTablet": false },
+    "icon": "./assets/images/icon.png",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.schulzeedi.fishingdex"
+    },
     "android": {
-      "package": "com.schulzeedi.fishingdex"
+      "package": "com.schulzeedi.fishingdex",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "monochromeImage": "./assets/images/adaptive-icon-monochrome.png",
+        "backgroundColor": "#0e4d5c"
+      },
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ]
     },
     "web": {
       "bundler": "metro",
-      "output": "static"
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router"],
-    "experiments": { "typedRoutes": true }
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#0e4d5c",
+          "dark": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#071519"
+          }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "O fishingdex usa a câmera para fotografar suas capturas.",
+          "photosPermission": "O fishingdex acessa suas fotos para anexar a foto da captura.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-localization",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "5abf6b46-0baa-451c-bf30-dba5eac0ad45"
+      }
+    },
+    "owner": "ederson.schulze"
   }
 }

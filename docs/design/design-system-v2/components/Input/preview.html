@@ -1,0 +1,13 @@
+<!-- @dsCard group="Formulários" height=210 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Input — fishingdex</title></head>
+<body>
+<div class="fd-stage">
+ <div class="fd-field"><label for="a">Tamanho</label><div class="fd-input"><input id="a" placeholder="0" inputmode="decimal"><span class="fd-unit">cm</span></div><span class="fd-help">Obrigatório para o ranking</span></div>
+ <div class="fd-field"><label for="b">Espécie</label><div class="fd-input is-focus"><i class="fd-icon fd-i-search fd-icon-sm" aria-hidden="true"></i><input id="b" value="Tucun"></div><span class="fd-help">Busca no catálogo da sua região</span></div>
+ <div class="fd-field"><label for="c">Tamanho</label><div class="fd-input is-error"><input id="c" value="240" aria-invalid="true" aria-describedby="ce"><span class="fd-unit">cm</span></div><span class="fd-help is-error" id="ce"><i class="fd-icon fd-i-alert fd-icon-xs" aria-hidden="true"></i>Acima do máximo plausível (120 cm)</span></div>
+ <div class="fd-field"><label for="d">Peso</label><div class="fd-input is-disabled"><input id="d" placeholder="Opcional" disabled><span class="fd-unit">kg</span></div></div>
+</div>
+</body>
+</html>

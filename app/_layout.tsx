@@ -1,11 +1,25 @@
 import { Stack } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-// Roteamento fino (Expo Router). A composição das telas vive em src/views (camada FSD).
+import { AppProviders } from '@/app-init';
+import { useTheme } from '@/shared/ui';
+
+// Roteamento fino (Expo Router). Inicialização em src/app-init; telas em src/views (FSD).
+function RootStack() {
+  const { colors } = useTheme();
+  return (
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="register" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+      <Stack.Screen name="species/[id]" />
+      <Stack.Screen name="onboarding" />
+    </Stack>
+  );
+}
+
 export default function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false }} />
-    </SafeAreaProvider>
+    <AppProviders>
+      <RootStack />
+    </AppProviders>
   );
 }

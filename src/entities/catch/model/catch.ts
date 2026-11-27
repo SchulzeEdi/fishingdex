@@ -10,4 +10,17 @@ export interface Catch {
   caughtAt: string;
   /** Local privado não expõe localização aos outros. */
   isPrivate: boolean;
+  /** Foto da captura — obrigatória para o ranking (comprovação, D-6). */
+  photoUrl?: string | null;
+  /** Setup: isca usada. */
+  bait?: string;
+  /** Nome do local (nunca exibido se privado). */
+  place?: string;
+}
+
+/** Captura de outro pescador como aparece no feed/ranking. */
+export interface CommunityCatch extends Catch {
+  authorName: string;
+  authorCountry: string;
+  likes: number;
 }

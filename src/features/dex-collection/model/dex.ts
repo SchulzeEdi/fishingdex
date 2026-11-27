@@ -5,6 +5,8 @@ import type { FishSpecies, Habitat } from '@/entities/fish-species';
 export interface DexEntry {
   species: FishSpecies;
   unlocked: boolean;
+  /** Nº da Dex (1-based) — posição no catálogo da região, estável entre as abas de habitat. */
+  number: number;
 }
 
 /** Progresso da coleção (estilo Pokédex): total, desbloqueadas, % e as células. */
@@ -31,6 +33,11 @@ export function isFirstCatchOfSpecies(
   return !existingCatches.some((c) => c.speciesId === speciesId);
 }
 
+/** "001" — o Nº da Dex sempre com 3 dígitos. */
+export function formatDexNumber(n: number): string {
+  return String(n).padStart(3, '0');
+}
+
 /**
  * Monta a Dex: cada espécie marcada como desbloqueada ou não, com o progresso.
  * `habitat` opcional filtra por água doce/salgada (as abas da tela da Dex).
@@ -41,11 +48,13 @@ export function buildDex(
   habitat?: Habitat,
 ): DexProgress {
   const unlocked = unlockedSpeciesIds(catches);
-  const scope = habitat ? species.filter((s) => s.habitat === habitat) : species;
+  const numbered = species.map((s, i) => ({ species: s, number: i + 1 }));
+  const scope = habitat ? numbered.filter((e) => e.species.habitat === habitat) : numbered;
 
-  const entries: DexEntry[] = scope.map((s) => ({
+  const entries: DexEntry[] = scope.map(({ species: s, number }) => ({
     species: s,
     unlocked: unlocked.has(s.id),
+    number,
   }));
 
   const unlockedCount = entries.filter((e) => e.unlocked).length;
