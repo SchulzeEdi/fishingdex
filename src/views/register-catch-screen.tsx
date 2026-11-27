@@ -2,27 +2,22 @@ import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Animated, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 
-import {
-  LOCAL_USER_ID,
-  catchActions,
-  catchesThisMonth,
-  useMyCatches,
-  type Catch,
-} from '@/entities/catch';
+import { catchesThisMonth, useMyCatches, type Catch } from '@/entities/catch';
 import { SPECIES_SEED, speciesForRegion, speciesName, type FishSpecies } from '@/entities/fish-species';
 import { usePlan, useProfile } from '@/entities/user';
 import { buildDex, formatDexNumber, isFirstCatchOfSpecies } from '@/features/dex-collection';
 import {
   SpeciesPicker,
   pickCatchPhoto,
+  registerCatch,
   validateCatchForm,
   type CatchFormErrors,
   type FieldError,
   type PhotoSource,
 } from '@/features/register-catch';
 import { FREE_MONTHLY_CATCH_LIMIT, PaywallCard, QuotaMeter, canRegisterCatch } from '@/features/subscribe-pro';
+import { toAppError } from '@/shared/api';
 import { useI18n } from '@/shared/i18n';
-import { createId } from '@/shared/lib';
 import {
   AppText,
   Button,
@@ -143,6 +138,8 @@ export function RegisterCatchScreen({ initialSpeciesId }: { initialSpeciesId?: s
   const [isPrivate, setIsPrivate] = useState(false);
   const [errors, setErrors] = useState<CatchFormErrors>({});
   const [saved, setSaved] = useState<Saved | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
 
   const close = () => (router.canGoBack() ? router.back() : router.replace('/'));
   const msg = (e?: FieldError) => (e ? t(e.key, e.params) : undefined);
@@ -158,7 +155,7 @@ export function RegisterCatchScreen({ initialSpeciesId }: { initialSpeciesId?: s
     );
   }
 
-  if (!canRegisterCatch(plan, usedThisMonth)) {
+  if (limitReached || !canRegisterCatch(plan, usedThisMonth)) {
     return (
       <Screen scroll edges={['top', 'bottom']}>
         <ScreenHeader title={t('catch.register')} right={<Button label={t('register.cancel')} variant="ghost" onPress={close} />} />
@@ -181,27 +178,40 @@ export function RegisterCatchScreen({ initialSpeciesId }: { initialSpeciesId?: s
     if (result.status === 'denied') Alert.alert(t('register.photoAdd'), t('register.photoDenied'));
   };
 
-  const save = () => {
+  const save = async () => {
     const result = validateCatchForm({ speciesId: species?.id ?? null, size, weight }, species);
     if (!result.ok || !species) {
       setErrors(result.ok ? {} : result.errors);
       return;
     }
-    const entry: Catch = {
-      id: createId('c'),
-      userId: LOCAL_USER_ID,
-      speciesId: species.id,
-      sizeCm: result.sizeCm,
-      weightKg: result.weightKg,
-      caughtAt: new Date().toISOString(),
-      isPrivate,
-      photoUrl: photoUri,
-      bait: bait.trim() || undefined,
-      place: place.trim() || undefined,
-    };
     const unlocked = isFirstCatchOfSpecies(mine, species.id);
-    catchActions.add(entry);
-    setSaved({ entry, species, unlocked });
+    setSaving(true);
+    try {
+      const entry = await registerCatch({
+        speciesId: species.id,
+        sizeCm: result.sizeCm,
+        weightKg: result.weightKg,
+        isPrivate,
+        photoUri,
+        bait: bait.trim() || undefined,
+        place: place.trim() || undefined,
+      });
+      setSaved({ entry, species, unlocked });
+    } catch (e) {
+      // O servidor é a autoridade: mesmas regras da tela, mais a cota do mês.
+      const code = toAppError(e).code;
+      if (code === 'size_exceeds_max') {
+        setErrors({ size: { key: 'register.sizeTooBig', params: { max: species.maxPlausibleSizeCm } } });
+      } else if (code === 'weight_exceeds_max') {
+        setErrors({ weight: { key: 'register.weightTooBig', params: { max: species.maxPlausibleWeightKg ?? 0 } } });
+      } else if (code === 'free_limit_reached') {
+        setLimitReached(true);
+      } else {
+        Alert.alert(t('error.offlineTitle'), t(code === 'network' ? 'error.network' : 'error.unknown'));
+      }
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -315,7 +325,7 @@ export function RegisterCatchScreen({ initialSpeciesId }: { initialSpeciesId?: s
 
           {plan === 'free' ? <QuotaMeter used={usedThisMonth} limit={FREE_MONTHLY_CATCH_LIMIT} /> : null}
 
-          <Button label={t('register.save')} block icon="check" onPress={save} />
+          <Button label={t('register.save')} block icon="check" loading={saving} onPress={save} />
         </View>
       </Screen>
     </KeyboardAvoidingView>

@@ -24,6 +24,7 @@ interface TextFieldProps {
   autoCapitalize?: 'none' | 'sentences' | 'words';
   maxLength?: number;
   returnKeyType?: 'done' | 'next' | 'search';
+  secureTextEntry?: boolean;
 }
 
 /** Campo com label sempre visível. Foco: borda primary + halo accent. */
@@ -41,6 +42,7 @@ export function TextField({
   autoCapitalize,
   maxLength,
   returnKeyType,
+  secureTextEntry,
 }: TextFieldProps) {
   const { colors } = useTheme();
   const [focused, setFocused] = useState(false);
@@ -72,6 +74,8 @@ export function TextField({
             autoCapitalize={autoCapitalize}
             maxLength={maxLength}
             returnKeyType={returnKeyType}
+            secureTextEntry={secureTextEntry}
+            autoComplete={secureTextEntry ? 'password' : keyboardType === 'email-address' ? 'email' : undefined}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             accessibilityLabel={label}

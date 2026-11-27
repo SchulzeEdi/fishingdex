@@ -85,7 +85,17 @@ EAS — `appVersionSource: remote`). A `version` visível ("1.0.0") fica no `app
 
 Para **teste interno e teste fechado** a versão atual serve como está (é o objetivo da fase).
 
-## 6. Conferência local (sem EAS)
+## 6. Servidor (Supabase)
+
+- Projeto **`fishingdex`** (`mfikwhzvkwdthfraghad`, região São Paulo, org SchulzeTech).
+- Migrations em `supabase/migrations/`; aplicar sempre com `npx supabase db push --remote`
+  (sem `--remote` o CLI mira a stack local). Senha do banco só em `secrets/supabase.env` (fora do git).
+- Variáveis públicas do app (`EXPO_PUBLIC_SUPABASE_URL/KEY`) em `eas.json` e na Vercel.
+- Cadastro **sem confirmação de e-mail** na fase de testes: o e-mail padrão do Supabase só envia
+  poucas mensagens e só para o time. Antes da produção: SMTP próprio (Resend) e ligar a
+  confirmação (DT-09).
+
+## 7. Conferência local (sem EAS)
 
 ```bash
 npm run lint && npm run typecheck && npm test

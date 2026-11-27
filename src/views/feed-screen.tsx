@@ -1,21 +1,29 @@
-import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useMemo, useRef } from 'react';
+import { Alert, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 
-import { CatchCard, catchActions, type CatchCardChip } from '@/entities/catch';
+import {
+  CatchCard,
+  CatchCardSkeleton,
+  fetchFeed,
+  reportCatch,
+  setLike,
+  type CatchCardChip,
+  type FeedItem,
+} from '@/entities/catch';
 import { SPECIES_SEED, speciesName } from '@/entities/fish-species';
 import { usePlan, useProfile } from '@/entities/user';
+import { fetchRanking } from '@/features/ranking';
 import { canViewSocial, LockedContent } from '@/features/subscribe-pro';
-import { formatRelativeTime, formatSize, formatWeight, useI18n, type Translate } from '@/shared/i18n';
-import { EmptyState, Screen, ScreenHeader, columnStyle, spacing } from '@/shared/ui';
-import { useCommunityFeed, useLeaderboard, type FeedItem } from '@/widgets/community';
+import { useI18n, formatRelativeTime, formatSize, formatWeight, type Locale, type Translate } from '@/shared/i18n';
+import { useAsync } from '@/shared/lib';
+import { EmptyState, Screen, ScreenHeader, columnStyle, spacing, useTheme } from '@/shared/ui';
 
 import { TAB_BAR_SPACE } from './layout';
 
 const SPECIES = new Map(SPECIES_SEED.map((s) => [s.id, s]));
-const MONTH = { period: 'month' } as const;
 
-function chipsOf(item: FeedItem, t: Translate, locale: 'pt' | 'es' | 'en'): CatchCardChip[] {
+function chipsOf(item: FeedItem, t: Translate, locale: Locale): CatchCardChip[] {
   const chips: CatchCardChip[] = [];
   if (item.bait) chips.push({ label: t('catch.bait'), value: item.bait });
   if (item.weightKg) chips.push({ label: t('register.weight'), value: formatWeight(locale, item.weightKg) });
@@ -23,18 +31,55 @@ function chipsOf(item: FeedItem, t: Translate, locale: 'pt' | 'es' | 'en'): Catc
   return chips;
 }
 
+/** Recarrega quando a aba volta a ficar visível (ex.: depois de registrar uma captura). */
+function useRefreshOnFocus(refresh: () => void) {
+  const first = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      if (first.current) {
+        first.current = false;
+        return;
+      }
+      refresh();
+    }, [refresh]),
+  );
+}
+
 export function FeedScreen() {
   const router = useRouter();
+  const { colors } = useTheme();
   const { t, locale } = useI18n();
   const plan = usePlan();
   const profile = useProfile();
-  const feed = useCommunityFeed();
-  const monthRanking = useLeaderboard(MONTH);
+  const isPro = canViewSocial(plan);
+  const feed = useAsync(() => fetchFeed(), `feed:${profile?.id}`, isPro);
+  const top = useAsync(() => fetchRanking({ period: 'month' }, 3), `top:${profile?.id}`, isPro);
+  useRefreshOnFocus(feed.refresh);
 
-  const podium = useMemo(
-    () => new Map(monthRanking.filter((r) => r.position <= 3).map((r) => [r.id, r.position])),
-    [monthRanking],
-  );
+  const podium = useMemo(() => new Map((top.data ?? []).map((r) => [r.id, r.position])), [top.data]);
+
+  const toggleLike = (item: FeedItem) => {
+    const liked = !item.liked;
+    const apply = (value: boolean) =>
+      feed.mutate((list) =>
+        list.map((c) => (c.id === item.id ? { ...c, liked: value, likes: c.likes + (value ? 1 : -1) } : c)),
+      );
+    apply(liked);
+    setLike(item.id, liked).catch(() => apply(!liked));
+  };
+
+  const report = (item: FeedItem) =>
+    Alert.alert(t('feed.reportTitle'), t('feed.reportMessage'), [
+      { text: t('register.cancel'), style: 'cancel' },
+      {
+        text: t('feed.report'),
+        style: 'destructive',
+        onPress: () => {
+          feed.mutate((list) => list.filter((c) => c.id !== item.id));
+          reportCatch(item.id, 'reported_in_app').catch(() => feed.refresh());
+        },
+      },
+    ]);
 
   const renderCard = (item: FeedItem) => {
     const species = SPECIES.get(item.speciesId);
@@ -44,7 +89,7 @@ export function FeedScreen() {
     const position = podium.get(item.id);
     return (
       <CatchCard
-        authorName={item.isMine ? t('feed.you') : item.authorName}
+        authorName={item.userId === profile?.id ? t('feed.you') : item.authorName}
         authorCountry={item.authorCountry}
         meta={meta}
         photoUri={item.photoUrl}
@@ -54,47 +99,81 @@ export function FeedScreen() {
         likes={item.likes}
         liked={item.liked}
         rankTag={position ? t('feed.rankTag', { position }) : undefined}
-        onToggleLike={() => catchActions.toggleLike(item.id)}
+        onToggleLike={() => toggleLike(item)}
         onOpenSpecies={() => router.push(`/species/${item.speciesId}`)}
+        onReport={item.userId === profile?.id ? undefined : () => report(item)}
       />
     );
   };
 
   const header = <ScreenHeader title={t('feed.title')} subtitle={t('feed.subtitle')} />;
 
-  if (!canViewSocial(plan)) {
+  if (!isPro) {
     return (
       <Screen>
-        <View style={styles.padded}>{header}</View>
         <View style={[styles.padded, styles.fill]}>
+          {header}
           <LockedContent
             icon="feed"
             title={t('paywall.feedTitle')}
             message={t('paywall.feedMessage')}
             country={profile?.country}
           >
-            <View style={styles.list}>{feed.slice(0, 2).map((item) => <View key={item.id}>{renderCard(item)}</View>)}</View>
+            <View style={styles.list}>
+              <CatchCardSkeleton />
+              <CatchCardSkeleton />
+            </View>
           </LockedContent>
         </View>
       </Screen>
     );
   }
 
+  const items = feed.data ?? [];
+  const firstLoad = feed.status === 'loading' && feed.data === null;
+
   return (
     <Screen>
       <FlatList
-        data={feed}
+        data={items}
         keyExtractor={(i) => i.id}
         renderItem={({ item }) => renderCard(item)}
         ListHeaderComponent={header}
-        ListEmptyComponent={
-          <EmptyState
-            icon="camera"
-            title={t('feed.emptyTitle')}
-            message={t('feed.emptyMessage')}
-            actionLabel={t('catch.register')}
-            onAction={() => router.push('/register')}
+        refreshControl={
+          <RefreshControl
+            refreshing={feed.status === 'loading' && feed.data !== null}
+            onRefresh={() => {
+              feed.refresh();
+              top.refresh();
+            }}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
           />
+        }
+        ListEmptyComponent={
+          firstLoad ? (
+            <View style={styles.list}>
+              <CatchCardSkeleton />
+              <CatchCardSkeleton />
+            </View>
+          ) : feed.status === 'error' ? (
+            <EmptyState
+              icon="wifi-off"
+              title={t('error.offlineTitle')}
+              message={t('error.loadFeed')}
+              actionLabel={t('error.retry')}
+              actionVariant="secondary"
+              onAction={feed.refresh}
+            />
+          ) : (
+            <EmptyState
+              icon="camera"
+              title={t('feed.emptyTitle')}
+              message={t('feed.emptyMessage')}
+              actionLabel={t('catch.register')}
+              onAction={() => router.push('/register')}
+            />
+          )
         }
         contentContainerStyle={[styles.padded, styles.list, columnStyle, { paddingBottom: TAB_BAR_SPACE }]}
         showsVerticalScrollIndicator={false}

@@ -4,8 +4,12 @@ export {
   sanitizeName,
   sessionActions,
   sessionStore,
+  toCountry,
   usePlan,
   useProfile,
+  useSessionStatus,
   type Country,
-  type LocalProfile,
+  type Profile,
+  type SessionStatus,
 } from './model/session-store';
+export { fetchProfile, updateProfile } from './api/profile.api';

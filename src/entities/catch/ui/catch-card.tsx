@@ -38,6 +38,8 @@ interface CatchCardProps {
   liked: boolean;
   onToggleLike?: () => void;
   onOpenSpecies?: () => void;
+  /** Denunciar (capturas de outros pescadores — moderação). */
+  onReport?: () => void;
   /** Selo sobre a foto (ex.: "2º no ranking"). */
   rankTag?: string;
 }
@@ -55,6 +57,7 @@ export function CatchCard({
   liked,
   onToggleLike,
   onOpenSpecies,
+  onReport,
   rankTag,
 }: CatchCardProps) {
   const { colors } = useTheme();
@@ -129,9 +132,14 @@ export function CatchCard({
             onPress={like}
           />
         </Animated.View>
-        {onOpenSpecies ? (
-          <IconButton icon="chevron-right" accessibilityLabel={t('feed.viewSpecies')} onPress={onOpenSpecies} />
-        ) : null}
+        <View style={styles.footRight}>
+          {onReport ? (
+            <IconButton icon="alert" accessibilityLabel={t('feed.report')} onPress={onReport} />
+          ) : null}
+          {onOpenSpecies ? (
+            <IconButton icon="chevron-right" accessibilityLabel={t('feed.viewSpecies')} onPress={onOpenSpecies} />
+          ) : null}
+        </View>
       </View>
     </View>
   );
@@ -234,6 +242,7 @@ const styles = StyleSheet.create({
     paddingRight: spacing.xs,
     paddingBottom: spacing.xs,
   },
+  footRight: { flexDirection: 'row', alignItems: 'center' },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

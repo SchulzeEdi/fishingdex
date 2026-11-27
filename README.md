@@ -38,9 +38,17 @@ npm run submit:android # envia o AAB para o teste interno da Play
 ```
 
 ## Estado do app
-Versão 1.0 de demonstração: perfil, capturas e fotos ficam no aparelho; feed e ranking
-misturam suas capturas com exemplos da comunidade, e "Assinar Pro" ativa o Pro localmente.
-A ligação com a API/Supabase e o Google Play Billing estão nos débitos DT-03/04/07/08.
+Online no **Supabase** (`fishingdex`, São Paulo): contas por e-mail/senha, capturas e fotos no
+servidor, feed e ranking entre usuários, curtidas, denúncia e exclusão de conta. As regras ficam no
+banco (RLS + triggers + RPC — ADR-0008). "Assinar Pro" ainda é de demonstração (sem cobrança) até o
+Google Play Billing entrar (DT-07).
+
+```bash
+cp .env.example .env            # preencher EXPO_PUBLIC_SUPABASE_URL/KEY (valores públicos)
+npm run db:test:supabase        # migrations + regras + RLS num Postgres descartável (Docker)
+node --env-file=.env scripts/e2e/supabase-smoke.mjs   # smoke test contra o Supabase real
+npx supabase db push --remote --dry-run               # conferir antes de aplicar migrations
+```
 
 ## SDD
 O processo e o estado do projeto ficam em `spec/` — comece por `spec/STATUS.md`.

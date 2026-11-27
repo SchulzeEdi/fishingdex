@@ -64,6 +64,16 @@ jobs:
         run: npm run db:reset
       - name: integration tests
         run: npm run test:integration
+      - name: supabase — migrations + regras + RLS (Postgres com shim do Supabase)
+        env:
+          PGPASSWORD: fishingdex_dev_pw
+        run: |
+          psql -h localhost -U fishingdex -d fishingdex -c 'CREATE DATABASE fd_supabase'
+          for f in supabase/tests/00_supabase_shim.sql supabase/migrations/*.sql supabase/tests/01_rules_and_rls.sql; do
+            echo "== $f"
+            psql -h localhost -U fishingdex -d fd_supabase -v ON_ERROR_STOP=1 -q -f "$f" > /dev/null
+          done
+          echo "OK: migrations e RLS do Supabase"
 
   # 2) Segurança: dependências (npm audit) + scanner SonarQube/SonarCloud com Quality Gate
   security:

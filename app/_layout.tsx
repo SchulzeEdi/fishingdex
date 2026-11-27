@@ -11,7 +11,8 @@ function RootStack() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="register" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="species/[id]" />
-      <Stack.Screen name="onboarding" />
+      <Stack.Screen name="auth" />
+      <Stack.Screen name="profile-edit" />
     </Stack>
   );
 }

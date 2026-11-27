@@ -69,6 +69,16 @@ describe('createPersistedStore', () => {
     expect(await storage.getItem('k')).toBeNull();
   });
 
+  it('persist: false fica só em memória', async () => {
+    const storage = memoryStorage();
+    const store = createPersistedStore({ key: 'm', version: 1, initial, storage, persist: false });
+    store.setState((s) => ({ ...s, count: 2 }));
+    await store.hydrate();
+    expect(store.getState().count).toBe(2);
+    expect(store.isHydrated()).toBe(true);
+    expect(await storage.getItem('m')).toBeNull();
+  });
+
   it('usa o storage padrão configurado e funciona sem nenhum', async () => {
     const none = createPersistedStore({ key: 'z', version: 1, initial });
     await none.hydrate();
