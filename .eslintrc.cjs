@@ -25,6 +25,9 @@ module.exports = {
     'coverage/',
     'docs/design/prototype/**',
     'scripts/**',
+    // Edge Functions do Supabase rodam em Deno (imports npm: e global Deno).
+    'supabase/functions/*/index.ts',
+    'supabase/functions/_shared/admin.ts',
   ],
   overrides: [
     { files: ['src/shared/**/*.{ts,tsx}'], rules: forbid(['app-init', 'views', 'widgets', 'features', 'entities']) },
