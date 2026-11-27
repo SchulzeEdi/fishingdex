@@ -33,6 +33,11 @@ denúncia, termos).
   doce e salgada, com nomes pt/es/en, nome científico, raridade e tetos plausíveis perto do
   recorde. Sem espécies protegidas (ex.: mero, tubarões). Fonte única `species.data.ts` →
   `scripts/db/gen-species-sql.mjs` gera o seed local e a migration do Supabase.
+- **Cobrança real (DT-07, ADR-0004):** `react-native-purchases` no app (planos e preços da Play,
+  compra, restaurar, gerenciar assinatura); Edge Functions `revenuecat-webhook` (eventos →
+  plano) e `sync-subscription` (confere na API do RevenueCat) publicadas no Supabase; tabela
+  `subscriptions` com upsert por usuário. Sem a chave pública no build, segue a demo.
+  Configuração das contas em `docs/release/revenuecat-setup.md`.
 - **Ajustes do teste no emulador:** Preferências no topo do Perfil; avatar com as iniciais do nome
   real (não de "Você"); selo "Nº no ranking" recarrega junto com o feed.
 

@@ -8,5 +8,14 @@ export {
 export type { PaymentProvider, SubscriptionEvent } from './api/payment-provider';
 export { currencyFor, proPriceLabels, resolveCurrency } from './model/prices';
 export { demoPurchase } from './api/purchase.client';
+export {
+  PRO_ENTITLEMENT,
+  connectBilling,
+  disconnectBilling,
+  isRealBillingEnabled,
+  openManageSubscriptions,
+  reconcileSubscription,
+  syncSubscription,
+} from './api/billing';
 export { LockedContent, PaywallCard, ProCta, QuotaMeter } from './ui/paywall';
 export { PlanBadge } from './ui/plan-badge';

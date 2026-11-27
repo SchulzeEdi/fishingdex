@@ -96,7 +96,7 @@
 | DT-04 | ✅ Acesso a dados via RLS + RPC no Supabase (ADR-0008) — SPRINT-007 | SPRINT-003 | — |
 | DT-05 | Adapters RevenueCat/Stripe + checkout real | SPRINT-004 | alta |
 | DT-06 | UI dos fluxos (registrar, feed, ranking, paywall ✅ na SPRINT-006 com dados locais; pesqueiros pendente) | SPRINT-003/004 | media |
-| DT-07 | "Assinar Pro" é demonstração — trocar por Google Play Billing/RevenueCat antes da produção | SPRINT-006 | alta |
+| DT-07 | Cobrança real: **código pronto** (RevenueCat no app + webhook/sync no Supabase); falta configurar Play Console + RevenueCat (`docs/release/revenuecat-setup.md`) e desligar a demo | SPRINT-006 | alta |
 | DT-08 | ✅ Feed/ranking reais (sem exemplos locais) — SPRINT-007 | SPRINT-006 | — |
 | DT-09 | SMTP próprio (confirmação de cadastro, esqueci a senha) | SPRINT-007 | alta |
 | DT-10 | Seguir pescadores (feed hoje é da comunidade Pro) | SPRINT-007 | media |

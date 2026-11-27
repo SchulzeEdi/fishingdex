@@ -3,8 +3,16 @@ import { Alert, Platform, StyleSheet, View } from 'react-native';
 
 import { useCurrencyPreference } from '@/shared/config';
 import { useI18n } from '@/shared/i18n';
-import { AppText, Button, Icon, radius, spacing, useTheme, type IconName } from '@/shared/ui';
+import { useAsync } from '@/shared/lib';
+import { AppText, Button, Icon, SegmentedControl, radius, spacing, useTheme, type IconName } from '@/shared/ui';
 
+import {
+  fetchProOffers,
+  isRealBillingEnabled,
+  purchaseProOffer,
+  restoreProPurchase,
+  type ProPeriod,
+} from '../api/billing';
 import { demoPurchase } from '../api/purchase.client';
 import { proPriceLabels, resolveCurrency } from '../model/prices';
 
@@ -16,8 +24,8 @@ interface PaywallCardProps {
   country?: string | null;
 }
 
-/** CTA do Pro: "Assinar Pro" (laranja reservado), preço logo abaixo e "Restaurar compra". */
-export function ProCta({ country }: { country?: string | null }) {
+/** CTA de demonstração (sem chave do RevenueCat no build): ativa o Pro sem cobrança. */
+function DemoProCta({ country }: { country?: string | null }) {
   const { t, locale } = useI18n();
   const [busy, setBusy] = useState(false);
   // Moeda escolhida em Perfil › Preferências (ou a do país).
@@ -48,6 +56,97 @@ export function ProCta({ country }: { country?: string | null }) {
       <Button label={t('paywall.restore')} variant="ghost" onPress={restore} style={styles.restore} />
     </View>
   );
+}
+
+/** CTA real: planos e preços da Google Play (RevenueCat), compra e restaurar. */
+function StoreProCta() {
+  const { t } = useI18n();
+  const offers = useAsync(fetchProOffers, 'pro-offers');
+  const [period, setPeriod] = useState<ProPeriod>('monthly');
+  const [busy, setBusy] = useState<'buy' | 'restore' | null>(null);
+  const list = offers.data ?? [];
+  const selected = list.find((o) => o.period === period) ?? list[0];
+
+  const subscribe = async () => {
+    if (!selected) return;
+    setBusy('buy');
+    try {
+      await purchaseProOffer(selected);
+    } catch {
+      Alert.alert(t('paywall.cta'), t('paywall.purchaseFailed'));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const restore = async () => {
+    setBusy('restore');
+    try {
+      const result = await restoreProPurchase();
+      Alert.alert(t('paywall.restore'), t(result === 'restored' ? 'paywall.restored' : 'paywall.restoreNone'));
+    } catch {
+      Alert.alert(t('paywall.restore'), t('error.unknown'));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  if (offers.status === 'error' || (offers.status === 'ready' && list.length === 0)) {
+    return (
+      <View style={styles.storeCta}>
+        <AppText variant="label" tone="textMuted" align="center">
+          {t('paywall.unavailable')}
+        </AppText>
+        <Button label={t('error.retry')} variant="secondary" block onPress={offers.refresh} />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.storeCta}>
+      {list.length > 1 ? (
+        <SegmentedControl
+          accessibilityLabel={t('paywall.plan')}
+          stretch
+          value={period}
+          onChange={setPeriod}
+          options={list.map((o) => ({
+            value: o.period,
+            label: t(o.period === 'monthly' ? 'paywall.monthly' : 'paywall.yearly'),
+          }))}
+        />
+      ) : null}
+      <Button
+        label={t('paywall.cta')}
+        variant="pro"
+        icon="star-fill"
+        block
+        loading={busy === 'buy' || !selected}
+        disabled={!selected}
+        onPress={subscribe}
+      />
+      <AppText variant="caption" tone="textMuted" align="center">
+        {selected
+          ? t(selected.period === 'monthly' ? 'paywall.perMonth' : 'paywall.perYear', { price: selected.priceLabel })
+          : ' '}
+      </AppText>
+      <AppText variant="caption" tone="textMuted" align="center">
+        {t('paywall.renewNote')}
+      </AppText>
+      <Button
+        label={t('paywall.restore')}
+        variant="ghost"
+        loading={busy === 'restore'}
+        onPress={restore}
+        style={styles.restore}
+      />
+    </View>
+  );
+}
+
+/** CTA do Pro: "Assinar Pro" (laranja reservado), preço logo abaixo e "Restaurar compra". */
+export function ProCta({ country }: { country?: string | null }) {
+  return isRealBillingEnabled() ? <StoreProCta /> : <DemoProCta country={country} />;
 }
 
 /**
@@ -174,6 +273,7 @@ const styles = StyleSheet.create({
   perk: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   perkText: { flex: 1 },
   price: { marginTop: spacing.sm },
+  storeCta: { gap: spacing.sm },
   restore: { alignSelf: 'center', marginTop: spacing.xs },
   locked: { flex: 1, overflow: 'hidden', borderRadius: radius.lg },
   lockedContent: { opacity: 0.7 },

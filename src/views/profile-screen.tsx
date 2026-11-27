@@ -13,6 +13,8 @@ import {
   QuotaMeter,
   canViewSocial,
   demoPurchase,
+  isRealBillingEnabled,
+  openManageSubscriptions,
 } from '@/features/subscribe-pro';
 import { deleteAccount, signOut } from '@/features/session';
 import { CurrencyPicker, LanguagePicker } from '@/widgets/preferences';
@@ -161,7 +163,16 @@ export function ProfileScreen() {
           loading={busy === 'signOut'}
           onPress={() => run('signOut', signOut)}
         />
-        {isPro ? (
+        {isPro && isRealBillingEnabled() ? (
+          <Button
+            label={t('paywall.manage')}
+            variant="secondary"
+            icon="star"
+            block
+            onPress={() => run('plan', () => openManageSubscriptions())}
+          />
+        ) : null}
+        {isPro && !isRealBillingEnabled() ? (
           <Button
             label={t('profile.backToFree')}
             variant="ghost"
@@ -179,9 +190,11 @@ export function ProfileScreen() {
         />
       </View>
 
-      <AppText variant="caption" tone="textMuted" align="center" style={styles.note}>
-        {t('app.demoNote')}
-      </AppText>
+      {isRealBillingEnabled() ? null : (
+        <AppText variant="caption" tone="textMuted" align="center" style={styles.note}>
+          {t('app.demoNote')}
+        </AppText>
+      )}
     </Screen>
   );
 }

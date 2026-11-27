@@ -19,6 +19,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { seenStore } from '@/features/dex-collection';
 import { startSession } from '@/features/session';
+import { connectBilling, disconnectBilling, reconcileSubscription } from '@/features/subscribe-pro';
+import { sessionStore } from '@/entities/user';
 import { configureSupabase, getSupabase } from '@/shared/api';
 import {
   isBackendConfigured,
@@ -36,6 +38,23 @@ configureSupabase(AsyncStorage);
 
 // Preferências do aparelho (selo "Nova" da Dex) + login salvo no Supabase Auth.
 const hydration = Promise.all([preferencesStore.hydrate(), seenStore.hydrate(), startSession()]);
+
+// Cobrança (RevenueCat): acompanha o login para ligar a compra ao usuário certo e alinha o
+// plano com a loja ao entrar (renovou, expirou ou foi cancelado fora do app).
+let billingUser: string | null = null;
+sessionStore.subscribe(() => {
+  const { status, profile } = sessionStore.getState();
+  const uid = status === 'signedIn' ? (profile?.id ?? null) : null;
+  if (uid === billingUser) return;
+  billingUser = uid;
+  if (uid && profile) {
+    connectBilling(uid)
+      .then(() => reconcileSubscription(profile.plan))
+      .catch(() => undefined);
+  } else {
+    disconnectBilling().catch(() => undefined);
+  }
+});
 
 // O token do Supabase só se renova com o app em primeiro plano (recomendação do supabase-js).
 if (isBackendConfigured()) {
